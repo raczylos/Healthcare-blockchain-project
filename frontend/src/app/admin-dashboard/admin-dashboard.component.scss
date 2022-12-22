@@ -1,0 +1,42 @@
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    // margin-right: -5px;
+    // margin-left: -5px;
+}
+
+.form {
+    margin-left: 10px;
+    padding-left: 10px;
+
+}
+
+.submit-button {
+    margin-bottom: 10px;
+}
+
+// .form input[type="password"] {
+//     width: 100%;
+//   }
+
+.table-container {
+    margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-item {
+    flex-grow: 1;
+    margin-right: 8px;
+}
+
+.form-container {
+    margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-item {
+    flex-grow: 1;
+    margin-right: 8px;
+}

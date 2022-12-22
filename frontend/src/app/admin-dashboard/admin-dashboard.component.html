@@ -1,0 +1,332 @@
+<div *ngIf="userRole === 'admin'">
+    <!-- <form [formGroup]="createUserForm" class="form">
+        <div class="form-row">
+            <mat-form-field appearance="fill" >
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstName" required>
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field appearance="fill" >
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="lastName" required>
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field appearance="fill" >
+                <mat-label>User Id</mat-label>
+                <input matInput formControlName="userId" required>
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field appearance="fill" >
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field appearance="fill" >
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role" required>
+                    <mat-option value="patient">patient</mat-option>
+                    <mat-option value="doctor">doctor</mat-option>
+                </mat-select>
+              </mat-form-field>
+        </div>
+
+        <div class="submit-button">
+            <button mat-raised-button color="primary" (click)="onSubmit()">Create user</button>
+        </div>
+    </form> -->
+
+
+    <div class="form-container">
+        <div class="form-item">
+
+            <form [formGroup]="createPatientForm" class="form">
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>First name</mat-label>
+                        <input matInput formControlName="firstName" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Last name</mat-label>
+                        <input matInput formControlName="lastName" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Age</mat-label>
+                        <input matInput formControlName="age" min="1" max="110" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Gender</mat-label>
+                        <mat-select formControlName="gender" required>
+                            <mat-option value="male">male</mat-option>
+                            <mat-option value="female">female</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Address</mat-label>
+                        <input matInput formControlName="address" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Username</mat-label>
+                        <input matInput formControlName="userId" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+
+                <div class="submit-button">
+                    <button mat-raised-button color="primary" (click)="onSubmitPatient()">Create patient</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-item">
+
+            <form [formGroup]="createDoctorForm" class="form">
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>First name</mat-label>
+                        <input matInput formControlName="firstName" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Last name</mat-label>
+                        <input matInput formControlName="lastName" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Age</mat-label>
+                        <input matInput formControlName="age" min="1" max="110" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Gender</mat-label>
+                        <mat-select formControlName="gender" required>
+                            <mat-option value="male">male</mat-option>
+                            <mat-option value="female">female</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Address</mat-label>
+                        <input matInput formControlName="address" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Specialization</mat-label>
+                        <input matInput formControlName="specialization" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Username</mat-label>
+                        <input matInput formControlName="userId" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+
+                <div class="submit-button">
+                    <button mat-raised-button color="primary" (click)="onSubmitDoctor()">Create doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="table-item" >
+            <!-- patientList table goes here -->
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Patient List
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    click to show
+
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <table mat-table [dataSource]="patientList" class="mat-elevation-z8">
+
+                    <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+
+                    <ng-container matColumnDef="patientId">
+                        <th mat-header-cell *matHeaderCellDef> Id. </th>
+                        <td mat-cell *matCellDef="let patient"> {{patient.patientId}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="firstName">
+                        <th mat-header-cell *matHeaderCellDef> First Name </th>
+                        <td mat-cell *matCellDef="let patient"> {{patient.firstName}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="lastName">
+                        <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                        <td mat-cell *matCellDef="let patient"> {{patient.lastName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="age">
+                        <th mat-header-cell *matHeaderCellDef> Age </th>
+                        <td mat-cell *matCellDef="let patient"> {{patient.age}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="gender">
+                        <th mat-header-cell *matHeaderCellDef> Gender </th>
+                        <td mat-cell *matCellDef="let patient"> {{patient.gender}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="address">
+                        <th mat-header-cell *matHeaderCellDef> Address </th>
+                        <td mat-cell *matCellDef="let patient"> {{patient.address}} </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedPatientColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;"></tr>
+                </table>
+
+              </mat-expansion-panel>
+        </div>
+        <div class="table-item" >
+            <!-- doctorList table goes here -->
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Doctor List
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    click to show
+
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+
+                <table mat-table [dataSource]="doctorList" class="mat-elevation-z8">
+
+                    <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+
+                    <ng-container matColumnDef="doctorId">
+                      <th mat-header-cell *matHeaderCellDef> Id. </th>
+                      <td mat-cell *matCellDef="let doctor"> {{doctor.doctorId}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="firstName">
+                      <th mat-header-cell *matHeaderCellDef> First Name </th>
+                      <td mat-cell *matCellDef="let doctor"> {{doctor.firstName}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="lastName">
+                      <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                      <td mat-cell *matCellDef="let doctor"> {{doctor.lastName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="age">
+                        <th mat-header-cell *matHeaderCellDef> Age </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.age}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="gender">
+                        <th mat-header-cell *matHeaderCellDef> Gender </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.gender}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="address">
+                        <th mat-header-cell *matHeaderCellDef> Address </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.address}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="specialization">
+                        <th mat-header-cell *matHeaderCellDef> Specialization </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.specialization}} </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedDoctorColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedDoctorColumns;"></tr>
+                </table>
+
+
+
+              </mat-expansion-panel>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</div>
+
+<div *ngIf="userRole !== 'admin'">
+    <p>You don't have permission to see this page!.</p>
+</div>
+
+
+

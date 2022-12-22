@@ -1,0 +1,41 @@
+<p>
+    <mat-toolbar color="primary">
+        <button
+            mat-icon-button
+            class="example-icon"
+            aria-label="Example icon-button with menu icon"
+            routerLink="/"
+        >
+            <mat-icon>health_and_safety</mat-icon>
+        </button>
+        <span [style.cursor]="'pointer'" routerLink="/" >Health Care</span>
+
+        <span class="example-spacer"></span>
+
+        <a *ngIf="!userService.isLoggedIn" mat-button (click)="openDialog()"  >Login</a>
+        <a *ngIf="userRole === 'doctor'" mat-button routerLink="/doctor/{{userId}}">Doctor Dashboard</a>
+        <a *ngIf="userRole === 'admin'" mat-button routerLink="/admin">Admin Dashboard</a>
+        <a *ngIf="userService.isLoggedIn" mat-button (click)="userService.logOut()" >Logout</a>
+
+        <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            class="example-icon account_circle"
+            aria-label="Example icon-button with account icon"
+        >
+            <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+            <button *ngIf="!userService.isLoggedIn" mat-menu-item (click)="openDialog()" >Login</button>
+            <button *ngIf="!userService.isLoggedIn" mat-menu-item >Login as doctor</button>
+            <button *ngIf="!userService.isLoggedIn" mat-menu-item>Login as admin</button>
+            <button *ngIf="userService.isLoggedIn" mat-menu-item (click)="userService.logOut()" >Log out</button>
+        </mat-menu>
+
+    </mat-toolbar>
+
+
+</p>
+
+<router-outlet></router-outlet>
