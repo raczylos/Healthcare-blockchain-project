@@ -1,3 +1,65 @@
 <p>patient-detail works!</p>
 {{patientId}}
 
+<div>
+    <!-- <span> Patient current data</span>
+    <mat-list role="list">
+        <mat-list-item role="listitem">Allergies: {{patientMedicalData.allergies}}</mat-list-item>
+        <mat-list-item role="listitem">Conditions: {{patientMedicalData.conditions}}</mat-list-item>
+        <mat-list-item role="listitem">Medications: {{patientMedicalData.medications}}</mat-list-item>
+        <mat-list-item role="listitem">Treatment Plans: {{patientMedicalData.treatmentPlans}}</mat-list-item>
+    </mat-list>
+
+    <span> Patient history data</span>
+    <mat-list role="list" *ngFor="let item of patientHistoryData">
+        <mat-list-item role="listitem">Allergies: {{item.value.allergies}} </mat-list-item>
+        <mat-list-item role="listitem">Conditions: {{item.value.conditions}} </mat-list-item>
+        <mat-list-item role="listitem">Medications: {{item.value.medications}} </mat-list-item>
+        <mat-list-item role="listitem">Treatment Plans: {{item.value.treatmentPlans}} </mat-list-item>
+    </mat-list> -->
+
+    <!-- <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let item of patientHistoryData">
+          <mat-list dense>
+            <mat-list-item role="listitem" *ngFor="let prop of item.value | keyvalue">{{ prop.key }}: {{ prop.value }}</mat-list-item>
+          </mat-list>
+        </mat-list-item>
+      </mat-list> -->
+      <mat-card *ngIf="patientMedicalData">
+        <mat-card-header>
+          <mat-card-title>{{patientId}} current data</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>Allergies: {{patientMedicalData.allergies}}</mat-list-item>
+            <mat-list-item>Conditions: {{patientMedicalData.conditions}}</mat-list-item>
+            <mat-list-item>Medications: {{patientMedicalData.medications}}</mat-list-item>
+            <mat-list-item>Treatment Plans: {{patientMedicalData.treatmentPlans}}</mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngFor="let item of patientHistoryData">
+        <mat-card-header>
+          <mat-card-title>{{patientId}}  history data</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>Allergies: {{item.value.allergies}}</mat-list-item>
+            <mat-list-item>Conditions: {{item.value.conditions}}</mat-list-item>
+            <mat-list-item>Medications: {{item.value.medications}}</mat-list-item>
+            <mat-list-item>Treatment Plans: {{item.value.treatmentPlans}}</mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+
+
+      <button [routerLink]="['CreateDiagnosis']"> Redirect to create diagnosis</button>
+
+
+</div>
+
+
+
+
+

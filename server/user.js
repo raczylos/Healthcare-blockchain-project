@@ -71,7 +71,7 @@ exports.getUserById = async function (userId) {
 exports.getUserRole = async function (userId) {
 
     const userList = await this.getUserList()
-    console.log(userList)
+    
     const user = userList.find(user => user.id === userId)
     
     if(!user){

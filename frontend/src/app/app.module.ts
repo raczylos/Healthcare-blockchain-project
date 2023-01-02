@@ -24,6 +24,11 @@ import { DoctorComponent } from './doctor/doctor.component';
 import { GrantedAccessPatientListComponent } from './doctor/granted-access-patient-list/granted-access-patient-list.component';
 import { PatientDetailComponent } from './doctor/patient-detail/patient-detail.component';
 import { CreateDiagnosisComponent } from './doctor/create-diagnosis/create-diagnosis.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatCardModule} from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
     declarations: [AppComponent, AdminDashboardComponent, LoginComponent, DoctorComponent, GrantedAccessPatientListComponent, PatientDetailComponent, CreateDiagnosisComponent],
@@ -44,6 +49,11 @@ import { CreateDiagnosisComponent } from './doctor/create-diagnosis/create-diagn
         MatListModule,
         MatExpansionModule,
         MatTableModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatCardModule,
+        MatChipsModule,
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

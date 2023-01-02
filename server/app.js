@@ -1,9 +1,11 @@
 require('dotenv').config()
 
 const register = require('./register')
-const patient = require('./patient')
-const database = require('./database')
-const user1 = require('./user');
+const diagnosis = require('./invokeDiagnosis')
+const queryDiagnosis = require('./queryDiagnosis')
+// const patient = require('./patient')
+// const database = require('./database')
+const userUtils = require('./user');
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -39,13 +41,6 @@ const authMiddleware = (req, res, next) => {
     })
 }
 
-app.get('/', (req, res) => {
-    console.log("get")
-    console.log(req.body)
-    res.send('Hello World!')
-
-    
-})
 
 app.post('/register-user', authMiddleware, async (req, res) => {
     console.log("registerUser")
@@ -57,13 +52,13 @@ app.post('/register-user', authMiddleware, async (req, res) => {
     let role = req.body.role
     let username = req.body.userId
     let password = req.body.password
-    let hashedPassword = await user1.encryptPassword(password)
-    let age = req.body.age
+    let hashedPassword = await userUtils.encryptPassword(password)
+    let age = (req.body.age).toString()
     let gender = req.body.gender
     let address = req.body.address
     let specialization = req.body.specialization
 
-    let user = await user1.getUserById(username)
+    let user = await userUtils.getUserById(username)
     if(user){
         return res.sendStatus(401) // user already exists (i am not sure if it is good status)
     }
@@ -84,24 +79,24 @@ app.post('/login', async (req, res) => {
     
     let username = req.body.username
     let password = req.body.password
-    let user = await user1.getUserById(username)
+    let user = await userUtils.getUserById(username)
     
     if(!user){
         return res.sendStatus(401) // user doesn't exist
     }
-    const userRole = await user1.getUserRole(username)
+    const userRole = await userUtils.getUserRole(username)
     
     if(userRole === 'admin'){
         
-        // const adminPassword = await user1.getAdminEnrollmentSecret()
+        // const adminPassword = await userUtils.getAdminEnrollmentSecret()
         const adminPassword = 'adminpw'
         if(adminPassword !== password){
             console.log('incorrect password')
             return res.sendStatus(401)
         }
     } else {
-        const hashedPassword = await user1.getUserHashedPassword(username)
-        const isPasswordMatch = await user1.comparePasswords(password, hashedPassword);
+        const hashedPassword = await userUtils.getUserHashedPassword(username)
+        const isPasswordMatch = await userUtils.comparePasswords(password, hashedPassword);
         if(!isPasswordMatch){
             console.log('incorrect password')
             return res.sendStatus(401)
@@ -123,7 +118,6 @@ app.post('/refresh-access-token', (req, res) => {
     // if(!refreshTokens.includes(refreshToken)){
     //     return res.sendStatus(403)
     // }
-    console.log("wazneeeeeeeeeeeeeeeeeeeeeeeeeee")
     console.log(refreshToken)
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
         if(err){
@@ -135,7 +129,7 @@ app.post('/refresh-access-token', (req, res) => {
             username: data.username
         }
         let newAccessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
-        res.json({accessToken: newAccessToken})
+        res.json({accessToken: newAccessToken, refreshToken: refreshToken})
     })
 })
 
@@ -169,14 +163,14 @@ app.get('/get-user-role/:userId', async (req, res) => {
     const userId = req.params.userId
     
     
-    let userRole = await user1.getUserRole(userId)
+    let userRole = await userUtils.getUserRole(userId)
     
     res.json({userRole: userRole})
 
 })
 
 app.get('/get-patient-list', async (req, res) => {
-    const patientList = await user1.getPatientList()
+    const patientList = await userUtils.getPatientList()
     let patientListInfo = []
 
     patientList.forEach((patient, index, array) => {
@@ -207,11 +201,11 @@ app.get('/get-patient-list', async (req, res) => {
 })
 
 app.get('/get-doctor-list', async (req, res) => {
-    const doctorList = await user1.getDoctorList()
+    const doctorList = await userUtils.getDoctorList()
     let doctorListInfo = []
 
     doctorList.forEach((doctor, index, array) => {
-        console.log(patient);
+        console.log(doctor);
         let doctorId = doctor.id
         let firstName = doctor.attrs.find(attr => attr.name === "firstName")
         let lastName = doctor.attrs.find(attr => attr.name === "lastName")
@@ -237,6 +231,32 @@ app.get('/get-doctor-list', async (req, res) => {
 
     res.json(doctorListInfo)
 })
+
+app.post('/post-patient-medical-data', async (req, res) => {
+    
+    const patientId = req.body.patientId
+    const medicalData = req.body.medicalData
+    await diagnosis.invokeDiagnosis(patientId, "lala")
+
+    // res.json(medicalData)
+})
+
+app.get('/get-current-medical-data/:patientId', async (req, res) => {
+    const patientId = req.params.patientId
+    console.log(patientId)
+    const medicalData = await queryDiagnosis.readPatientMedicalData(patientId)
+
+    res.json(medicalData)
+})
+
+app.get('/get-history-medical-data/:patientId', async (req, res) => {
+    const patientId = req.params.patientId
+    const medicalData = await queryDiagnosis.readPatientHistoryData(patientId)
+
+    res.json(medicalData)
+})
+
+
 
 app.delete('/logout', (req, res) => {
     const {refreshToken} = req.body

@@ -23,10 +23,7 @@ class AdminContract extends Contract {
     //     return Buffer.from(JSON.stringify(patientData))
     // }
 
-    // async lala(ctx){
-    //     let test = "elo"
-    //     return test
-    // }
+
     // async readPatientData(ctx, patientId){
     //     let response = await ctx.stub.getState(patientId)
     //     response = response.toString('utf-8')                                       // convert buffer to string

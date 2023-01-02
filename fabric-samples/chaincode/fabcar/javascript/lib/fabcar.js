@@ -46,11 +46,22 @@ class FabCar extends Contract {
         await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)))
         return Buffer.from(JSON.stringify(patientData))
     }
+    // async readPatientData(ctx, patientId){
+    //     let patientData = await ctx.stub.getState(patientId)
+    //     patientData = patientData.toString('utf-8')   
+    //     return JSON.stringify(patientData)
+    // }
     async readPatientData(ctx, patientId){
-        let patientData = await ctx.stub.getState(patientId)
-        patientData = patientData.toString('utf-8')   
+        let patientDataAsBuffer = await ctx.stub.getState(patientId)
+
+        if (!patientDataAsBuffer) {
+            throw new Error(`No data found for patient with ID ${patientId}`);
+          }
+
+        const patientData = JSON.parse(patientDataAsBuffer.toString());
         return JSON.stringify(patientData)
     }
+    
     async readPatientHistoryData(ctx, patientId){ 
         let iterator = await ctx.stub.getHistoryForKey(patientId)
         let result = await this.getIteratorData(iterator)

@@ -6,6 +6,7 @@ import { GrantedAccessPatientListComponent } from './doctor/granted-access-patie
 import { PatientDetailComponent } from './doctor/patient-detail/patient-detail.component';
 import { CreateDiagnosisComponent } from './doctor/create-diagnosis/create-diagnosis.component';
 
+
 const routes: Routes = [
     { path: 'admin', component: AdminDashboardComponent },
     {
@@ -21,7 +22,7 @@ const routes: Routes = [
             component: PatientDetailComponent,
           },
           {
-            path: 'patients/:patientId/diagnosis',
+            path: 'patients/:patientId/CreateDiagnosis',
             component: CreateDiagnosisComponent,
           },
         ],

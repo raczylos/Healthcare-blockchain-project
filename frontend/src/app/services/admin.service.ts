@@ -52,20 +52,20 @@ export class AdminService {
             .pipe(catchError(this.handleError<Doctor>('registerDoctor')));
     }
 
-    getPatientList(): Observable<User[]> {
+    getPatientList(): Observable<Patient[]> {
         let url = 'get-patient-list/';
 
         return this.http
-            .get<User[]>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<User[]>('getPatientList')));
+            .get<Patient[]>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<Patient[]>('getPatientList')));
     }
 
-    getDoctorList(): Observable<User[]> {
+    getDoctorList(): Observable<Doctor[]> {
         let url = 'get-doctor-list/';
 
         return this.http
-            .get<User[]>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<User[]>('getPatientList')));
+            .get<Doctor[]>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<Doctor[]>('getPatientList')));
     }
 
 

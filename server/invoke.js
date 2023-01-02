@@ -109,11 +109,18 @@ async function main() {
 
         // INIT BASIC PATIENT DATA BY ADMIN, then doctor can add medic data
 
-        let patientData = {
-            "diagnosis": "cancer",
-            "age": 18,
-            "allergies": "eggs"
-        }
+    //   let patientData = {
+	// 		conditions: ["Heart disease", "High blood pressure"],
+	// 		medications: ["Aspirin"],
+	// 		allergies: ["eggs", "milk"],
+	// 		treatmentPlans: "Bla bla bla",
+	// 	};
+    let patientData = {
+        conditions: ["Heart disease", "High blood pressure"],
+        medications: ["Aspirin"],
+        allergies: ["eggs", "milk"],
+        treatmentPlans: "Bla bla bla1",
+    };
 
 
 

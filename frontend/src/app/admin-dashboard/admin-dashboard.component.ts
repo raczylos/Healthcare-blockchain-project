@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators  } from '@angular/forms';
 import { User } from '../user';
 import { AdminService } from '../services/admin.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -53,6 +54,11 @@ export class AdminDashboardComponent {
     userRole!: string;
     patientList!: Array<any>;
     doctorList!: Array<any>;
+    // @Input() prop: number = 0;
+
+    // ngOnChanges() {
+    //     console.log("jestem w onChanges " + this.patientList)
+    // }
 
     ngOnInit() {
         this.userId = localStorage.getItem('userId')!;
@@ -72,6 +78,14 @@ export class AdminDashboardComponent {
         })
     }
 
+    openSnackBar(message: string) {
+        this._snackBar.open(message + " registered", "close", {
+            duration: 5 * 1000, // 5 sec
+            verticalPosition: "top",
+        });
+      }
+
+
     // onSubmit(): void {
     //     let user: User = {
     //         firstName: this.createUserForm.value.firstName!,
@@ -90,6 +104,10 @@ export class AdminDashboardComponent {
     //     });
     // }
 
+    refresh(): void {
+        window.location.reload();
+    }
+
     onSubmitPatient(): void {
         let patient: Patient = {
             firstName: this.createPatientForm.value.firstName!,
@@ -107,6 +125,8 @@ export class AdminDashboardComponent {
                 if(res){
                     console.log("patient registered")
                     console.log(res)
+                    // this.openSnackBar(res.userId)
+                    this.refresh()
                 }
             });
         } else {
@@ -135,6 +155,7 @@ export class AdminDashboardComponent {
                 if(res){
                     console.log("doctor registered")
                     console.log(res)
+                    this.refresh()
                 }
             });
         } else {
@@ -146,6 +167,7 @@ export class AdminDashboardComponent {
     constructor(
         private formBuilder: FormBuilder,
         private userService: UserService,
-        private adminService: AdminService
+        private adminService: AdminService,
+        private _snackBar: MatSnackBar
     ) {}
 }

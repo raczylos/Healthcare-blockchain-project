@@ -13,8 +13,10 @@
         <span class="example-spacer"></span>
 
         <a *ngIf="!userService.isLoggedIn" mat-button (click)="openDialog()"  >Login</a>
-        <a *ngIf="userRole === 'doctor'" mat-button routerLink="/doctor/{{userId}}">Doctor Dashboard</a>
-        <a *ngIf="userRole === 'admin'" mat-button routerLink="/admin">Admin Dashboard</a>
+        <!-- <a *ngIf="userRole === 'doctor'" mat-button routerLink="/doctor/{{userId}}">Doctor Dashboard</a>
+        <a *ngIf="userRole === 'admin'" mat-button routerLink="/admin">Admin Dashboard</a> -->
+        <a *ngIf="userService.userRole === 'doctor'" mat-button routerLink="/doctor/{{userId}}">Doctor Dashboard</a>
+        <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin">Admin Dashboard</a>
         <a *ngIf="userService.isLoggedIn" mat-button (click)="userService.logOut()" >Logout</a>
 
         <button

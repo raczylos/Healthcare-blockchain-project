@@ -21,6 +21,8 @@ export class UserService {
 
     private base_url = 'http://localhost:3000/';
     public isLoggedIn: boolean = !!this.getAccessToken()
+    public userId: string  = localStorage.getItem('userId')!;
+    public userRole: any = this.getUserRole(this.userId)
 
     constructor(private http: HttpClient, private router: Router) {
         console.log('patient service constructor');
@@ -84,6 +86,7 @@ export class UserService {
         console.log("logout")
         localStorage.clear()
         this.isLoggedIn = false
+        this.userRole = undefined
         this.router.navigate(['/'])
     }
 

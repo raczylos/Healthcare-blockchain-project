@@ -1,1 +1,52 @@
 <p>create-diagnosis works!</p>
+
+
+<form [formGroup]="createMedicalDataForm">
+    <div>
+        <mat-form-field appearance="fill" >
+            <mat-label>conditions</mat-label>
+            <input matInput formControlName="conditions" required>
+        </mat-form-field>
+    </div>
+
+    <!-- <mat-form-field appearance="fill">
+        <mat-label>Conditions</mat-label>
+        <mat-chip-list #conditionsChipList>
+          <mat-chip *ngFor="let condition of conditions.controls" [selectable]="true">{{condition.value}}</mat-chip>
+          <input placeholder="Enter a condition" [matChipInputFor]="conditionsChipList" (matChipInputTokenEnd)="addCondition($event)">
+        </mat-chip-list>
+      </mat-form-field>
+
+      <button mat-icon-button (click)="addCondition()">
+        <mat-icon>add</mat-icon>
+      </button> -->
+
+      <!-- end -->
+    <div>
+        <mat-form-field appearance="fill" >
+            <mat-label>medications</mat-label>
+            <input matInput formControlName="medications" required>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-form-field appearance="fill" >
+            <mat-label>allergies</mat-label>
+            <input matInput  formControlName="allergies" required>
+        </mat-form-field>
+    </div>
+
+
+
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>treatmentPlans</mat-label>
+            <textarea matInput formControlName="treatmentPlans" required></textarea>
+        </mat-form-field>
+    </div>
+
+    <div class="submit-button">
+        <button mat-raised-button color="primary" (click)="onSubmit()">Create diagnosis</button>
+    </div>
+
+</form>

@@ -24,7 +24,7 @@ export class AppComponent {
     ngOnInit() {
         this.userId = localStorage.getItem('userId')!;
         this.userService.getUserRole(this.userId).subscribe((res: any) => {
-            this.userRole = res.userRole;
+            this.userService.userRole = res.userRole;
         });
     }
 
