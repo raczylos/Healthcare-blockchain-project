@@ -116,11 +116,11 @@ async function main() {
 	// 		treatmentPlans: "Bla bla bla",
 	// 	};
     let patientData = {
-        conditions: ["Heart disease", "High blood pressure"],
-        medications: ["Aspirin"],
-        allergies: ["eggs", "milk"],
-        treatmentPlans: "Bla bla bla1",
-    };
+		conditions: ["Heart disease", "High blood pressure"],
+		medications: ["Aspirin"],
+		allergies: ["eggs", "milk"],
+		treatmentPlans: "Bla bla bla",
+	};
 
 
 

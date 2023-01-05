@@ -1,10 +1,10 @@
 const { Gateway, Wallets } = require("fabric-network");
-const fs = require("fs");
 const path = require("path");
+const fs = require("fs");
 
-exports.invokeDiagnosis = async function (patientId, medicalData) {
+exports.getDoctorAccessList = async function (doctorId) {
 	try {
-		
+		console.log("getDoctorAccessList")
 		// load the network configuration
 		const ccpPath = path.resolve(
 			__dirname,
@@ -16,7 +16,7 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 			"org1.example.com",
 			"connection-org1.json"
 		);
-		let ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
+		const ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
 
 		// Create a new file system based wallet for managing identities.
 		const walletPath = path.join(process.cwd(), "wallet");
@@ -24,11 +24,13 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 		console.log(`Wallet path: ${walletPath}`);
 
 		// Check to see if we've already enrolled the user.
-		const identity = await wallet.get(patientId);
+		const identity = await wallet.get(doctorId);
 		if (!identity) {
+			console.log("getDoctorAccessList")
 			console.log(
-				`An identity for the patient ${patientId} does not exist in the wallet`
+				`An identity for the user ${doctorId} does not exist in the wallet`
 			);
+			
 			return;
 		}
 
@@ -36,7 +38,7 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 		const gateway = new Gateway();
 		await gateway.connect(ccp, {
 			wallet,
-			identity: patientId,
+			identity: doctorId,
 			discovery: { enabled: true, asLocalhost: true },
 		});
 
@@ -46,22 +48,24 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 		// Get the contract from the network.
 		// const contract = network.getContract('fabcar');
 		const contract = network.getContract("adminContract");
-
-	
-        
-		await contract.submitTransaction(
-			"writePatientData",
-			patientId,
-			JSON.stringify(medicalData)
+		
+		const doctorAccessList = await contract.evaluateTransaction(
+			"readPatientData",
+			doctorId
 		);
 
-		console.log("Transaction has been submitted.");
-
+		const buffer = Buffer.from(doctorAccessList);
+		const strData = buffer.toString();
+		const doctorAccessListJson = JSON.parse(strData);
+		
+		
 		// Disconnect from the gateway.
 		await gateway.disconnect();
-		// return
+
+		return doctorAccessListJson
+
 	} catch (error) {
-		console.error(`Failed to submit transaction: ${error}`);
-		process.exit(1);
+		console.error(`Failed to evaluate transaction in getDoctorAccessList: ${error}`);
+		// process.exit(1);
 	}
 };

@@ -1,6 +1,5 @@
 import { Doctor } from './../doctor';
 import { Patient } from './../patient';
-import { PatientService } from '../patient.service';
 import { UserService } from '../services/user.service';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators  } from '@angular/forms';

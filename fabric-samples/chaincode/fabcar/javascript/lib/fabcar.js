@@ -54,9 +54,9 @@ class FabCar extends Contract {
     async readPatientData(ctx, patientId){
         let patientDataAsBuffer = await ctx.stub.getState(patientId)
 
-        if (!patientDataAsBuffer) {
-            throw new Error(`No data found for patient with ID ${patientId}`);
-          }
+        // if (!patientDataAsBuffer) {
+        //     throw new Error(`No data found for patient with ID ${patientId}`);
+        //   }
 
         const patientData = JSON.parse(patientDataAsBuffer.toString());
         return JSON.stringify(patientData)

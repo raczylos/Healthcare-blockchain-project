@@ -22,7 +22,7 @@ export class DoctorService {
 
         return this.http
             .get<MedicalData>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<MedicalData>('getPatientList')));
+            .pipe(catchError(this.handleError<MedicalData>('getPatientMedicalData')));
     }
 
     getPatientHistoryData(patientId: string): Observable<MedicalData> {
@@ -30,7 +30,7 @@ export class DoctorService {
 
         return this.http
             .get<MedicalData>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<MedicalData>('getPatientList')));
+            .pipe(catchError(this.handleError<MedicalData>('getPatientHistoryData')));
     }
 
     postPatientMedicalData(patientId: string, medicalData: MedicalData): Observable<MedicalData> {
@@ -41,7 +41,39 @@ export class DoctorService {
         }
         return this.http
             .post<MedicalData>(this.base_url + url, dataJson, httpOptions)
-            .pipe(catchError(this.handleError<MedicalData>('getPatientList')));
+            .pipe(catchError(this.handleError<MedicalData>('postPatientMedicalData')));
+    }
+
+    getDoctorAccessList(doctorId: string): Observable<Array<string>> {
+        let url = `get-doctor-access-list/${doctorId}/`;
+
+        return this.http
+            .get<Array<string>>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<Array<string>>('getDoctorAccessList')));
+    }
+
+    grantDoctorAccess(patientId: string, doctorId: string, doctorAccessList: Array<String>): Observable<Array<String>> {
+        let url = `grant-doctor-access/`;
+        let dataJson = {
+            patientId: patientId,
+            doctorId: doctorId,
+            doctorAccessList: doctorAccessList,
+        }
+        return this.http
+            .post<Array<String>>(this.base_url + url, dataJson, httpOptions)
+            .pipe(catchError(this.handleError<Array<String>>('grantDoctorAccess')));
+    }
+
+    revokeDoctorAccess(patientId: string, doctorId: string, doctorAccessList: Array<String>): Observable<Array<String>> {
+        let url = `revoke-doctor-access/`;
+        let dataJson = {
+            patientId: patientId,
+            doctorId: doctorId,
+            doctorAccessList: doctorAccessList,
+        }
+        return this.http
+            .post<Array<String>>(this.base_url + url, dataJson, httpOptions)
+            .pipe(catchError(this.handleError<Array<String>>('revokeDoctorAccess')));
     }
 
 

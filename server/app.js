@@ -3,6 +3,8 @@ require('dotenv').config()
 const register = require('./register')
 const diagnosis = require('./invokeDiagnosis')
 const queryDiagnosis = require('./queryDiagnosis')
+const queryDoctorAccessList = require('./queryDoctorAccessList')
+const invokeDoctorAccessList = require('./invokeDoctorAccessList')
 // const patient = require('./patient')
 // const database = require('./database')
 const userUtils = require('./user');
@@ -174,7 +176,7 @@ app.get('/get-patient-list', async (req, res) => {
     let patientListInfo = []
 
     patientList.forEach((patient, index, array) => {
-        console.log(patient);
+        // console.log(patient);
         let patientId = patient.id
         let firstName = patient.attrs.find(attr => attr.name === "firstName")
         let lastName = patient.attrs.find(attr => attr.name === "lastName")
@@ -184,7 +186,7 @@ app.get('/get-patient-list', async (req, res) => {
         
 
         let patientInfo = {
-            patientId: patientId,
+            userId: patientId,
             firstName: firstName.value,
             lastName: lastName.value,
             age: age.value,
@@ -205,7 +207,7 @@ app.get('/get-doctor-list', async (req, res) => {
     let doctorListInfo = []
 
     doctorList.forEach((doctor, index, array) => {
-        console.log(doctor);
+        // console.log(doctor);
         let doctorId = doctor.id
         let firstName = doctor.attrs.find(attr => attr.name === "firstName")
         let lastName = doctor.attrs.find(attr => attr.name === "lastName")
@@ -215,7 +217,7 @@ app.get('/get-doctor-list', async (req, res) => {
         let specialization = doctor.attrs.find(attr => attr.name === "specialization")
 
         let doctorInfo = {
-            doctorId: doctorId,
+            userId: doctorId,
             firstName: firstName.value,
             lastName: lastName.value,
             age: age.value,
@@ -236,13 +238,14 @@ app.post('/post-patient-medical-data', async (req, res) => {
     
     const patientId = req.body.patientId
     const medicalData = req.body.medicalData
-    await diagnosis.invokeDiagnosis(patientId, "lala")
+    await diagnosis.invokeDiagnosis(patientId, medicalData)
 
-    // res.json(medicalData)
+    res.json(medicalData)
 })
 
 app.get('/get-current-medical-data/:patientId', async (req, res) => {
     const patientId = req.params.patientId
+    console.log("get-current-medical-data")
     console.log(patientId)
     const medicalData = await queryDiagnosis.readPatientMedicalData(patientId)
 
@@ -251,9 +254,61 @@ app.get('/get-current-medical-data/:patientId', async (req, res) => {
 
 app.get('/get-history-medical-data/:patientId', async (req, res) => {
     const patientId = req.params.patientId
-    const medicalData = await queryDiagnosis.readPatientHistoryData(patientId)
+    const medicalHistoryData = await queryDiagnosis.readPatientHistoryData(patientId)
+    if(!medicalHistoryData){
+        return
+    }   
+    medicalHistoryData.shift() // remove current medical data from history
+    res.json(medicalHistoryData)
+})
 
-    res.json(medicalData)
+app.get('/get-doctor-access-list/:doctorId', async (req, res) => {
+    const doctorId = req.params.doctorId
+    const doctorAccessList = await queryDoctorAccessList.getDoctorAccessList(doctorId)
+    
+    if(!doctorAccessList){ // if undefined doctor doesn't have any access
+        let list = []
+        res.json(list)
+    } else {
+        
+        res.json(doctorAccessList)
+    }
+    
+})
+
+app.post('/grant-doctor-access', async (req, res) => {
+
+    const patientId = req.body.patientId
+    const doctorId = req.body.doctorId
+    let doctorAccessList = req.body.doctorAccessList
+    
+    // await diagnosis.invokeDiagnosis(doctorId, medicalData)
+    if(doctorAccessList.find(item => item === patientId)){
+        console.log(`doctor: ${doctorId}  has already access to patient: ${patientId}`)
+        return;
+    }
+    doctorAccessList.push(patientId)
+
+    await invokeDoctorAccessList.postDoctorAccessList(doctorId, doctorAccessList)
+
+    res.json(doctorAccessList)
+})
+
+app.post('/revoke-doctor-access', async (req, res) => {
+
+    const patientId = req.body.patientId
+    const doctorId = req.body.doctorId
+    let doctorAccessList = req.body.doctorAccessList
+    
+    if(!doctorAccessList.find(item => item === patientId)){
+        console.log(`doctor: ${doctorId}  doesn't have access to patient: ${patientId} so it cannot be revoked`)
+        return;
+    }
+    doctorAccessList = doctorAccessList.filter(item => item !== patientId)
+
+    await invokeDoctorAccessList.postDoctorAccessList(doctorId, doctorAccessList)
+
+    res.json(doctorAccessList)
 })
 
 

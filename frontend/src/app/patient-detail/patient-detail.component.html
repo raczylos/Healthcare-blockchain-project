@@ -14,7 +14,7 @@
     <mat-list role="list" *ngFor="let item of patientHistoryData">
         <mat-list-item role="listitem">Allergies: {{item.value.allergies}} </mat-list-item>
         <mat-list-item role="listitem">Conditions: {{item.value.conditions}} </mat-list-item>
-        <mat-list-item role="listitem">Medications: {{item.value.medications}} </mat-list-item>
+        <mat-list-item role="   listitem">Medications: {{item.value.medications}} </mat-list-item>
         <mat-list-item role="listitem">Treatment Plans: {{item.value.treatmentPlans}} </mat-list-item>
     </mat-list> -->
 
@@ -53,8 +53,10 @@
         </mat-card-content>
       </mat-card>
 
+      <div *ngIf="userService.userRole === 'doctor'">
+        <app-create-diagnosis></app-create-diagnosis>
+      </div>
 
-      <button [routerLink]="['CreateDiagnosis']"> Redirect to create diagnosis</button>
 
 
 </div>

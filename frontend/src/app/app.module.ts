@@ -21,17 +21,17 @@ import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTableModule} from '@angular/material/table';
 import { DoctorComponent } from './doctor/doctor.component';
-import { GrantedAccessPatientListComponent } from './doctor/granted-access-patient-list/granted-access-patient-list.component';
-import { PatientDetailComponent } from './doctor/patient-detail/patient-detail.component';
-import { CreateDiagnosisComponent } from './doctor/create-diagnosis/create-diagnosis.component';
+import { PatientDetailComponent } from './patient-detail/patient-detail.component';
+import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatCardModule} from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
+import { PatientComponent } from './patient/patient.component';
 
 @NgModule({
-    declarations: [AppComponent, AdminDashboardComponent, LoginComponent, DoctorComponent, GrantedAccessPatientListComponent, PatientDetailComponent, CreateDiagnosisComponent],
+    declarations: [AppComponent, AdminDashboardComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

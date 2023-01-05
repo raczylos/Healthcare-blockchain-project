@@ -1,0 +1,32 @@
+<p>patient works!</p>
+
+<div *ngIf="userRole === 'patient'">
+
+    <!-- <mat-selection-list #doctor [multiple]="false">
+        <mat-list-option *ngFor="let doctor of doctorList" [value]="doctor">
+            {{doctor.userId}}
+            <button mat-raised-button color="primary" (click)="grantDoctorAccess(doctor.userId)"
+            [ngClass]="{'green': !isGrantedAccess, 'red': isGrantedAccess}">Grant access</button>
+            <button mat-raised-button color="primary" (click)="revokeDoctorAccess(doctor.userId)" >Revoke access</button>
+        </mat-list-option>
+    </mat-selection-list> -->
+    <h3>Grant access to doctor</h3>
+    <mat-form-field appearance="fill">
+        <mat-label>Choose doctor</mat-label>
+        <mat-select [(value)]="selectedDoctor" (valueChange)="selectedDoctorChanged($event)">
+            <mat-option *ngFor="let doctor of doctorList" [value]="doctor">
+                {{doctor.userId}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- <button mat-raised-button color="primary" (click)="revokeDoctorAccess(selectedDoctor.userId)" >Revoke access</button> -->
+
+    <div *ngIf="selectedDoctor">
+        <button mat-raised-button color="primary" (click)="isGrantedAccess ? revokeDoctorAccess(selectedDoctor.userId) : grantDoctorAccess(selectedDoctor.userId)"
+        [ngClass]="{'green': !isGrantedAccess, 'red': isGrantedAccess}">{{isGrantedAccess ? 'Revoke access': 'Grant access' }}</button>
+    </div>
+
+    <app-patient-detail > </app-patient-detail>
+
+</div>

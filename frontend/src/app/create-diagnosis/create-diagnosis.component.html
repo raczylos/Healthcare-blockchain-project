@@ -22,12 +22,34 @@
       </button> -->
 
       <!-- end -->
-    <div>
-        <mat-form-field appearance="fill" >
-            <mat-label>medications</mat-label>
-            <input matInput formControlName="medications" required>
-        </mat-form-field>
+
+    <div formArrayName="medications">
+        <div *ngFor="let medication of medications.controls; let i = index">
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>medication{{i}}</mat-label>
+                    <input matInput [formControlName]="i" >
+                    <button mat-icon-button matSuffix (click)="addInput()">
+                        <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
+                    </button>
+                </mat-form-field>
+
+            </div>
+            <div>
+
+            </div>
+        </div>
+
     </div>
+
+
+    <!-- <ng-container formArrayName="medications" *ngFor="let contact of medications.controls; index as i">
+        <ng-container [formGroupName]="i">
+          <input formControlName="medication">
+        </ng-container>
+      </ng-container> -->
+
+
 
     <div>
         <mat-form-field appearance="fill" >

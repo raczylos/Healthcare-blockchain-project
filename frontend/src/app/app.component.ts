@@ -21,12 +21,19 @@ export class AppComponent {
     userRole!: string;
 
 
+
     ngOnInit() {
-        this.userId = localStorage.getItem('userId')!;
-        this.userService.getUserRole(this.userId).subscribe((res: any) => {
-            this.userService.userRole = res.userRole;
-        });
+
+        if(this.userService.isLoggedIn){
+            this.userId = localStorage.getItem('userId')!;
+            this.userRole = localStorage.getItem('userRole')!;
+            this.userService.getUserRole(this.userId).subscribe((res: any) => {
+                this.userService.userRole = res.userRole;
+            });
+        }
+
     }
+
 
 
     openDialog(): void { //componentName: ComponentType<any>
@@ -36,6 +43,7 @@ export class AppComponent {
         dialogRef.afterClosed().subscribe((result) => {
             // this.userService.getUsername()
             console.log("the dialog was closed")
+            this.userId = localStorage.getItem('userId')!;
         })
     }
 }

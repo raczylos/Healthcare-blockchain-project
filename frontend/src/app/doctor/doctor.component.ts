@@ -1,3 +1,4 @@
+import { DoctorService } from 'src/app/services/doctor.service';
 import { Router } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -7,6 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { Patient } from '../patient';
+const Buffer = require('buffer').Buffer;
 
 @Component({
   selector: 'app-doctor',
@@ -23,6 +25,8 @@ export class DoctorComponent {
     userId!: string;
     userRole!: string;
     patientList!: Array<any>;
+    doctorAccessList!: Array<string>
+    grantedAccessPatientList!: Array<any>
 
     dataSource!: MatTableDataSource<Patient>;
 
@@ -48,20 +52,50 @@ export class DoctorComponent {
         });
 
 
+        this.getDoctorAccessList(this.userId)
+
+    }
+
+    getGrantedAccessPatientList() {
         this.adminService.getPatientList().subscribe((res) => {
             console.log("patient list")
             console.log(res)
-            this.patientList = res
-            this.dataSource = new MatTableDataSource(res);
+
+            console.log(this.doctorAccessList.includes("patient1"))
+
+            this.grantedAccessPatientList = res.filter(item => this.doctorAccessList.includes(item.userId)); // czm negacja?
+
+            console.log(this.grantedAccessPatientList)
+            this.dataSource = new MatTableDataSource(this.grantedAccessPatientList);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
         })
+    }
+
+    getDoctorAccessList(doctorId: string) {
+        this.doctorService
+            .getDoctorAccessList(doctorId)
+            .subscribe((res: any) => {
+                console.log('doctor access list');
+                if (!res) {
+                    // this.doctorAccessList = '';
+                } else {
+                    const buffer = Buffer.from(res.data);
+                    const strData = buffer.toString();
+
+                    this.doctorAccessList = JSON.parse(strData);
+
+                    console.log(this.doctorAccessList);
+                    this.getGrantedAccessPatientList()
+                }
+            });
     }
 
     constructor(
         private formBuilder: FormBuilder,
         private userService: UserService,
         private adminService: AdminService,
+        private doctorService: DoctorService,
         private router: Router
     ) {}
 

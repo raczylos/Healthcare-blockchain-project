@@ -2,9 +2,8 @@ const { Gateway, Wallets } = require("fabric-network");
 const fs = require("fs");
 const path = require("path");
 
-exports.invokeDiagnosis = async function (patientId, medicalData) {
+exports.postDoctorAccessList = async function (doctorId, doctorAccessList) {
 	try {
-		
 		// load the network configuration
 		const ccpPath = path.resolve(
 			__dirname,
@@ -24,10 +23,10 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 		console.log(`Wallet path: ${walletPath}`);
 
 		// Check to see if we've already enrolled the user.
-		const identity = await wallet.get(patientId);
+		const identity = await wallet.get(doctorId);
 		if (!identity) {
 			console.log(
-				`An identity for the patient ${patientId} does not exist in the wallet`
+				`An identity for the doctor ${doctorId} does not exist in the wallet`
 			);
 			return;
 		}
@@ -36,7 +35,7 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 		const gateway = new Gateway();
 		await gateway.connect(ccp, {
 			wallet,
-			identity: patientId,
+			identity: doctorId,
 			discovery: { enabled: true, asLocalhost: true },
 		});
 
@@ -51,10 +50,10 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
         
 		await contract.submitTransaction(
 			"writePatientData",
-			patientId,
-			JSON.stringify(medicalData)
+			doctorId,
+			JSON.stringify(doctorAccessList)
 		);
-
+			
 		console.log("Transaction has been submitted.");
 
 		// Disconnect from the gateway.

@@ -53,6 +53,7 @@ export class LoginComponent {
 
                 this.userService.getUserRole(this.loginForm.value.username!).subscribe((res: any) => {
                     this.userService.userRole = res.userRole;
+                    // localStorage.setItem('userRole', res.userRole);
                 });
 
             }
