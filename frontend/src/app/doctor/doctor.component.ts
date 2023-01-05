@@ -30,12 +30,6 @@ export class DoctorComponent {
 
     dataSource!: MatTableDataSource<Patient>;
 
-    // ngAfterViewInit() {
-    //     console.log("afterview")
-    //     // this.dataSource.paginator = this.paginator;
-    //     // this.dataSource.sort = this.sort;
-    //   }
-
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -80,11 +74,8 @@ export class DoctorComponent {
                 if (!res) {
                     // this.doctorAccessList = '';
                 } else {
-                    const buffer = Buffer.from(res.data);
-                    const strData = buffer.toString();
 
-                    this.doctorAccessList = JSON.parse(strData);
-
+                    this.doctorAccessList = res
                     console.log(this.doctorAccessList);
                     this.getGrantedAccessPatientList()
                 }

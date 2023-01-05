@@ -33,8 +33,8 @@
 
         <mat-menu #menu="matMenu">
             <button *ngIf="!userService.isLoggedIn" mat-menu-item (click)="openDialog()" >Login</button>
-            <button *ngIf="!userService.isLoggedIn" mat-menu-item >Login as doctor</button>
-            <button *ngIf="!userService.isLoggedIn" mat-menu-item>Login as admin</button>
+            <!-- <button *ngIf="!userService.isLoggedIn" mat-menu-item >Login as doctor</button>
+            <button *ngIf="!userService.isLoggedIn" mat-menu-item>Login as admin</button> -->
             <button *ngIf="userService.isLoggedIn" mat-menu-item (click)="userService.logOut()" >Log out</button>
         </mat-menu>
 

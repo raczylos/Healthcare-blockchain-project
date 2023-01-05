@@ -24,8 +24,10 @@ export class PatientComponent {
     ngOnInit() {
         this.userId = localStorage.getItem('userId')!;
         this.getUserRole();
+        this.getDoctorList()
 
-        this.getDoctorList();
+        console.log(this.selectedDoctor)
+        this.getDoctorAccessList(this.selectedDoctor)
 
     }
 
@@ -53,7 +55,7 @@ export class PatientComponent {
         this.doctorService
             .getDoctorAccessList(doctorId)
             .subscribe((res: any) => {
-                console.log('doctor access list');
+                console.log('doctor access list', doctorId);
                 if (!res) {
                     // this.doctorAccessList = '';
                 } else {
@@ -93,7 +95,7 @@ export class PatientComponent {
                                 `trying to grant doctor: ${doctorId} access to patient: ${patientId}`
                             );
                             console.log(res);
-                            
+
                         });
                 }
             });
