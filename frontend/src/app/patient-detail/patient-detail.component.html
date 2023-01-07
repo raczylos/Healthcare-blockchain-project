@@ -1,45 +1,20 @@
-<p>patient-detail works!</p>
-{{patientId}}
-
 <div>
-    <!-- <span> Patient current data</span>
-    <mat-list role="list">
-        <mat-list-item role="listitem">Allergies: {{patientMedicalData.allergies}}</mat-list-item>
-        <mat-list-item role="listitem">Conditions: {{patientMedicalData.conditions}}</mat-list-item>
-        <mat-list-item role="listitem">Medications: {{patientMedicalData.medications}}</mat-list-item>
-        <mat-list-item role="listitem">Treatment Plans: {{patientMedicalData.treatmentPlans}}</mat-list-item>
-    </mat-list>
 
-    <span> Patient history data</span>
-    <mat-list role="list" *ngFor="let item of patientHistoryData">
-        <mat-list-item role="listitem">Allergies: {{item.value.allergies}} </mat-list-item>
-        <mat-list-item role="listitem">Conditions: {{item.value.conditions}} </mat-list-item>
-        <mat-list-item role="   listitem">Medications: {{item.value.medications}} </mat-list-item>
-        <mat-list-item role="listitem">Treatment Plans: {{item.value.treatmentPlans}} </mat-list-item>
-    </mat-list> -->
-
-    <!-- <mat-list role="list">
-        <mat-list-item role="listitem" *ngFor="let item of patientHistoryData">
-          <mat-list dense>
-            <mat-list-item role="listitem" *ngFor="let prop of item.value | keyvalue">{{ prop.key }}: {{ prop.value }}</mat-list-item>
-          </mat-list>
-        </mat-list-item>
-      </mat-list> -->
-      <mat-card *ngIf="patientMedicalData">
+      <mat-card class="patient-current-medical-data-card" *ngIf="patientMedicalData">
         <mat-card-header>
-          <mat-card-title>{{patientId}} current data</mat-card-title>
+          <mat-card-title>{{patientId}} current medical data</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <mat-list>
-            <mat-list-item>Allergies: {{patientMedicalData.allergies}}</mat-list-item>
-            <mat-list-item>Conditions: {{patientMedicalData.conditions}}</mat-list-item>
-            <mat-list-item>Medications: {{patientMedicalData.medications}}</mat-list-item>
-            <mat-list-item>Treatment Plans: {{patientMedicalData.treatmentPlans}}</mat-list-item>
+            <mat-list-item><strong>Allergies:</strong> {{patientMedicalData.allergies}}</mat-list-item>
+            <mat-list-item><strong>Conditions:</strong> {{patientMedicalData.conditions}}</mat-list-item>
+            <mat-list-item><strong>Medications:</strong> {{patientMedicalData.medications}}</mat-list-item>
+            <mat-list-item><strong>Treatment Plans:</strong> {{patientMedicalData.treatmentPlans}}</mat-list-item>
           </mat-list>
         </mat-card-content>
       </mat-card>
 
-      <mat-card *ngFor="let item of patientHistoryData">
+      <!-- <mat-card *ngFor="let item of patientHistoryData">
         <mat-card-header>
           <mat-card-title>{{patientId}}  history data</mat-card-title>
         </mat-card-header>
@@ -51,11 +26,56 @@
             <mat-list-item>Treatment Plans: {{item.value.treatmentPlans}}</mat-list-item>
           </mat-list>
         </mat-card-content>
-      </mat-card>
+      </mat-card> -->
 
-      <div *ngIf="userService.userRole === 'doctor'">
+
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="patientId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Id. </th>
+            <td mat-cell  *matCellDef="let patient"> {{patient.userId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+            <td mat-cell *matCellDef="let patient"> {{patient.firstName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+            <td mat-cell *matCellDef="let patient"> {{patient.lastName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
+            <td mat-cell *matCellDef="let patient"> {{patient.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+            <td mat-cell *matCellDef="let patient"> {{patient.gender}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+            <td mat-cell *matCellDef="let patient"> {{patient.address}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedPatientColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;"></tr>
+
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+
+    <div *ngIf="userService.userRole === 'doctor'">
         <app-create-diagnosis></app-create-diagnosis>
-      </div>
+    </div>
 
 
 

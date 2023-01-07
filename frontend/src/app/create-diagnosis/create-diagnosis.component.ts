@@ -18,14 +18,13 @@ import { MedicalData } from 'src/app/medicalData';
 export class CreateDiagnosisComponent {
     patientId!: string;
     conditions!: FormArray;
+    doctorId!: string;
     medicationCounter: number = 1
 
-    // createMedicalDataForm = this.formBuilder.group({
-    //     conditions: [[''], Validators.required],
-    //     medications: [[''], Validators.required],
-    //     allergies: [[''], Validators.required],
-    //     treatmentPlans: ['', Validators.required],
-    // });
+    isProgressSpinner: boolean = false
+
+    doctorAccessList!: Array<string>
+
     createMedicalDataForm = this.formBuilder.group({
         conditions: [[''], Validators.required],
         medications: this.formBuilder.array([
@@ -40,10 +39,14 @@ export class CreateDiagnosisComponent {
       }
 
     ngOnInit() {
+        this.doctorId = localStorage.getItem("userId")!
+        this.getDoctorAccessList(this.doctorId)
         this.activatedRoute.params.subscribe((params) => {
             this.patientId = params['id'];
+            console.log("params")
             console.log(params)
             console.log(this.patientId)
+
 
         });
     }
@@ -53,6 +56,20 @@ export class CreateDiagnosisComponent {
         const medication = this.formBuilder.control('', Validators.required);
         medications.push(medication);
         this.medicationCounter++;
+    }
+
+    getDoctorAccessList(doctorId: string) {
+        this.doctorService
+            .getDoctorAccessList(doctorId)
+            .subscribe((res: any) => {
+                console.log('doctor access list', doctorId);
+                if (!res) {
+                    // this.doctorAccessList = '';
+                } else {
+                    this.doctorAccessList = res
+                    console.log(this.doctorAccessList);
+                }
+            });
     }
 
     onSubmit() {
@@ -65,17 +82,28 @@ export class CreateDiagnosisComponent {
         };
 
         if(this.createMedicalDataForm.valid){
-            console.log("valid")
-            console.log(medicalData)
-            this.doctorService
-            .postPatientMedicalData(this.patientId, medicalData)
-            .subscribe((res) => {
-                console.log(res);
-            });
+            if(this.doctorAccessList.find(patient => patient === this.patientId)){
+                console.log("valid createMedicalDataForm")
+                console.log(medicalData)
+                this.isProgressSpinner = true
+                this.doctorService
+                .postPatientMedicalData(this.patientId, medicalData)
+                .subscribe((res) => {
+                    console.log(res);
+
+                    this.refresh()
+                });
+            } else {
+                console.log("you don't have access to that patient")
+            }
         } else {
             console.log("invalid createMedicalDataForm")
         }
 
+    }
+
+    refresh(): void {
+        window.location.reload();
     }
 
     constructor(

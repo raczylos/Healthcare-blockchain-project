@@ -43,7 +43,8 @@ async function main() {
 
         // Get the contract from the network.
         // const contract = network.getContract('fabcar');
-        const contract = network.getContract('adminContract');
+        // const contract = network.getContract('adminContract');
+        const contract = network.getContract("medicalContract");
 
 
         // let key1 = "patient1"
@@ -100,12 +101,12 @@ async function main() {
 
 
 
-        // await contract.submitTransaction("writePatientData", key1, JSON.stringify(patient1));
-        // await contract.submitTransaction("writePatientData", key1, JSON.stringify(patient6));
-        // await contract.submitTransaction("writePatientData", key2, JSON.stringify(patient2));
-        // await contract.submitTransaction("writePatientData", key3, JSON.stringify(patient3));
-        // await contract.submitTransaction("writePatientData", key4, JSON.stringify(patient4));
-        // await contract.submitTransaction("writePatientData", key5, JSON.stringify(patient5));
+        // await contract.submitTransaction("writeData", key1, JSON.stringify(patient1));
+        // await contract.submitTransaction("writeData", key1, JSON.stringify(patient6));
+        // await contract.submitTransaction("writeData", key2, JSON.stringify(patient2));
+        // await contract.submitTransaction("writeData", key3, JSON.stringify(patient3));
+        // await contract.submitTransaction("writeData", key4, JSON.stringify(patient4));
+        // await contract.submitTransaction("writeData", key5, JSON.stringify(patient5));
 
         // INIT BASIC PATIENT DATA BY ADMIN, then doctor can add medic data
 
@@ -124,7 +125,7 @@ async function main() {
 
 
 
-        await contract.submitTransaction("writePatientData", patientId, JSON.stringify(patientData));
+        await contract.submitTransaction("writeData", patientId, JSON.stringify(patientData));
 
         console.log('Transaction has been submitted.');
 

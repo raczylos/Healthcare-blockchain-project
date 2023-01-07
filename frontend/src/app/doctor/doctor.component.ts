@@ -30,6 +30,7 @@ export class DoctorComponent {
 
     dataSource!: MatTableDataSource<Patient>;
 
+
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -52,12 +53,8 @@ export class DoctorComponent {
 
     getGrantedAccessPatientList() {
         this.adminService.getPatientList().subscribe((res) => {
-            console.log("patient list")
-            console.log(res)
-
-            console.log(this.doctorAccessList.includes("patient1"))
-
-            this.grantedAccessPatientList = res.filter(item => this.doctorAccessList.includes(item.userId)); // czm negacja?
+            
+            this.grantedAccessPatientList = res.filter(item => this.doctorAccessList.includes(item.userId));
 
             console.log(this.grantedAccessPatientList)
             this.dataSource = new MatTableDataSource(this.grantedAccessPatientList);

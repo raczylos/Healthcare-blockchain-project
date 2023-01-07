@@ -6,7 +6,7 @@
             <input matInput (keyup)="applyFilter($event)">
         </mat-form-field>
 
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+        <table mat-table [dataSource]="dataSource" matSort>
 
             <ng-container matColumnDef="patientId">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Id. </th>

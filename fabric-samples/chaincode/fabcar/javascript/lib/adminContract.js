@@ -10,62 +10,58 @@ const { Contract } = require('fabric-contract-api');
 
 
 class AdminContract extends Contract {
+	async initLedger1(ctx) {
+		await ctx.stub.putState("testt11", "test valuee111");
+		return "success";
+	}
 
-    // async initLedger(ctx){
-    //     await ctx.stub.putState("testt", "test valuee")
-    //     return "success"
-    // }
-    
+	// async writePatientData(ctx, patientId, data){
+	//     let patientData = JSON.parse(data)
+	//     await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)))
+	//     return Buffer.from(JSON.stringify(patientData))
+	// }
 
-    // async writePatientData(ctx, patientId, data){
-    //     let patientData = JSON.parse(data)
-    //     await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)))
-    //     return Buffer.from(JSON.stringify(patientData))
-    // }
+	// async readPatientData(ctx, patientId){
+	//     let response = await ctx.stub.getState(patientId)
+	//     response = response.toString('utf-8')                                       // convert buffer to string
+	//     return JSON.stringify(response)
+	// }
 
+	// async readPatientHistoryData(ctx, patientId){
+	//     let iterator = await ctx.stub.getHistoryForKey(patientId)
+	//     let result = await this.getIteratorData(iterator)
+	//     return JSON.stringify(result)
+	// }
 
-    // async readPatientData(ctx, patientId){
-    //     let response = await ctx.stub.getState(patientId)
-    //     response = response.toString('utf-8')                                       // convert buffer to string
-    //     return JSON.stringify(response)
-    // }
+	// async queryPatientsByDiagnosis(ctx, diagnosis){
+	//     let query = {}
+	//     query.selector = {"diagnosis": diagnosis}
+	//     let iterator = await ctx.stub.getQueryResult(JSON.stringify(query))
+	//     let result = await this.getIteratorData(iterator)
+	//     return JSON.stringify(result)
+	// }
 
-    // async readPatientHistoryData(ctx, patientId){ 
-    //     let iterator = await ctx.stub.getHistoryForKey(patientId)
-    //     let result = await this.getIteratorData(iterator)
-    //     return JSON.stringify(result)
-    // }
+	// async getIteratorData(iterator){
+	//     let resultArray = []
 
-    // async queryPatientsByDiagnosis(ctx, diagnosis){
-    //     let query = {}
-    //     query.selector = {"diagnosis": diagnosis}
-    //     let iterator = await ctx.stub.getQueryResult(JSON.stringify(query))
-    //     let result = await this.getIteratorData(iterator)
-    //     return JSON.stringify(result)
-    // }
+	//     while(true){
+	//         let res = await iterator.next()
+	//         let resJson = {}
 
-    // async getIteratorData(iterator){
-    //     let resultArray = []
+	//         if(res.value && res.value.value.toString()){
+	//             resJson.key = res.value.key
+	//             resJson.value = JSON.parse(res.value.value.toString('utf-8'))
+	//             resultArray.push(resJson)
+	//         }
 
-    //     while(true){
-    //         let res = await iterator.next()
-    //         let resJson = {}
+	//         if(res.done){
+	//             await iterator.close()
+	//             return resultArray
+	//         }
 
-    //         if(res.value && res.value.value.toString()){
-    //             resJson.key = res.value.key
-    //             resJson.value = JSON.parse(res.value.value.toString('utf-8')) 
-    //             resultArray.push(resJson)
-    //         }
+	//     }
 
-    //         if(res.done){
-    //             await iterator.close()
-    //             return resultArray
-    //         }
-
-    //     }
-
-    // }
-
+	// }
 }
 
 module.exports = AdminContract;

@@ -5,6 +5,7 @@ const fs = require("fs");
 exports.getDoctorAccessList = async function (doctorId) {
 	try {
 		console.log("getDoctorAccessList")
+		console.log(doctorId)
 		// load the network configuration
 		const ccpPath = path.resolve(
 			__dirname,
@@ -47,10 +48,11 @@ exports.getDoctorAccessList = async function (doctorId) {
 
 		// Get the contract from the network.
 		// const contract = network.getContract('fabcar');
-		const contract = network.getContract("adminContract");
+		// const contract = network.getContract("adminContract");
+		const contract = network.getContract("medicalContract");
 		
 		const doctorAccessList = await contract.evaluateTransaction(
-			"readPatientData",
+			"readData",
 			doctorId
 		);
 

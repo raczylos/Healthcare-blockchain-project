@@ -6,9 +6,12 @@
 
 'use strict';
 
-const FabCar = require('./lib/fabcar');
+// const FabCar = require('./lib/fabcar');
 const AdminContract = require('./lib/adminContract');
+const MedicalContract = require('./lib/medicalContract');
 
-module.exports.AdminContract = AdminContract;
-module.exports.FabCar = FabCar;
-module.exports.contracts = [ FabCar, AdminContract];
+// module.exports.FabCar = FabCar;
+// module.exports.AdminContract = AdminContract;
+module.exports.AdminContract = MedicalContract;
+// module.exports.contracts = [ FabCar];
+module.exports.contracts = [ MedicalContract];

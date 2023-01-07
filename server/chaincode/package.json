@@ -1,0 +1,20 @@
+{
+	"name": "chaincode",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"engines": {
+		"node": ">=12",
+		"npm": ">=6.9"
+	},
+	"dependencies": {
+		"fabric-contract-api": "^2.0.0",
+		"fabric-shim": "^2.0.0"
+	},
+	"scripts": {
+    "start": "fabric-chaincode-node start"
+	},
+  "engineStrict": true,
+	"author": "",
+	"license": "ISC"
+}

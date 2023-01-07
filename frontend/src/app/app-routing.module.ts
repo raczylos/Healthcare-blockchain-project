@@ -25,7 +25,6 @@ const routes: Routes = [
             expectedUserRole: 'doctor',
         },
     },
-    // {path: 'patients/:patientId', component: PatientDetailComponent,},
     {
         path: 'patient/:id',
         component: PatientComponent,
@@ -37,6 +36,11 @@ const routes: Routes = [
     {
         path: 'patient-details/:id',
         component: PatientDetailComponent,
+        canActivate: [RoleGuardService],
+        data: {
+            expectedUserRole: 'doctor',
+            patientDetail: "patientDetail",
+        },
     },
 ];
 

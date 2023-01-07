@@ -29,6 +29,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatCardModule} from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
 import { PatientComponent } from './patient/patient.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
     declarations: [AppComponent, AdminDashboardComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent],
@@ -54,6 +55,7 @@ import { PatientComponent } from './patient/patient.component';
         MatSortModule,
         MatCardModule,
         MatChipsModule,
+        MatProgressSpinnerModule,
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

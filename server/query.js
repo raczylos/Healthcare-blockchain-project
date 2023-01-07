@@ -39,16 +39,17 @@ async function main() {
 
         // Get the contract from the network.
         // const contract = network.getContract('fabcar');
-        const contract = network.getContract('adminContract');
+        // const contract = network.getContract('adminContract');
+        const contract = network.getContract("medicalContract");
 
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
         // const result = await contract.evaluateTransaction('readData', "key1");
-        let result = await contract.evaluateTransaction('queryPatientsByDiagnosis', "cancer2");
+        // let result = await contract.evaluateTransaction('queryPatientsByDiagnosis', "cancer2");
         // result = result.toString('utf-8') // convert buffer to string
         console.log(`Transaction has been evaluated, result is: ${result}`);
-        let result2 = await contract.evaluateTransaction('readPatientHistoryData', "patient1");
+        let result2 = await contract.evaluateTransaction('readHistoryData', "patient1");
         // result2 = result2.toString('utf-8') // convert buffer to string
         console.log(`patient history data: ${result2}`);
         // Disconnect from the gateway.

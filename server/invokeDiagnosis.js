@@ -45,12 +45,13 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 
 		// Get the contract from the network.
 		// const contract = network.getContract('fabcar');
-		const contract = network.getContract("adminContract");
+		// const contract = network.getContract("adminContract");
+		const contract = network.getContract("medicalContract");
 
 	
         
 		await contract.submitTransaction(
-			"writePatientData",
+			"writeData",
 			patientId,
 			JSON.stringify(medicalData)
 		);

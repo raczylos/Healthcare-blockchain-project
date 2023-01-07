@@ -44,12 +44,13 @@ exports.postDoctorAccessList = async function (doctorId, doctorAccessList) {
 
 		// Get the contract from the network.
 		// const contract = network.getContract('fabcar');
-		const contract = network.getContract("adminContract");
+		// const contract = network.getContract("adminContract");
+		const contract = network.getContract("medicalContract");
 
 	
         
 		await contract.submitTransaction(
-			"writePatientData",
+			"writeData",
 			doctorId,
 			JSON.stringify(doctorAccessList)
 		);

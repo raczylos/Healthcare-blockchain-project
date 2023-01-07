@@ -11,112 +11,107 @@ const { off } = require('process');
 const { crypto } = require('crypto')
 
 class FabCar extends Contract {
+	async initLedger2(ctx) {
+		await ctx.stub.putState("test", "test value");
+		return "success";
+	}
 
-    async initLedger(ctx){
-        await ctx.stub.putState("test", "test value")
-        return "success"
-    }
-    
-    // async writePatientData(ctx, key, value){
-    //     let patientData = JSON.parse(value)
-    //     await ctx.stub.putState(key, Buffer.from(JSON.stringify(patientData)))
-    //     return Buffer.from(JSON.stringify(patientData))
-    // }
+	// async writePatientData(ctx, key, value){
+	//     let patientData = JSON.parse(value)
+	//     await ctx.stub.putState(key, Buffer.from(JSON.stringify(patientData)))
+	//     return Buffer.from(JSON.stringify(patientData))
+	// }
 
-    // async writePatientData(ctx, key, value, privateKey){
-        
-    //     let patientData = value
-    //     let encryptedPatientData = crypto.privateEncrypt(privateKey, Buffer.from(patientData))
-    //     await ctx.stub.putState(key, encryptedPatientData)
-    //     return Buffer.from(JSON.stringify(patientData))
-    // }
+	// async writePatientData(ctx, key, value, privateKey){
 
-    // async readPatientData(ctx, key, publicKey){
-    //     let encryptedPatientData = await ctx.stub.getState(key)
+	//     let patientData = value
+	//     let encryptedPatientData = crypto.privateEncrypt(privateKey, Buffer.from(patientData))
+	//     await ctx.stub.putState(key, encryptedPatientData)
+	//     return Buffer.from(JSON.stringify(patientData))
+	// }
 
-    //     let decryptedPatientData = crypto.publicDecrypt(publicKey, encryptedPatientData)
+	// async readPatientData(ctx, key, publicKey){
+	//     let encryptedPatientData = await ctx.stub.getState(key)
 
-    //     let decryptedPatientDataJson = JSON.parse(decryptedPatientData.toString('utf-8'))
-        
-    //     return JSON.stringify(decryptedPatientDataJson)
-    // }
+	//     let decryptedPatientData = crypto.publicDecrypt(publicKey, encryptedPatientData)
 
-    async writePatientData(ctx, patientId, data){
-        let patientData = JSON.parse(data)
-        await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)))
-        return Buffer.from(JSON.stringify(patientData))
-    }
-    // async readPatientData(ctx, patientId){
-    //     let patientData = await ctx.stub.getState(patientId)
-    //     patientData = patientData.toString('utf-8')   
-    //     return JSON.stringify(patientData)
-    // }
-    async readPatientData(ctx, patientId){
-        let patientDataAsBuffer = await ctx.stub.getState(patientId)
+	//     let decryptedPatientDataJson = JSON.parse(decryptedPatientData.toString('utf-8'))
 
-        // if (!patientDataAsBuffer) {
-        //     throw new Error(`No data found for patient with ID ${patientId}`);
-        //   }
+	//     return JSON.stringify(decryptedPatientDataJson)
+	// }
 
-        const patientData = JSON.parse(patientDataAsBuffer.toString());
-        return JSON.stringify(patientData)
-    }
-    
-    async readPatientHistoryData(ctx, patientId){ 
-        let iterator = await ctx.stub.getHistoryForKey(patientId)
-        let result = await this.getIteratorData(iterator)
-        return JSON.stringify(result)
-    }
+	async writeData(ctx, patientId, data) {
+		let patientData = JSON.parse(data);
+		await ctx.stub.putState(
+			patientId,
+			Buffer.from(JSON.stringify(patientData))
+		);
+		return Buffer.from(JSON.stringify(patientData));
+	}
 
-    async readAllPatients(ctx) {
-        const startKey = '';
-        const endKey = '';
-        const allResults = [];
-        for await (const {key, value} of ctx.stub.getStateByRange(startKey, endKey)) {
-            const strValue = Buffer.from(value).toString('utf-8');
-            let record;
-            try {
-                record = JSON.parse(strValue);
-            } catch (err) {
-                console.log(err);
-                record = strValue;
-            }
-            allResults.push({ Key: key, Record: record });
-        }
-        console.info(allResults);
-        return JSON.stringify(allResults);
-    }
-        
-    async queryPatientsByDiagnosis(ctx, diagnosis){
-        let query = {}
-        query.selector = {"diagnosis": diagnosis}
-        let iterator = await ctx.stub.getQueryResult(JSON.stringify(query))
-        let result = await this.getIteratorData(iterator)
-        return JSON.stringify(result)
-    }
+	async readData(ctx, patientId) {
+		let patientDataAsBuffer = await ctx.stub.getState(patientId);
 
-    async getIteratorData(iterator){
-        let resultArray = []
+		// if (!patientDataAsBuffer) {
+		//     throw new Error(`No data found for patient with ID ${patientId}`);
+		//   }
 
-        while(true){
-            let res = await iterator.next()
-            let resJson = {}
+		const patientData = JSON.parse(patientDataAsBuffer.toString());
+		return JSON.stringify(patientData);
+	}
 
-            if(res.value && res.value.value.toString()){
-                resJson.key = res.value.key
-                resJson.value = JSON.parse(res.value.value.toString('utf-8')) 
-                resultArray.push(resJson)
-            }
+	async readHistoryData(ctx, patientId) {
+		let iterator = await ctx.stub.getHistoryForKey(patientId);
+		let result = await this.getIteratorData(iterator);
+		return JSON.stringify(result);
+	}
 
-            if(res.done){
-                await iterator.close()
-                return resultArray
-            }
+	// async readAllPatients(ctx) {
+	//     const startKey = '';
+	//     const endKey = '';
+	//     const allResults = [];
+	//     for await (const {key, value} of ctx.stub.getStateByRange(startKey, endKey)) {
+	//         const strValue = Buffer.from(value).toString('utf-8');
+	//         let record;
+	//         try {
+	//             record = JSON.parse(strValue);
+	//         } catch (err) {
+	//             console.log(err);
+	//             record = strValue;
+	//         }
+	//         allResults.push({ Key: key, Record: record });
+	//     }
+	//     console.info(allResults);
+	//     return JSON.stringify(allResults);
+	// }
 
-        }
+	// async queryPatientsByDiagnosis(ctx, diagnosis){
+	//     let query = {}
+	//     query.selector = {"diagnosis": diagnosis}
+	//     let iterator = await ctx.stub.getQueryResult(JSON.stringify(query))
+	//     let result = await this.getIteratorData(iterator)
+	//     return JSON.stringify(result)
+	// }
 
-    }
+	async getIteratorData(iterator) {
+		let resultArray = [];
 
+		while (true) {
+			let res = await iterator.next();
+			let resJson = {};
+
+			if (res.value && res.value.value.toString()) {
+				resJson.key = res.value.key;
+				resJson.value = JSON.parse(res.value.value.toString("utf-8"));
+				resultArray.push(resJson);
+			}
+
+			if (res.done) {
+				await iterator.close();
+				return resultArray;
+			}
+		}
+	}
 }
 
 module.exports = FabCar;
