@@ -13,5 +13,5 @@ pushd ../../fabric-samples/test-network
 popd
 
 # clean out any old identites in the wallets
-rm -rf wallet/*
+rm -rf ../wallet/*
 

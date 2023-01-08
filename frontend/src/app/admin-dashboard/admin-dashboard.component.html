@@ -1,145 +1,183 @@
 <div *ngIf="userRole === 'admin'">
 
-    <div class="form-container">
-        <div class="form-item">
+    <div class="card-container">
+        <mat-card class="create-patient-card">
+            <mat-card-header>
+                <mat-card-title>Create patient</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="createPatientForm" >
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>First name</mat-label>
+                            <input matInput formControlName="firstName" required>
+                            <mat-error *ngIf="createPatientForm.controls.firstName.errors?.['required']"> First name field is required </mat-error>
+                            <!-- <mat-error *ngIf="createPatientForm.get('firstName')?.touched && createPatientForm.get('firstName')?.invalid">This field is required</mat-error> -->
+                        </mat-form-field>
+                    </div>
 
-            <form [formGroup]="createPatientForm" class="form">
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>First name</mat-label>
-                        <input matInput formControlName="firstName" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Last name</mat-label>
+                            <input matInput formControlName="lastName" required>
+                            <mat-error *ngIf="createPatientForm.controls.lastName.errors?.['required']"> Last name field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Last name</mat-label>
-                        <input matInput formControlName="lastName" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Age</mat-label>
+                            <input matInput type="number" formControlName="age" min="1" max="110" required>
+                            <mat-error *ngIf="createPatientForm.controls.age.errors?.['required']"> Age field is required </mat-error>
+                            <mat-error *ngIf="createPatientForm.controls.age.errors?.['min']"> Age field is too low </mat-error>
+                            <mat-error *ngIf="createPatientForm.controls.age.errors?.['max']"> Age field is too hight </mat-error>
+                            <!-- <mat-error *ngIf="createPatientForm.controls.age.errors?.['pattern']">Age must be a number</mat-error> -->
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Age</mat-label>
-                        <input matInput type="number" formControlName="age" min="1" max="110" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Gender</mat-label>
+                            <mat-select formControlName="gender" required>
+                                <mat-option value="male">male</mat-option>
+                                <mat-option value="female">female</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="createPatientForm.controls.gender.errors?.['required']"> Gender field is required </mat-error>
+                          </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Gender</mat-label>
-                        <mat-select formControlName="gender" required>
-                            <mat-option value="male">male</mat-option>
-                            <mat-option value="female">female</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Address</mat-label>
+                            <input matInput formControlName="address" required>
+                            <mat-error *ngIf="createPatientForm.controls.address.errors?.['required']"> Address field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Address</mat-label>
-                        <input matInput formControlName="address" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Username</mat-label>
+                            <input matInput formControlName="userId" required>
+                            <mat-error *ngIf="createPatientForm.controls.userId.errors?.['required']"> Username field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Username</mat-label>
-                        <input matInput formControlName="userId" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="createPatientForm.controls.password.errors?.['required']"> Password field is required </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <mat-card-actions align="end">
+                        <div>
+                            <button mat-raised-button color="primary" (click)="onSubmitPatient()">Create patient</button>
+                        </div>
+                    </mat-card-actions>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Password</mat-label>
-                        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
-                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
 
-                <div class="submit-button">
-                    <button mat-raised-button color="primary" (click)="onSubmitPatient()">Create patient</button>
-                </div>
-            </form>
-        </div>
+        <br>
 
-        <div class="form-item">
+        <mat-card class="create-doctor-card">
+            <mat-card-header>
+                <mat-card-title>Create doctor</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="createDoctorForm">
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>First name</mat-label>
+                            <input matInput formControlName="firstName" required>
+                            <mat-error *ngIf="createDoctorForm.controls.firstName.errors?.['required']"> First name field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-            <form [formGroup]="createDoctorForm" class="form">
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>First name</mat-label>
-                        <input matInput formControlName="firstName" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Last name</mat-label>
+                            <input matInput formControlName="lastName" required>
+                            <mat-error *ngIf="createDoctorForm.controls.lastName.errors?.['required']"> Last name field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Last name</mat-label>
-                        <input matInput formControlName="lastName" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Age</mat-label>
+                            <input matInput type="number" formControlName="age" min="1" max="110" required>
+                            <mat-error *ngIf="createDoctorForm.controls.age.errors?.['required']"> Age field is required </mat-error>
+                            <mat-error *ngIf="createDoctorForm.controls.age.errors?.['min']"> Age field is too low </mat-error>
+                            <mat-error *ngIf="createDoctorForm.controls.age.errors?.['max']"> Age field is too hight </mat-error>
+                            <!-- <mat-error *ngIf="createDoctorForm.controls.age.errors?.['pattern']">Age must be a number</mat-error> -->
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Age</mat-label>
-                        <input matInput type="number" formControlName="age" min="1" max="110" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Gender</mat-label>
+                            <mat-select formControlName="gender" required>
+                                <mat-option value="male">male</mat-option>
+                                <mat-option value="female">female</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="createDoctorForm.controls.gender.errors?.['required']"> Gender field is required </mat-error>
+                          </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Gender</mat-label>
-                        <mat-select formControlName="gender" required>
-                            <mat-option value="male">male</mat-option>
-                            <mat-option value="female">female</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Address</mat-label>
+                            <input matInput formControlName="address" required>
+                            <mat-error *ngIf="createDoctorForm.controls.address.errors?.['required']"> Address field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Address</mat-label>
-                        <input matInput formControlName="address" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Specialization</mat-label>
+                            <input matInput formControlName="specialization" required>
+                            <mat-error *ngIf="createDoctorForm.controls.specialization.errors?.['required']"> Specialization field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Specialization</mat-label>
-                        <input matInput formControlName="specialization" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Username</mat-label>
+                            <input matInput formControlName="userId" required>
+                            <mat-error *ngIf="createDoctorForm.controls.userId.errors?.['required']"> Username field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Username</mat-label>
-                        <input matInput formControlName="userId" required>
-                    </mat-form-field>
-                </div>
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="createDoctorForm.controls.password.errors?.['required']"> Password field is required </mat-error>
+                        </mat-form-field>
+                    </div>
 
-                <div class="form-row">
-                    <mat-form-field appearance="fill" >
-                        <mat-label>Password</mat-label>
-                        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
-                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
+                    <mat-card-actions align="end">
+                        <div>
+                            <button mat-raised-button color="primary" (click)="onSubmitDoctor()">Create doctor</button>
+                        </div>
+                    </mat-card-actions>
+                </form>
+            </mat-card-content>
 
-                <div class="submit-button">
-                    <button mat-raised-button color="primary" (click)="onSubmitDoctor()">Create doctor</button>
-                </div>
-            </form>
-        </div>
+        </mat-card>
     </div>
+
+    <br>
 
     <div class="table-container">
         <div class="table-item" >
-            <!-- patientList table goes here -->
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -152,9 +190,6 @@
                 </mat-expansion-panel-header>
 
                 <table mat-table [dataSource]="patientList" class="mat-elevation-z8">
-
-                    <!--- Note that these columns can be defined in any order.
-                          The actual rendered columns are set as a property on the row definition" -->
 
                     <ng-container matColumnDef="patientId">
                         <th mat-header-cell *matHeaderCellDef> Id. </th>
@@ -199,7 +234,7 @@
               </mat-expansion-panel>
         </div>
         <div class="table-item" >
-            <!-- doctorList table goes here -->
+
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -213,9 +248,6 @@
 
 
                 <table mat-table [dataSource]="doctorList" class="mat-elevation-z8">
-
-                    <!--- Note that these columns can be defined in any order.
-                          The actual rendered columns are set as a property on the row definition" -->
 
                     <ng-container matColumnDef="doctorId">
                       <th mat-header-cell *matHeaderCellDef> Id. </th>
@@ -267,15 +299,9 @@
               </mat-expansion-panel>
         </div>
     </div>
-
-
-
-
-
-
-
-
 </div>
+
+
 
 <div *ngIf="userRole !== 'admin'">
     <p>You don't have permission to see this page!.</p>

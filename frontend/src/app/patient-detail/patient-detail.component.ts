@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Patient } from '../patient';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MedicalData } from '../medicalData';
 
 @Component({
     selector: 'app-patient-detail',
@@ -17,10 +18,10 @@ export class PatientDetailComponent {
     patientMedicalData: any = '';
     patientHistoryData: any = '';
 
-    displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
+    displayedPatientColumns: string[] = ["allergies", "conditions", "medications", "treatmentPlans"];
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
-    dataSource!: MatTableDataSource<Patient>;
+    dataSource!: MatTableDataSource<MedicalData>;
 
     ngOnInit() {
         this.activatedRoute.params.subscribe((params) => {
@@ -56,8 +57,14 @@ export class PatientDetailComponent {
                     this.patientHistoryData = res;
                     console.log('patient history medical data');
                     console.log(this.patientHistoryData);
+                    console.log(res)
+                    let patientHistoryDataValue: any = []
+                    this.patientHistoryData.forEach((medicalData: any) => {
+                        patientHistoryDataValue.push(medicalData.value)
 
-                    this.dataSource = new MatTableDataSource(this.patientHistoryData);
+                    });
+
+                    this.dataSource = new MatTableDataSource(patientHistoryDataValue);
                     this.dataSource.paginator = this.paginator;
                     this.dataSource.sort = this.sort;
 
@@ -69,7 +76,6 @@ export class PatientDetailComponent {
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
-
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }

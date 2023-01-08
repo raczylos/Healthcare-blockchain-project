@@ -31,7 +31,7 @@ export class AdminDashboardComponent {
         lastName: ['', Validators.required],
         password: ['', Validators.required],
         userId: ['', Validators.required],
-        age: ['', Validators.required],
+        age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', Validators.required],
         address: ['', Validators.required],
         specialization: ['', Validators.required],
@@ -43,7 +43,7 @@ export class AdminDashboardComponent {
         lastName: ['', Validators.required],
         password: ['', Validators.required],
         userId: ['', Validators.required],
-        age: ['', Validators.required],
+        age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', Validators.required],
         address: ['', Validators.required],
 
@@ -78,30 +78,12 @@ export class AdminDashboardComponent {
     }
 
     openSnackBar(message: string) {
-        this._snackBar.open(message + " registered", "close", {
+        this._snackBar.open(message + " registered successfully", "close", {
             duration: 5 * 1000, // 5 sec
             verticalPosition: "top",
         });
       }
 
-
-    // onSubmit(): void {
-    //     let user: User = {
-    //         firstName: this.createUserForm.value.firstName!,
-    //         lastName: this.createUserForm.value.lastName!,
-    //         userId: this.createUserForm.value.userId!,
-    //         password: this.createUserForm.value.password!,
-    //         role: this.createUserForm.value.role!,
-    //     };
-
-    //     this.adminService.registerUser(user).subscribe((res) => {
-    //         if(res){
-    //             console.log("user registered")
-    //             console.log(res)
-    //         }
-
-    //     });
-    // }
 
     refresh(): void {
         window.location.reload();
@@ -124,8 +106,9 @@ export class AdminDashboardComponent {
                 if(res){
                     console.log("patient registered")
                     console.log(res)
-                    // this.openSnackBar(res.userId)
-                    this.refresh()
+                    this.openSnackBar(res.userId)
+                    this.createPatientForm.reset()
+                    // this.refresh()
                 }
             });
         } else {
@@ -154,7 +137,9 @@ export class AdminDashboardComponent {
                 if(res){
                     console.log("doctor registered")
                     console.log(res)
-                    this.refresh()
+                    this.openSnackBar(res.userId)
+                    this.createDoctorForm.reset()
+                    // this.refresh()
                 }
             });
         } else {

@@ -1,51 +1,65 @@
 <div *ngIf="!isProgressSpinner">
-    <form [formGroup]="createMedicalDataForm">
-        <div>
-            <mat-form-field appearance="fill" >
-                <mat-label>conditions</mat-label>
-                <input matInput formControlName="conditions" required>
-            </mat-form-field>
-        </div>
-
-        <div formArrayName="medications">
-            <div *ngFor="let medication of medications.controls; let i = index">
+    <mat-card class="create-diagnosis-card">
+        <mat-card-header>
+            <mat-card-title>Create {{patientId}} medical data </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="createMedicalDataForm">
                 <div>
                     <mat-form-field appearance="fill" >
-                        <mat-label>medication{{i}}</mat-label>
-                        <input matInput [formControlName]="i" >
-                        <button mat-icon-button matSuffix (click)="addInput()">
-                            <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
-                        </button>
+                        <mat-label>conditions</mat-label>
+                        <input matInput formControlName="conditions" required>
+                        <mat-error *ngIf="createMedicalDataForm.controls.conditions.errors?.['required']"> Conditions field is required </mat-error>
                     </mat-form-field>
+                </div>
+
+                <div formArrayName="medications">
+                    <div *ngFor="let medication of medications.controls; let i = index">
+                        <div>
+                            <mat-form-field appearance="fill" >
+                                <mat-label>medication{{i}}</mat-label>
+                                <input matInput [formControlName]="i" required>
+                                <mat-error *ngIf="medication.errors?.['required']"> Medication{{i}} field is required </mat-error>
+                                <button mat-icon-button matSuffix (click)="addInput('medications')" *ngIf="medicationCounter === i">
+                                    <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
+                                </button>
+                                <button mat-icon-button matSuffix (click)="removeInput('medications', i)" *ngIf="medicationCounter === i && medicationCounter > 0" >
+                                    <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                                </button>
+                            </mat-form-field>
+
+                        </div>
+                    </div>
 
                 </div>
+
                 <div>
-
+                    <mat-form-field appearance="fill" >
+                        <mat-label>allergies</mat-label>
+                        <input matInput  formControlName="allergies" required>
+                        <mat-error *ngIf="createMedicalDataForm.controls.allergies.errors?.['required']"> Allergies field is required </mat-error>
+                    </mat-form-field>
                 </div>
+
+
+
+                <div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>treatmentPlans</mat-label>
+                        <textarea matInput formControlName="treatmentPlans" required></textarea>
+                        <mat-error *ngIf="createMedicalDataForm.controls.treatmentPlans.errors?.['required']"> Treatment plans field is required </mat-error>
+                    </mat-form-field>
+                </div>
+
+            </form>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <div class="submit-button">
+                <button mat-raised-button color="primary" (click)="onSubmit()">Create diagnosis</button>
             </div>
-
-        </div>
-
-        <div>
-            <mat-form-field appearance="fill" >
-                <mat-label>allergies</mat-label>
-                <input matInput  formControlName="allergies" required>
-            </mat-form-field>
-        </div>
+        </mat-card-actions>
+      </mat-card>
 
 
-
-        <div>
-            <mat-form-field appearance="fill">
-                <mat-label>treatmentPlans</mat-label>
-                <textarea matInput formControlName="treatmentPlans" required></textarea>
-            </mat-form-field>
-        </div>
-
-        <div class="submit-button">
-            <button mat-raised-button color="primary" (click)="onSubmit()">Create diagnosis</button>
-        </div>
-
-    </form>
 </div>
 <mat-spinner class="spinner" *ngIf="isProgressSpinner" ></mat-spinner>

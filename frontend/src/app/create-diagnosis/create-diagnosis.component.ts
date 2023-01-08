@@ -19,7 +19,7 @@ export class CreateDiagnosisComponent {
     patientId!: string;
     conditions!: FormArray;
     doctorId!: string;
-    medicationCounter: number = 1
+    medicationCounter: number = 0
 
     isProgressSpinner: boolean = false
 
@@ -51,12 +51,25 @@ export class CreateDiagnosisComponent {
         });
     }
 
-    addInput() {
-        const medications = this.createMedicalDataForm.get('medications') as FormArray
-        const medication = this.formBuilder.control('', Validators.required);
-        medications.push(medication);
+    // addInput() {
+    //     const medications = this.createMedicalDataForm.get('medications') as FormArray
+    //     const medication = this.formBuilder.control('', Validators.required);
+    //     medications.push(medication);
+    //     // this.medicationCounter++;
+    // }
+
+    addInput(inputName: string) {
+        const medicalFormArray = this.createMedicalDataForm.get(inputName) as FormArray
+        const medicalArrayItem = this.formBuilder.control('', Validators.required);
+        medicalFormArray.push(medicalArrayItem);
         this.medicationCounter++;
     }
+
+    removeInput(inputName: string, index: number) {
+        const medicalFormArray = this.createMedicalDataForm.get(inputName) as FormArray;
+        medicalFormArray.removeAt(index);
+        this.medicationCounter--;
+      }
 
     getDoctorAccessList(doctorId: string) {
         this.doctorService
@@ -75,7 +88,6 @@ export class CreateDiagnosisComponent {
     onSubmit() {
         let medicalData: MedicalData = {
             conditions: this.createMedicalDataForm.value.conditions!,
-            // medications: this.createMedicalDataForm.value.medications!,
             medications: (this.createMedicalDataForm.get('medications') as FormArray).value,
             allergies: this.createMedicalDataForm.value.allergies!,
             treatmentPlans: this.createMedicalDataForm.value.treatmentPlans!,

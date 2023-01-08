@@ -53,10 +53,11 @@ export class DoctorComponent {
 
     getGrantedAccessPatientList() {
         this.adminService.getPatientList().subscribe((res) => {
-            
+
             this.grantedAccessPatientList = res.filter(item => this.doctorAccessList.includes(item.userId));
 
             console.log(this.grantedAccessPatientList)
+            
             this.dataSource = new MatTableDataSource(this.grantedAccessPatientList);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;

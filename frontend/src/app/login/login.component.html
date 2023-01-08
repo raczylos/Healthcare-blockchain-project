@@ -17,9 +17,10 @@
                     required
                 />
             </mat-form-field>
+            <mat-error *ngIf="!accountExist">Nazwa użytkownika lub hasło są niepoprawne!</mat-error>
         </div>
 
-        <div *ngIf="!accountExist" class="alert-danger">Nazwa użytkownika lub hasło są niepoprawne!</div>
+        <!-- <div *ngIf="!accountExist" class="alert-danger">Nazwa użytkownika lub hasło są niepoprawne!</div> -->
 
         <div mat-dialog-actions>
             <a mat-button (click)="onNoClick()">Wstecz</a>
