@@ -38,7 +38,7 @@ const routes: Routes = [
         component: PatientDetailComponent,
         canActivate: [RoleGuardService],
         data: {
-            expectedUserRole: 'doctor',
+            // expectedUserRole: 'patient',
             patientDetail: "patientDetail",
         },
     },

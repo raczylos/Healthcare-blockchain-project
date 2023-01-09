@@ -1,18 +1,29 @@
 <div>
+    <div class="card-container">
+        <mat-card class="patient-current-medical-data-card" *ngIf="patientMedicalData">
+          <mat-card-header>
+            <mat-card-title>{{patientId}} current medical data</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- <p><strong>Allergies:</strong> <span>{{patientMedicalData.allergies}}</span></p>
+            <p><strong>Conditions:</strong> <span>{{patientMedicalData.conditions}}</span></p>
+            <p><strong>Medications:</strong> <span>{{patientMedicalData.medications}}</span></p>
+            <p><strong>Treatment Plans:</strong> <span>{{patientMedicalData.treatmentPlans}}</span></p> -->
 
-      <mat-card class="patient-current-medical-data-card" *ngIf="patientMedicalData">
-        <mat-card-header>
-          <mat-card-title>{{patientId}} current medical data</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-list>
-            <mat-list-item><strong>Allergies:</strong> {{patientMedicalData.allergies}}</mat-list-item>
-            <mat-list-item><strong>Conditions:</strong> {{patientMedicalData.conditions}}</mat-list-item>
-            <mat-list-item><strong>Medications:</strong> {{patientMedicalData.medications}}</mat-list-item>
-            <mat-list-item><strong>Treatment Plans:</strong> {{patientMedicalData.treatmentPlans}}</mat-list-item>
-          </mat-list>
-        </mat-card-content>
-      </mat-card>
+            <mat-list >
+              <mat-list-item><span><strong>Allergies:</strong>{{patientMedicalData.allergies}}</span></mat-list-item>
+              <mat-list-item><span><strong>Conditions:</strong> {{patientMedicalData.conditions}}</span></mat-list-item>
+              <mat-list-item><span><strong>Medications:</strong> {{patientMedicalData.medications}}</span></mat-list-item>
+              <mat-list-item><span><strong>Treatment Plans:</strong> {{patientMedicalData.treatmentPlans}}</span></mat-list-item>
+            </mat-list>
+
+          </mat-card-content>
+        </mat-card>
+
+          <div *ngIf="userService.userRole === 'doctor'" class="create-patient-medical-data-card" >
+              <app-create-diagnosis ></app-create-diagnosis>
+          </div>
+    </div>
 
       <!-- <mat-card *ngFor="let item of patientHistoryData">
         <mat-card-header>
@@ -27,51 +38,54 @@
           </mat-list>
         </mat-card-content>
       </mat-card> -->
-    <mat-card class="patient-history-data-card" *ngIf="dataSource">
-            <mat-card-header>
-                <mat-card-title>{{patientId}} history medical data</mat-card-title>
-            </mat-card-header>
-            <mat-form-field>
-                <mat-label>Filter</mat-label>
-                <input matInput (keyup)="applyFilter($event)">
-            </mat-form-field>
+    <div [hidden]="!dataSource"><!--*ngIf="dataSource" breaks pagination hidden not-->
 
-            <mat-card-content>
-                <table mat-table [dataSource]="dataSource" matSort *ngIf="dataSource">
+        <mat-card class="patient-history-data-card">
+                <mat-card-header>
+                    <mat-card-title>{{patientId}} history medical data</mat-card-title>
+                </mat-card-header>
+                <mat-form-field>
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter($event)">
+                </mat-form-field>
 
-                    <ng-container matColumnDef="allergies">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Allergies </th>
-                        <td mat-cell  *matCellDef="let medicalHistoryData"> {{medicalHistoryData.allergies}} </td>
-                    </ng-container>
+                <mat-card-content>
+                    <table mat-table [dataSource]="dataSource" matSort >
 
-                    <ng-container matColumnDef="conditions">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Conditions </th>
-                        <td mat-cell *matCellDef="let medicalHistoryData"> {{medicalHistoryData.conditions}} </td>
-                    </ng-container>
+                        <ng-container matColumnDef="allergies">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Allergies </th>
+                            <td mat-cell  *matCellDef="let medicalHistoryData"> {{medicalHistoryData.allergies}} </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="medications">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Medications </th>
-                        <td mat-cell *matCellDef="let medicalHistoryData"> {{medicalHistoryData.medications}} </td>
-                    </ng-container>
+                        <ng-container matColumnDef="conditions">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Conditions </th>
+                            <td mat-cell *matCellDef="let medicalHistoryData"> {{medicalHistoryData.conditions}} </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="treatmentPlans">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Treatment plans </th>
-                        <td mat-cell *matCellDef="let medicalHistoryData"> {{medicalHistoryData.treatmentPlans}} </td>
-                    </ng-container>
+                        <ng-container matColumnDef="medications">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Medications </th>
+                            <td mat-cell *matCellDef="let medicalHistoryData"> {{medicalHistoryData.medications}} </td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedPatientColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;"></tr>
+                        <ng-container matColumnDef="treatmentPlans">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Treatment plans </th>
+                            <td mat-cell *matCellDef="let medicalHistoryData"> {{medicalHistoryData.treatmentPlans}} </td>
+                        </ng-container>
 
-                </table>
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-            </mat-card-content>
+                        <tr mat-header-row *matHeaderRowDef="displayedPatientColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;"></tr>
 
-    </mat-card>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                </mat-card-content>
+
+        </mat-card>
 
 
-    <div *ngIf="userService.userRole === 'doctor'">
-        <app-create-diagnosis></app-create-diagnosis>
+
     </div>
+    <mat-spinner class="spinner" *ngIf="loading" ></mat-spinner>
+
 
 
 

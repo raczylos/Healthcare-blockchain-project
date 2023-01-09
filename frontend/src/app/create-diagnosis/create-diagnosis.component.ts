@@ -1,3 +1,4 @@
+import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import {
     FormBuilder,
@@ -39,7 +40,9 @@ export class CreateDiagnosisComponent {
       }
 
     ngOnInit() {
-        this.doctorId = localStorage.getItem("userId")!
+        // this.doctorId = localStorage.getItem("userId")!
+        this.doctorId = this.userService.getUserIdFromToken()
+
         this.getDoctorAccessList(this.doctorId)
         this.activatedRoute.params.subscribe((params) => {
             this.patientId = params['id'];
@@ -121,6 +124,7 @@ export class CreateDiagnosisComponent {
     constructor(
         private activatedRoute: ActivatedRoute,
         private doctorService: DoctorService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private userService: UserService,
     ) {}
 }

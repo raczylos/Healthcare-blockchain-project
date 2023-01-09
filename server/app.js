@@ -108,11 +108,11 @@ app.post('/login', async (req, res) => {
     
     
 
-    let userJson = {username: username}
+    let userJson = {userId: username}
 
     let accessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
     let refreshToken = jwt.sign(userJson, process.env.REFRESH_TOKEN_SECRET)
-    res.json({accessToken, refreshToken, userJson})
+    res.json({accessToken, refreshToken})
 })
 
 app.post('/refresh-access-token', (req, res) => {
@@ -147,6 +147,8 @@ app.post('/get-access-token', (req, res, next) => {
     
 
 })
+
+
 
 app.post('/get-refresh-token', (req, res, next) => {
     const {refreshToken} = req.body

@@ -30,6 +30,7 @@ export class DoctorComponent {
 
     dataSource!: MatTableDataSource<Patient>;
 
+    loading: boolean = true
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
@@ -41,7 +42,8 @@ export class DoctorComponent {
       }
 
     ngOnInit() {
-        this.userId = localStorage.getItem('userId')!;
+        // this.userId = localStorage.getItem('userId')!;
+        this.userId = this.userService.getUserIdFromToken()
         this.userService.getUserRole(this.userId).subscribe((res: any) => {
             this.userRole = res.userRole;
         });
@@ -57,14 +59,16 @@ export class DoctorComponent {
             this.grantedAccessPatientList = res.filter(item => this.doctorAccessList.includes(item.userId));
 
             console.log(this.grantedAccessPatientList)
-            
+
             this.dataSource = new MatTableDataSource(this.grantedAccessPatientList);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+            this.loading = false
         })
     }
 
     getDoctorAccessList(doctorId: string) {
+        this.loading = true
         this.doctorService
             .getDoctorAccessList(doctorId)
             .subscribe((res: any) => {

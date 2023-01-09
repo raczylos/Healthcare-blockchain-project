@@ -3,7 +3,7 @@ import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { UserService } from '../services/user.service';
 import { DoctorService } from '../services/doctor.service';
-import { Subject } from 'rxjs';
+import { finalize, Subject } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -22,7 +22,6 @@ export class PatientComponent {
     userId!: string;
     userRole!: string;
     doctorList!: Array<any>;
-    patientId!: string;
     // selectedDoctor: any;
     doctorList$: Subject<any> = new Subject<any>();
 
@@ -40,30 +39,35 @@ export class PatientComponent {
         'action',
     ];
 
-    isProgressSpinner: boolean = false;
+    loading: boolean = true;
 
     ngOnInit() {
+        this.userId = this.userService.getUserIdFromToken()
         this.route.params.subscribe((params) => {
-            this.patientId = params['id'];
+            let patientId = params['id'];
+            if(this.userId !== patientId){
+                // unautorized
+            }
         });
-        this.userId = localStorage.getItem('userId')!;
+        // this.userId = localStorage.getItem('userId')!;
+
         this.getUserRole();
         this.getDoctorList();
         this.doctorList$.subscribe((doctorId) => {
             this.getDoctorAccessList(doctorId);
-        });
 
+        });
 
     }
 
     isAccessGranted(doctorId: string) {
 
-
-        if (this.doctorAccessListDict.get(doctorId)?.find(patient => patient = this.patientId)) {
+        if (this.doctorAccessListDict.get(doctorId)?.find(patient => patient === this.userId)) {
             return true;
         } else {
             return false;
         }
+
     }
 
     applyFilter(event: Event) {
@@ -75,10 +79,7 @@ export class PatientComponent {
         }
     }
 
-    selectedDoctorChanged(doctor: any) {
-        this.getDoctorAccessList(doctor.userId);
-        console.log('Selected doctor changed:', doctor);
-    }
+
 
     getUserRole() {
         this.userService.getUserRole(this.userId).subscribe((res: any) => {
@@ -88,8 +89,8 @@ export class PatientComponent {
 
     getDoctorList() {
         this.adminService.getDoctorList().subscribe((res) => {
-            console.log('doctor list');
-            console.log(res);
+            // console.log('doctor list');
+            // console.log(res);
             this.doctorList = res;
 
             this.dataSource = new MatTableDataSource(this.doctorList);
@@ -103,18 +104,17 @@ export class PatientComponent {
     }
 
     getDoctorAccessList(doctorId: string) {
-        this.isProgressSpinner = true
+        this.loading = true
         this.doctorService
             .getDoctorAccessList(doctorId)
             .subscribe((res: Array<string>) => {
-                console.log('doctor access list', doctorId);
                 if (!res) {
                     // this.doctorAccessList = '';
                 } else {
                     this.doctorAccessListDict.set(doctorId, res);
-                    console.log('doctorAccessListDict');
-                    console.log(this.doctorAccessListDict);
-                    this.isProgressSpinner = false
+                    // console.log('doctorAccessListDict');
+                    // console.log(this.doctorAccessListDict);
+                    this.loading = false
                 }
             });
     }
@@ -124,7 +124,7 @@ export class PatientComponent {
     }
 
     grantDoctorAccess(doctorId: string) {
-        this.isProgressSpinner = true;
+        this.loading = true;
 
         let patientId = this.userId;
 
@@ -144,7 +144,7 @@ export class PatientComponent {
     }
 
     revokeDoctorAccess(doctorId: string) {
-        this.isProgressSpinner = true;
+        this.loading = true;
 
         let patientId = this.userId;
         this.doctorService
@@ -167,5 +167,6 @@ export class PatientComponent {
         private adminService: AdminService,
         private doctorService: DoctorService,
         private route: ActivatedRoute
-    ) {}
+    ) {
+    }
 }

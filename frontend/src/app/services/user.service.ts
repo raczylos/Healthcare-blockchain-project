@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../user';
 import { catchError, of, Observable } from 'rxjs';
 import { Login } from '../login';
+import jwtDecode from "jwt-decode";
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -21,7 +22,7 @@ export class UserService {
 
     private base_url = 'http://localhost:3000/';
     public isLoggedIn: boolean = !!this.getAccessToken()
-    public userId: string  = localStorage.getItem('userId')!;
+    public userId: string  = this.getUserIdFromToken();
     public userRole: any = this.getUserRole(this.userId)
 
     constructor(private http: HttpClient, private router: Router) {
@@ -78,6 +79,20 @@ export class UserService {
             return refresh_token;
         } else {
             return '';
+        }
+    }
+
+
+
+    getUserIdFromToken() {
+
+        let tokens = localStorage.getItem('authTokens');
+        if (tokens) {
+            let tokensJSON = JSON.parse(tokens!);
+        let accessToken = tokensJSON['accessToken'];
+
+        const decodedToken: any = jwtDecode(accessToken);
+        return decodedToken.userId;
         }
     }
 

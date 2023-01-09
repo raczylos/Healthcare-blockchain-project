@@ -1,4 +1,4 @@
-<div *ngIf="userRole === 'admin'">
+<div *ngIf="!loading && userRole === 'admin'"  > <!-- *ngIf="userRole === 'admin'" -->
 
     <div class="card-container">
         <mat-card class="create-patient-card">
@@ -42,7 +42,7 @@
                                 <mat-option value="female">female</mat-option>
                             </mat-select>
                             <mat-error *ngIf="createPatientForm.controls.gender.errors?.['required']"> Gender field is required </mat-error>
-                          </mat-form-field>
+                            </mat-form-field>
                     </div>
 
                     <div>
@@ -124,7 +124,7 @@
                                 <mat-option value="female">female</mat-option>
                             </mat-select>
                             <mat-error *ngIf="createDoctorForm.controls.gender.errors?.['required']"> Gender field is required </mat-error>
-                          </mat-form-field>
+                            </mat-form-field>
                     </div>
 
                     <div>
@@ -179,13 +179,13 @@
         <div class="table-item" >
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
-                  <mat-panel-title>
+                    <mat-panel-title>
                     Patient List
-                  </mat-panel-title>
-                  <mat-panel-description>
+                    </mat-panel-title>
+                    <mat-panel-description>
                     click to show
 
-                  </mat-panel-description>
+                    </mat-panel-description>
                 </mat-expansion-panel-header>
 
                 <table mat-table [dataSource]="patientList" class="mat-elevation-z8">
@@ -230,39 +230,39 @@
                     <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;"></tr>
                 </table>
 
-              </mat-expansion-panel>
+                </mat-expansion-panel>
         </div>
         <div class="table-item" >
 
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
-                  <mat-panel-title>
+                    <mat-panel-title>
                     Doctor List
-                  </mat-panel-title>
-                  <mat-panel-description>
+                    </mat-panel-title>
+                    <mat-panel-description>
                     click to show
 
-                  </mat-panel-description>
+                    </mat-panel-description>
                 </mat-expansion-panel-header>
 
 
                 <table mat-table [dataSource]="doctorList" class="mat-elevation-z8">
 
                     <ng-container matColumnDef="doctorId">
-                      <th mat-header-cell *matHeaderCellDef> Id. </th>
-                      <td mat-cell *matCellDef="let doctor"> {{doctor.userId}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Id. </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.userId}} </td>
                     </ng-container>
 
 
                     <ng-container matColumnDef="firstName">
-                      <th mat-header-cell *matHeaderCellDef> First Name </th>
-                      <td mat-cell *matCellDef="let doctor"> {{doctor.firstName}} </td>
+                        <th mat-header-cell *matHeaderCellDef> First Name </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.firstName}} </td>
                     </ng-container>
 
 
                     <ng-container matColumnDef="lastName">
-                      <th mat-header-cell *matHeaderCellDef> Last Name </th>
-                      <td mat-cell *matCellDef="let doctor"> {{doctor.lastName}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                        <td mat-cell *matCellDef="let doctor"> {{doctor.lastName}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="age">
@@ -295,14 +295,14 @@
 
 
 
-              </mat-expansion-panel>
+                </mat-expansion-panel>
         </div>
     </div>
 </div>
 
 
 
-<div *ngIf="userRole !== 'admin'">
+<div *ngIf="userRole !== 'admin' && !loading">
     <p>You don't have permission to see this page!.</p>
 </div>
 

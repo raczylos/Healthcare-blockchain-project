@@ -14,10 +14,10 @@
 
         <a *ngIf="!userService.isLoggedIn" mat-button (click)="openDialog()"  >Login</a>
 
-        <a *ngIf="userService.userRole === 'doctor'" mat-button routerLink="/doctor/{{userId}}">Doctor Dashboard</a>
+        <a *ngIf="userService.userRole === 'doctor'" mat-button routerLink="/doctor/{{userService.getUserIdFromToken()}}">Doctor Dashboard</a>
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin">Admin Dashboard</a>
-        <!-- <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient/{{userId}}">Patient Details</a> -->
-        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient/{{userId}}">Patient Dashboard</a>
+        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient-details/{{userService.getUserIdFromToken()}}">Patient Details</a>
+        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient/{{userService.getUserIdFromToken()}}">Grant access to doctor</a>
 
 
 

@@ -1,4 +1,4 @@
-<div *ngIf="userRole === 'doctor'">
+<div *ngIf="userRole === 'doctor' && !loading" >
 
 
         <mat-card class="granted-patient-list-card">
@@ -49,7 +49,7 @@
 
 
                     <tr mat-header-row *matHeaderRowDef="displayedPatientColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;" routerLink="/patient-details/{{row.userId}}"  ></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;" [style.cursor]="'pointer'" routerLink="/patient-details/{{row.userId}}"  ></tr>
 
                     <!-- Row shown when there is no matching data. -->
                     <!-- <tr class="mat-row" *matNoDataRow>
@@ -62,7 +62,9 @@
 
 </div>
 
-<div *ngIf="userRole !== 'doctor'">
+<mat-spinner class="spinner" *ngIf="loading" ></mat-spinner>
+
+<div *ngIf="userRole !== 'doctor' && !loading" >
     <p>You don't have permission to see this page!.</p>
 </div>
 

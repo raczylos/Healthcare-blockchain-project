@@ -17,7 +17,7 @@ export class AdminDashboardComponent {
 
     displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
     displayedDoctorColumns: string[] = ["doctorId", "firstName", "lastName", "age", "gender", "address", "specialization"];
-
+    loading: boolean = true
     // createUserForm = this.formBuilder.group({
     //     firstName: [''],
     //     lastName: [''],
@@ -56,7 +56,10 @@ export class AdminDashboardComponent {
     doctorList!: Array<any>;
 
     ngOnInit() {
-        this.userId = localStorage.getItem('userId')!;
+        // this.userId = localStorage.getItem('userId')!;
+
+        this.userId = this.userService.getUserIdFromToken()
+
         this.userService.getUserRole(this.userId).subscribe((res: any) => {
             this.userRole = res.userRole;
         });
@@ -65,11 +68,13 @@ export class AdminDashboardComponent {
             console.log("doctor list")
             console.log(res)
             this.doctorList = res
+            this.loading = false
         })
         this.adminService.getPatientList().subscribe((res) => {
             console.log("patient list")
             console.log(res)
             this.patientList = res
+            this.loading = false
         })
     }
 

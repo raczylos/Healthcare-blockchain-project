@@ -22,11 +22,14 @@ export class PatientDetailComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
     dataSource!: MatTableDataSource<MedicalData>;
+    loading: boolean = true
 
     ngOnInit() {
+        // this.patientId = this.userService.getUserIdFromToken()
         this.activatedRoute.params.subscribe((params) => {
             this.patientId = params['id'];
             // this.patientId = localStorage.getItem('userId')!;
+            // this.patientId = this.userService.getUserIdFromToken()
 
             this.getPatientMedicalData();
             this.getPatientHistoryData();
@@ -34,6 +37,7 @@ export class PatientDetailComponent {
     }
 
     getPatientMedicalData() {
+        this.loading = true
         this.doctorService
             .getPatientMedicalData(this.patientId)
             .subscribe((res: any) => {
@@ -43,32 +47,33 @@ export class PatientDetailComponent {
                     console.log('current patient medical data');
                     console.log(res);
                     this.patientMedicalData = res;
+                    this.loading = false
                 }
             });
     }
 
     getPatientHistoryData() {
+        this.loading = true
         this.doctorService
             .getPatientHistoryData(this.patientId)
             .subscribe((res: any) => {
                 if (!res) {
-                    this.patientHistoryData = '';
+                    // this.patientHistoryData = '';
                 } else {
                     this.patientHistoryData = res;
                     console.log('patient history medical data');
                     console.log(this.patientHistoryData);
                     console.log(res)
-                    let patientHistoryDataValue: any = []
+                    let patientHistoryDataValues: any = []
                     this.patientHistoryData.forEach((medicalData: any) => {
-                        patientHistoryDataValue.push(medicalData.value)
+                        patientHistoryDataValues.push(medicalData.value)
 
                     });
 
-                    this.dataSource = new MatTableDataSource(patientHistoryDataValue);
+                    this.dataSource = new MatTableDataSource(patientHistoryDataValues);
                     this.dataSource.paginator = this.paginator;
                     this.dataSource.sort = this.sort;
-
-                    console.log(this.dataSource)
+                    this.loading = false
                 }
             });
     }

@@ -45,7 +45,7 @@ export class LoginComponent {
                 this.accountExist = false;
             } else {
                 localStorage.setItem('authTokens', JSON.stringify(res));
-                localStorage.setItem('userId', this.loginForm.value.username!);
+                // localStorage.setItem('userId', this.loginForm.value.username!);
                 console.log(res.accessToken);
                 this.dialogRef.close();
                 this.accountExist = true;
