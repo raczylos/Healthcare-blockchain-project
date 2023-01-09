@@ -1,8 +1,8 @@
 import { Doctor } from './../doctor';
 import { Patient } from './../patient';
 import { UserService } from '../services/user.service';
-import { Component } from '@angular/core';
-import { FormBuilder, Validators  } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroupDirective, Validators  } from '@angular/forms';
 import { User } from '../user';
 import { AdminService } from '../services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,37 +27,33 @@ export class AdminDashboardComponent {
     // });
 
     createDoctorForm = this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        password: ['', Validators.required],
-        userId: ['', Validators.required],
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        password: ['', [Validators.required]],
+        userId: ['', [Validators.required]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
-        gender: ['', Validators.required],
-        address: ['', Validators.required],
-        specialization: ['', Validators.required],
+        gender: ['', [Validators.required]],
+        address: ['', [Validators.required]],
+        specialization: ['', [Validators.required]],
 
     });
 
     createPatientForm = this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        password: ['', Validators.required],
-        userId: ['', Validators.required],
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        password: ['', [Validators.required]],
+        userId: ['', [Validators.required]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
-        gender: ['', Validators.required],
-        address: ['', Validators.required],
+        gender: ['', [Validators.required]],
+        address: ['', [Validators.required]],
 
     });
+
 
     userId!: string;
     userRole!: string;
     patientList!: Array<any>;
     doctorList!: Array<any>;
-    // @Input() prop: number = 0;
-
-    // ngOnChanges() {
-    //     console.log("jestem w onChanges " + this.patientList)
-    // }
 
     ngOnInit() {
         this.userId = localStorage.getItem('userId')!;
@@ -89,7 +85,7 @@ export class AdminDashboardComponent {
         window.location.reload();
     }
 
-    onSubmitPatient(): void {
+    onSubmitPatient(formDirective: FormGroupDirective): void {
         let patient: Patient = {
             firstName: this.createPatientForm.value.firstName!,
             lastName: this.createPatientForm.value.lastName!,
@@ -107,7 +103,10 @@ export class AdminDashboardComponent {
                     console.log("patient registered")
                     console.log(res)
                     this.openSnackBar(res.userId)
+                    formDirective.resetForm();
                     this.createPatientForm.reset()
+
+
                     // this.refresh()
                 }
             });
@@ -118,7 +117,7 @@ export class AdminDashboardComponent {
 
     }
 
-    onSubmitDoctor(): void {
+    onSubmitDoctor(formDirective: FormGroupDirective): void {
 
         let doctor: Doctor = {
             firstName: this.createDoctorForm.value.firstName!,
@@ -138,8 +137,12 @@ export class AdminDashboardComponent {
                     console.log("doctor registered")
                     console.log(res)
                     this.openSnackBar(res.userId)
+                    formDirective.resetForm();
                     this.createDoctorForm.reset()
+
                     // this.refresh()
+                } else {
+                    console.log("user exists")
                 }
             });
         } else {

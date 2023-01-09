@@ -6,13 +6,12 @@
                 <mat-card-title>Create patient</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <form [formGroup]="createPatientForm" >
+                <form [formGroup]="createPatientForm" #formDirective="ngForm" >
                     <div>
                         <mat-form-field appearance="fill" >
                             <mat-label>First name</mat-label>
-                            <input matInput formControlName="firstName" required>
+                            <input matInput formControlName="firstName" >
                             <mat-error *ngIf="createPatientForm.controls.firstName.errors?.['required']"> First name field is required </mat-error>
-                            <!-- <mat-error *ngIf="createPatientForm.get('firstName')?.touched && createPatientForm.get('firstName')?.invalid">This field is required</mat-error> -->
                         </mat-form-field>
                     </div>
 
@@ -74,7 +73,7 @@
                     </div>
                     <mat-card-actions align="end">
                         <div>
-                            <button mat-raised-button color="primary" (click)="onSubmitPatient()">Create patient</button>
+                            <button mat-raised-button color="primary" (click)="onSubmitPatient(formDirective)">Create patient</button>
                         </div>
                     </mat-card-actions>
 
@@ -89,7 +88,7 @@
                 <mat-card-title>Create doctor</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <form [formGroup]="createDoctorForm">
+                <form [formGroup]="createDoctorForm" #formDirective="ngForm">
                     <div>
                         <mat-form-field appearance="fill" >
                             <mat-label>First name</mat-label>
@@ -165,7 +164,7 @@
 
                     <mat-card-actions align="end">
                         <div>
-                            <button mat-raised-button color="primary" (click)="onSubmitDoctor()">Create doctor</button>
+                            <button mat-raised-button color="primary" (click)="onSubmitDoctor(formDirective)">Create doctor</button>
                         </div>
                     </mat-card-actions>
                 </form>
