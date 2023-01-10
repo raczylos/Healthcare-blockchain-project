@@ -7,6 +7,7 @@ const queryDoctorAccessList = require('./queryDoctorAccessList')
 const invokeDoctorAccessList = require('./invokeDoctorAccessList')
 // const patient = require('./patient')
 // const database = require('./database')
+const editUser = require('./editUser')
 const userUtils = require('./user');
 const express = require('express')
 const cors = require('cors')
@@ -30,6 +31,7 @@ app.use(function(req, res, next) {
 });
 
 const authMiddleware = (req, res, next) => {
+    
     const token = req.headers['authorization']?.split(' ')[1]
     if(!token){
         return res.sendStatus(401) // unauthorized
@@ -62,7 +64,7 @@ app.post('/register-user', authMiddleware, async (req, res) => {
 
     let user = await userUtils.getUserById(username)
     if(user){
-        return res.sendStatus(401) // user already exists (i am not sure if it is good status)
+        return res.sendStatus(401) 
     }
 
     if(role === 'doctor'){
@@ -74,6 +76,12 @@ app.post('/register-user', authMiddleware, async (req, res) => {
 
     res.json(req.body)
 })
+
+// app.get('/get-user/:userId', async (req, res) => {
+//     const userId = req.params.userId
+//     let user = await userUtils.getUserById(userId)
+//     res.json(user)
+// })
 
 app.post('/login', async (req, res) => {
     console.log("login")
@@ -105,12 +113,10 @@ app.post('/login', async (req, res) => {
         }
         
     }
-    
-    
 
     let userJson = {userId: username}
 
-    let accessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+    let accessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '2m'})
     let refreshToken = jwt.sign(userJson, process.env.REFRESH_TOKEN_SECRET)
     res.json({accessToken, refreshToken})
 })
@@ -126,23 +132,26 @@ app.post('/refresh-access-token', (req, res) => {
             console.log("error in refresh access token")
             return res.sendStatus(403)
         }
+        
         console.log("no error in refresh access token")
+      
         const userJson = {
-            username: data.username
+            userId: data.userId
         }
-        let newAccessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+        let newAccessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '2m'})
         res.json({accessToken: newAccessToken, refreshToken: refreshToken})
     })
 })
 
-app.post('/get-access-token', (req, res, next) => {
+app.post('/get-access-token', (req, res) => {
     const {accessToken} = req.body
+    
     jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         if(err){
             return res.sendStatus(403)  // unauthorized
         }
         req.user = data
-        next()
+        res.json(accessToken)
     })
     
 
@@ -150,20 +159,53 @@ app.post('/get-access-token', (req, res, next) => {
 
 
 
-app.post('/get-refresh-token', (req, res, next) => {
+app.post('/get-refresh-token', (req, res) => {
     const {refreshToken} = req.body
+    
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
         if(err){
+            
             return res.sendStatus(403)  // unauthorized
         }
         req.user = data
-        next()
+        // next()
+        res.json(refreshToken)
+        
     })
     
 
 })
 
-app.get('/get-user-role/:userId', async (req, res) => {
+app.put('/edit-user', authMiddleware, async (req, res) => {
+
+    let firstName = req.body.firstName
+    let lastName = req.body.lastName
+    let role = req.body.role
+    let username = req.body.userId
+    let password = req.body.password
+    let hashedPassword = await userUtils.encryptPassword(password)
+    let age = (req.body.age).toString()
+    let gender = req.body.gender
+    let address = req.body.address
+    let specialization = req.body.specialization
+
+    // let user = await userUtils.getUserById(username)
+    // if(user){
+    //     return res.sendStatus(401) 
+    // }
+
+    if(role === 'doctor'){
+        editUser.updateUserAttributes(firstName, lastName, role, username, hashedPassword, age, gender, address, specialization)
+    } else {
+        editUser.updateUserAttributes(firstName, lastName, role, username, hashedPassword, age, gender, address)
+    }
+    
+    
+    res.json(req.body)
+
+})
+
+app.get('/get-user-role/:userId', authMiddleware, async (req, res) => {
     const userId = req.params.userId
     
     

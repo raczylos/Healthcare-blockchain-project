@@ -1,5 +1,5 @@
-import { Doctor } from './../doctor';
-import { Patient } from './../patient';
+import { Doctor } from '../doctor';
+import { Patient } from '../patient';
 import { UserService } from '../services/user.service';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroupDirective, Validators  } from '@angular/forms';
@@ -8,11 +8,11 @@ import { AdminService } from '../services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-admin-dashboard',
-    templateUrl: './admin-dashboard.component.html',
-    styleUrls: ['./admin-dashboard.component.scss'],
+    selector: 'app-create-user',
+    templateUrl: './create-user.component.html',
+    styleUrls: ['./create-user.component.scss'],
 })
-export class AdminDashboardComponent {
+export class CreateUserComponent {
     hide = true
 
     displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
@@ -79,7 +79,7 @@ export class AdminDashboardComponent {
     }
 
     openSnackBar(message: string) {
-        this._snackBar.open(message + " registered successfully", "close", {
+        this._snackBar.open(message, "close", {
             duration: 5 * 1000, // 5 sec
             verticalPosition: "top",
         });
@@ -107,12 +107,15 @@ export class AdminDashboardComponent {
                 if(res){
                     console.log("patient registered")
                     console.log(res)
-                    this.openSnackBar(res.userId)
+                    this.openSnackBar(res.userId + " registered successfully")
                     formDirective.resetForm();
                     this.createPatientForm.reset()
-
+                    console.log(this.createPatientForm.controls.firstName.errors)
 
                     // this.refresh()
+                } else {
+                    console.log("user exists")
+                    this.openSnackBar("user exists")
                 }
             });
         } else {
@@ -137,17 +140,19 @@ export class AdminDashboardComponent {
         };
 
         if(this.createDoctorForm.valid){
+            formDirective.resetForm();
             this.adminService.registerDoctor(doctor).subscribe((res) => {
                 if(res){
                     console.log("doctor registered")
                     console.log(res)
-                    this.openSnackBar(res.userId)
+                    this.openSnackBar(res.userId + " registered successfully")
                     formDirective.resetForm();
                     this.createDoctorForm.reset()
 
                     // this.refresh()
                 } else {
                     console.log("user exists")
+                    this.openSnackBar("user exists")
                 }
             });
         } else {

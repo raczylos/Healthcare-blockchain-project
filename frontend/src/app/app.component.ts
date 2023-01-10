@@ -26,6 +26,7 @@ export class AppComponent {
 
         if(this.userService.isLoggedIn){
             this.userId = this.userService.getUserIdFromToken()
+    
             this.userRole = localStorage.getItem('userRole')!;
             this.userService.getUserRole(this.userId).subscribe((res: any) => {
                 this.userService.userRole = res.userRole;

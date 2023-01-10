@@ -88,7 +88,7 @@
                 <mat-card-title>Create doctor</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <form [formGroup]="createDoctorForm" #formDirective="ngForm">
+                <form [formGroup]="createDoctorForm" #formDirective1="ngForm">
                     <div>
                         <mat-form-field appearance="fill" >
                             <mat-label>First name</mat-label>
@@ -164,7 +164,7 @@
 
                     <mat-card-actions align="end">
                         <div>
-                            <button mat-raised-button color="primary" (click)="onSubmitDoctor(formDirective)">Create doctor</button>
+                            <button mat-raised-button color="primary" (click)="onSubmitDoctor(formDirective1)">Create doctor</button>
                         </div>
                     </mat-card-actions>
                 </form>
@@ -175,7 +175,7 @@
 
     <br>
 
-    <div class="table-container">
+    <!-- <div class="table-container">
         <div class="table-item" >
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -297,7 +297,7 @@
 
                 </mat-expansion-panel>
         </div>
-    </div>
+    </div> -->
 </div>
 
 

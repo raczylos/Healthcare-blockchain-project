@@ -1,0 +1,81 @@
+<p>edit-patient works!</p>
+
+<mat-card class="edit-patient-card">
+    <mat-card-header>
+        <mat-card-title>Edit patient</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="editPatientForm" >
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>First name</mat-label>
+                    <input matInput formControlName="firstName" >
+                    <mat-error *ngIf="editPatientForm.controls.firstName.errors?.['required']"> First name field is required </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Last name</mat-label>
+                    <input matInput formControlName="lastName" required>
+                    <mat-error *ngIf="editPatientForm.controls.lastName.errors?.['required']"> Last name field is required </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Age</mat-label>
+                    <input matInput type="number" formControlName="age" min="1" max="110" required>
+                    <mat-error *ngIf="editPatientForm.controls.age.errors?.['required']"> Age field is required </mat-error>
+                    <mat-error *ngIf="editPatientForm.controls.age.errors?.['min']"> Age field is too low </mat-error>
+                    <mat-error *ngIf="editPatientForm.controls.age.errors?.['max']"> Age field is too hight </mat-error>
+                    <!-- <mat-error *ngIf="createPatientForm.controls.age.errors?.['pattern']">Age must be a number</mat-error> -->
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Gender</mat-label>
+                    <mat-select formControlName="gender" required>
+                        <mat-option value="male">male</mat-option>
+                        <mat-option value="female">female</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="editPatientForm.controls.gender.errors?.['required']"> Gender field is required </mat-error>
+                    </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="address" required>
+                    <mat-error *ngIf="editPatientForm.controls.address.errors?.['required']"> Address field is required </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="userId" required>
+                    <mat-error *ngIf="editPatientForm.controls.userId.errors?.['required']"> Username field is required </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="editPatientForm.controls.password.errors?.['required']"> Password field is required </mat-error>
+                </mat-form-field>
+            </div>
+            <mat-card-actions align="end">
+                <div>
+                    <button mat-raised-button color="primary" (click)="onSubmit()">Create patient</button>
+                </div>
+            </mat-card-actions>
+
+        </form>
+    </mat-card-content>
+</mat-card>

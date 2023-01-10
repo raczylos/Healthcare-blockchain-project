@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { CreateUserComponent } from './create-user/create-user.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -30,9 +30,13 @@ import {MatCardModule} from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
 import { PatientComponent } from './patient/patient.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { DoctorListComponent } from './doctor-list/doctor-list.component';
+import { PatientListComponent } from './patient-list/patient-list.component';
+import { EditPatientComponent } from './edit-patient/edit-patient.component';
+import { EditDoctorComponent } from './edit-doctor/edit-doctor.component';
 
 @NgModule({
-    declarations: [AppComponent, AdminDashboardComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent],
+    declarations: [AppComponent, CreateUserComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

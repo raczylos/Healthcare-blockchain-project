@@ -1,3 +1,4 @@
+import { Patient } from './../patient';
 import { Router} from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -5,6 +6,7 @@ import { User } from '../user';
 import { catchError, of, Observable } from 'rxjs';
 import { Login } from '../login';
 import jwtDecode from "jwt-decode";
+import { Doctor } from '../doctor';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -51,36 +53,65 @@ export class UserService {
         const refreshToken = {
             refreshToken: this.getRefreshToken(),
         };
+
         return this.http
             .post<String>(this.base_url + url, refreshToken, httpOptions)
             .pipe(catchError(this.handleError<String>('updateAuthToken')));
     }
 
-    getAccessToken(): String {
+    getTokensFromLocalStorage() {
         let tokens = localStorage.getItem('authTokens');
-
+        let tokensJSON
         if (tokens) {
+            tokensJSON = JSON.parse(tokens);
 
-            let tokensJSON = JSON.parse(tokens);
-            console.log(tokensJSON)
-            let access_token = tokensJSON['accessToken'];
-
-
-            return access_token;
-        } else {
-            return '';
         }
+        return tokensJSON
+    }
+
+    // getAccessToken(): Observable<String> {
+
+    //     let url = 'get-access-token/';
+
+    //     let tokens = this.getTokensFromLocalStorage()
+    //     let access_token = tokens['accessToken'];
+    //     return this.http
+    //     .post<String>(this.base_url + url, access_token, httpOptions)
+    //     .pipe(catchError(this.handleError<String>('getAccessToken')));
+    // }
+
+    getAccessToken(): String {
+
+        let url = 'get-access-token/';
+
+        let tokens = this.getTokensFromLocalStorage()
+        if(!tokens){
+            return ''
+        }
+        let accessToken = tokens['accessToken'];
+            return accessToken
+
     }
 
     getRefreshToken(): String {
-        let tokens = JSON.parse(localStorage.getItem('authTokens') || '');
-        if (tokens) {
-            let refresh_token = tokens['refreshToken'];
-            return refresh_token;
-        } else {
-            return '';
+        let tokens = this.getTokensFromLocalStorage()!
+        let refreshToken = tokens['refreshToken'];
+        if(!tokens){
+            return ''
         }
+        return refreshToken
     }
+
+    // getRefreshToken(): Observable<String> {
+    //     let url = 'get-refresh-token/';
+
+    //     let tokens = this.getTokensFromLocalStorage()
+    //     let refresh_token = tokens['refreshToken'];
+
+    //     return this.http
+    //     .post<String>(this.base_url + url, refresh_token, httpOptions)
+    //     .pipe(catchError(this.handleError<String>('getRefreshToken')));
+    // }
 
 
 
@@ -96,6 +127,31 @@ export class UserService {
         }
     }
 
+    // getUser(userId: string): Observable<String> {
+    //     let url = `get-user/${userId}/`;
+
+    //     return this.http
+    //     .get<String>(this.base_url + url, httpOptions)
+    //     .pipe(catchError(this.handleError<String>('getRefreshToken')));
+    // }
+
+
+    editPatient(editedPatient: Patient): Observable<Patient> {
+        let url = 'edit-user/';
+
+
+        return this.http
+        .put<Patient>(this.base_url + url, editedPatient, httpOptions)
+        .pipe(catchError(this.handleError<Patient>('editUser')));
+    }
+
+    editDoctor(editedDoctor: Doctor): Observable<Doctor> {
+        let url = 'edit-user/';
+
+        return this.http
+        .put<Doctor>(this.base_url + url, editedDoctor, httpOptions)
+        .pipe(catchError(this.handleError<Doctor>('editUser')));
+    }
 
     logOut(): void {
         console.log("logout")

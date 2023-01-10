@@ -1,17 +1,61 @@
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
-import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { CreateUserComponent } from './create-user/create-user.component';
 import { DoctorComponent } from './doctor/doctor.component';
 import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
 import { PatientComponent } from './patient/patient.component';
 import { RoleGuardService } from './services/role-guard.service';
+import { PatientListComponent } from './patient-list/patient-list.component';
+import { DoctorListComponent } from './doctor-list/doctor-list.component';
+import { EditPatientComponent } from './edit-patient/edit-patient.component';
+import { EditDoctorComponent } from './edit-doctor/edit-doctor.component';
 
 
 const routes: Routes = [
+    // {
+    //     path: '',
+    //     component: DoctorComponent,
+    //     canActivate: [RoleGuardService],
+    //     data: {
+    //         expectedUserRole: 'doctor',
+    //     },
+    // },
+    // {
+    //     path: '',
+    //     component: PatientComponent,
+    //     canActivate: [RoleGuardService],
+    //     data: {
+    //         expectedUserRole: 'patient',
+    //     },
+    // },
     {
-        path: 'admin',
-        component: AdminDashboardComponent,
+        path: 'admin/create-user',
+        component: CreateUserComponent,
+        canActivate: [RoleGuardService],
+        data: {
+            expectedUserRole: 'admin',
+        },
+    },
+    {
+        path: 'admin/create-user',
+        component: CreateUserComponent,
+        canActivate: [RoleGuardService],
+        data: {
+            expectedUserRole: 'admin',
+        },
+    },
+    {
+        path: 'admin/doctor-list',
+        component: DoctorListComponent,
+        canActivate: [RoleGuardService],
+        data: {
+            expectedUserRole: 'admin',
+        },
+    },
+    {
+        path: 'admin/patient-list',
+        component: PatientListComponent,
         canActivate: [RoleGuardService],
         data: {
             expectedUserRole: 'admin',
@@ -42,6 +86,16 @@ const routes: Routes = [
             patientDetail: "patientDetail",
         },
     },
+    {
+        path: 'edit-patient/:id',
+        component: EditPatientComponent,
+        canActivate: [RoleGuardService],
+        data: {
+            expectedUserRole: 'admin'
+        },
+    },
+
+
 ];
 
 @NgModule({
