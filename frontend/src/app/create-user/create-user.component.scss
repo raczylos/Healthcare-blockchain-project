@@ -17,8 +17,9 @@
 .create-patient-card {
     flex: 1;
     max-width: 400px;
-    margin: 20px;
-    margin-left: 400px;
+    // margin: 20px;
+    // margin-left: 400px;
+    margin-left: 20%;
     padding: 10px;
     border: 1px solid #ded9d9;
     margin-bottom: 100px;
@@ -28,8 +29,9 @@
 .create-doctor-card {
     flex: 1;
     max-width: 400px;
-    margin: 20px;
-    margin-right: 400px;
+    // margin: 20px;
+    // margin-right: 400px;
+    margin-right: 20%;
     padding: 10px;
     border: 1px solid #ded9d9;
 }

@@ -141,6 +141,11 @@ exports.getUserAttrs = async function (userId) {
     const userList = await this.getUserList()
     
     const user = userList.find(user => user.id === userId)
+    
+    console.log("tuu1", userId)
+    if(!user){
+        return
+    }
     if(!user.attrs){
         return
     }

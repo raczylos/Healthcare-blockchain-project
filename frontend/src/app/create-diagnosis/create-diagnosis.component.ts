@@ -1,5 +1,5 @@
 import { UserService } from './../services/user.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
     FormBuilder,
     Validators,
@@ -25,6 +25,7 @@ export class CreateDiagnosisComponent {
     isProgressSpinner: boolean = false
 
     doctorAccessList!: Array<string>
+    @Input() patientMedicalData!: any
 
     createMedicalDataForm = this.formBuilder.group({
         conditions: [[''], Validators.required],
@@ -46,13 +47,14 @@ export class CreateDiagnosisComponent {
         this.getDoctorAccessList(this.doctorId)
         this.activatedRoute.params.subscribe((params) => {
             this.patientId = params['id'];
-            console.log("params")
-            console.log(params)
+
             console.log(this.patientId)
+            
 
 
         });
     }
+
 
     // addInput() {
     //     const medications = this.createMedicalDataForm.get('medications') as FormArray

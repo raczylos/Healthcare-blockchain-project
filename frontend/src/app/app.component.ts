@@ -18,7 +18,7 @@ export class AppComponent {
     }
 
     userId!: string;
-    userRole!: string;
+    // userRole!: string;
 
 
 
@@ -26,10 +26,11 @@ export class AppComponent {
 
         if(this.userService.isLoggedIn){
             this.userId = this.userService.getUserIdFromToken()
-    
-            this.userRole = localStorage.getItem('userRole')!;
+
+            // this.userRole = localStorage.getItem('userRole')!;
             this.userService.getUserRole(this.userId).subscribe((res: any) => {
                 this.userService.userRole = res.userRole;
+                console.log("test", this.userService.userRole)
             });
         }
 

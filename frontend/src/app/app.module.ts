@@ -34,9 +34,11 @@ import { DoctorListComponent } from './doctor-list/doctor-list.component';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { EditPatientComponent } from './edit-patient/edit-patient.component';
 import { EditDoctorComponent } from './edit-doctor/edit-doctor.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 @NgModule({
-    declarations: [AppComponent, CreateUserComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent],
+    declarations: [AppComponent, CreateUserComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent, HomePageComponent, UserDetailsComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

@@ -23,7 +23,7 @@ export class PatientListComponent {
 
     ngOnInit() {
         this.adminService.getPatientList().subscribe((res) => {
-            console.log("patient list")
+            
             console.log(res)
             this.patientList = res
             this.dataSource = new MatTableDataSource(this.patientList);
@@ -33,7 +33,7 @@ export class PatientListComponent {
         })
 
     }
-    
+
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();

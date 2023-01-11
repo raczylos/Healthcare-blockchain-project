@@ -83,6 +83,13 @@ app.post('/register-user', authMiddleware, async (req, res) => {
 //     res.json(user)
 // })
 
+app.get('/get-user-attrs/:userId', async (req, res) => {
+    const userId = req.params.userId
+    let userAttrs = await userUtils.getUserAttrs(userId)
+
+    res.json(userAttrs)
+})
+
 app.post('/login', async (req, res) => {
     console.log("login")
     console.log(req.body)
@@ -92,7 +99,8 @@ app.post('/login', async (req, res) => {
     let user = await userUtils.getUserById(username)
     
     if(!user){
-        return res.sendStatus(401) // user doesn't exist
+
+        return res.sendStatus(404) // user doesn't exist
     }
     const userRole = await userUtils.getUserRole(username)
     
@@ -102,14 +110,14 @@ app.post('/login', async (req, res) => {
         const adminPassword = 'adminpw'
         if(adminPassword !== password){
             console.log('incorrect password')
-            return res.sendStatus(401)
+            return res.sendStatus(404)
         }
     } else {
         const hashedPassword = await userUtils.getUserHashedPassword(username)
         const isPasswordMatch = await userUtils.comparePasswords(password, hashedPassword);
         if(!isPasswordMatch){
             console.log('incorrect password')
-            return res.sendStatus(401)
+            return res.sendStatus(404)
         }
         
     }
@@ -177,11 +185,12 @@ app.post('/get-refresh-token', (req, res) => {
 })
 
 app.put('/edit-user', authMiddleware, async (req, res) => {
-
+   
+    
     let firstName = req.body.firstName
     let lastName = req.body.lastName
     let role = req.body.role
-    let username = req.body.userId
+    let userId = req.body.userId
     let password = req.body.password
     let hashedPassword = await userUtils.encryptPassword(password)
     let age = (req.body.age).toString()
@@ -195,9 +204,9 @@ app.put('/edit-user', authMiddleware, async (req, res) => {
     // }
 
     if(role === 'doctor'){
-        editUser.updateUserAttributes(firstName, lastName, role, username, hashedPassword, age, gender, address, specialization)
+        editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, specialization)
     } else {
-        editUser.updateUserAttributes(firstName, lastName, role, username, hashedPassword, age, gender, address)
+        editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address)
     }
     
     
@@ -206,6 +215,7 @@ app.put('/edit-user', authMiddleware, async (req, res) => {
 })
 
 app.get('/get-user-role/:userId', authMiddleware, async (req, res) => {
+    
     const userId = req.params.userId
     
     
@@ -276,6 +286,34 @@ app.get('/get-doctor-list', async (req, res) => {
     
 
     res.json(doctorListInfo)
+})
+
+app.get('/get-user-details/:userId/:role', async (req, res) => {
+    const userId = req.params.userId
+    const role = req.params.role
+    let userAttrs = await userUtils.getUserAttrs(userId)
+    if(!userAttrs){
+        return res.sendStatus(404)
+    }
+    let userInfo = {
+        userId: userId,
+        firstName: userAttrs.find(attr => attr.name === "firstName").value,
+        lastName: userAttrs.find(attr => attr.name === "lastName").value,
+        age: userAttrs.find(attr => attr.name === "age").value,
+        gender: userAttrs.find(attr => attr.name === "gender").value,
+        address: userAttrs.find(attr => attr.name === "address").value,
+        
+
+    }
+    
+    if(role === "doctor"){
+        userInfo.specialization = userAttrs.find(attr => attr.name === "specialization").value
+        // userInfo.push({specialization: userAttrs.find(attr => attr.name === "specialization").value})
+    }
+
+    
+
+    res.json(userInfo)
 })
 
 app.post('/post-patient-medical-data', async (req, res) => {

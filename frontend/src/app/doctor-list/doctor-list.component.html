@@ -52,7 +52,7 @@
 
 
             <tr mat-header-row *matHeaderRowDef="displayedDoctorColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedDoctorColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedDoctorColumns;" [style.cursor]="'pointer'" routerLink="/edit-doctor/{{row.userId}}" ></tr>
         </table>
 
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>

@@ -28,12 +28,12 @@ export class UserService {
     public userRole: any = this.getUserRole(this.userId)
 
     constructor(private http: HttpClient, private router: Router) {
-        console.log('patient service constructor');
+        console.log('user service constructor');
     }
 
     getUserRole(userId: string): Observable<string> {
         let url = `get-user-role/${userId}/`;
-
+        console.log(`get-user-role/${userId}/`)
         return this.http
             .get<string>(this.base_url + url, httpOptions)
             .pipe(catchError(this.handleError<any>('getUserRole')));
@@ -135,6 +135,23 @@ export class UserService {
     //     .pipe(catchError(this.handleError<String>('getRefreshToken')));
     // }
 
+    getUserAttrs(userId: string): Observable<String> {
+        let url = `get-user-attrs/${userId}/`;
+
+        return this.http
+        .get<String>(this.base_url + url, httpOptions)
+        .pipe(catchError(this.handleError<String>('getUserAttrs')));
+    }
+    // /get-user-details/:userId/:role
+
+    getUserDetails(userId: string, role: string): Observable<String> {
+        let url = `get-user-details/${userId}/${role}/`;
+
+        return this.http
+        .get<String>(this.base_url + url, httpOptions)
+        .pipe(catchError(this.handleError<String>('getUserDetails')));
+    }
+
 
     editPatient(editedPatient: Patient): Observable<Patient> {
         let url = 'edit-user/';
@@ -159,6 +176,7 @@ export class UserService {
         this.isLoggedIn = false
         this.userRole = undefined
         this.router.navigate(['/'])
+        // location.reload()
     }
 
 

@@ -1,3 +1,4 @@
+import { HomePageComponent } from './home-page/home-page.component';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { CreateUserComponent } from './create-user/create-user.component';
@@ -13,22 +14,12 @@ import { EditDoctorComponent } from './edit-doctor/edit-doctor.component';
 
 
 const routes: Routes = [
-    // {
-    //     path: '',
-    //     component: DoctorComponent,
-    //     canActivate: [RoleGuardService],
-    //     data: {
-    //         expectedUserRole: 'doctor',
-    //     },
-    // },
-    // {
-    //     path: '',
-    //     component: PatientComponent,
-    //     canActivate: [RoleGuardService],
-    //     data: {
-    //         expectedUserRole: 'patient',
-    //     },
-    // },
+
+    {
+        path: '',
+        component: HomePageComponent,
+        canActivate: [RoleGuardService],
+    },
     {
         path: 'admin/create-user',
         component: CreateUserComponent,
@@ -90,9 +81,17 @@ const routes: Routes = [
         path: 'edit-patient/:id',
         component: EditPatientComponent,
         canActivate: [RoleGuardService],
-        data: {
-            expectedUserRole: 'admin'
-        },
+        // data: {
+        //     expectedUserRole: 'admin'
+        // },
+    },
+    {
+        path: 'edit-doctor/:id',
+        component: EditDoctorComponent,
+        canActivate: [RoleGuardService],
+        // data: {
+        //     expectedUserRole: 'admin'
+        // },
     },
 
 

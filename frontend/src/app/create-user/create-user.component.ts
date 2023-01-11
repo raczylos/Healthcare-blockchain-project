@@ -29,7 +29,7 @@ export class CreateUserComponent {
     createDoctorForm = this.formBuilder.group({
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
-        password: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
         userId: ['', [Validators.required]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
@@ -41,7 +41,7 @@ export class CreateUserComponent {
     createPatientForm = this.formBuilder.group({
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
-        password: ['', [Validators.required]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
         userId: ['', [Validators.required]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],

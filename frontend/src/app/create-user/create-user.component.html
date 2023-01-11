@@ -69,6 +69,7 @@
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                             <mat-error *ngIf="createPatientForm.controls.password.errors?.['required']"> Password field is required </mat-error>
+                            <mat-error *ngIf="createPatientForm.controls.password.errors?.['minLength']"> Password is too short </mat-error>
                         </mat-form-field>
                     </div>
                     <mat-card-actions align="end">
@@ -159,6 +160,7 @@
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                             <mat-error *ngIf="createDoctorForm.controls.password.errors?.['required']"> Password field is required </mat-error>
+                            <mat-error *ngIf="createDoctorForm.controls.password.errors?.['minLength']"> Password is too short </mat-error>
                         </mat-form-field>
                     </div>
 

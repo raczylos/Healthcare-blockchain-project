@@ -1,6 +1,6 @@
 <div>
-    <div class="card-container">
-        <mat-card class="patient-current-medical-data-card" *ngIf="patientMedicalData">
+    <div [ngClass]="{'card-container': patientMedicalData}">
+        <mat-card [ngClass]="{'patient-current-medical-data-card': userService.userRole === 'doctor' , 'patient-current-medical-data-card-center': userService.userRole !== 'doctor'}" *ngIf="patientMedicalData">
           <mat-card-header>
             <mat-card-title>{{patientId}} current medical data</mat-card-title>
           </mat-card-header>
@@ -20,9 +20,10 @@
           </mat-card-content>
         </mat-card>
 
-          <div *ngIf="userService.userRole === 'doctor'" class="create-patient-medical-data-card" >
-              <app-create-diagnosis ></app-create-diagnosis>
+          <div *ngIf="userService.userRole === 'doctor'" >
+              <app-create-diagnosis [patientMedicalData]="patientMedicalData" ></app-create-diagnosis>
           </div>
+
     </div>
 
       <!-- <mat-card *ngFor="let item of patientHistoryData">
@@ -38,9 +39,9 @@
           </mat-list>
         </mat-card-content>
       </mat-card> -->
-    <div [hidden]="!dataSource"><!--*ngIf="dataSource" breaks pagination hidden not-->
+    <div [hidden]="patientHistoryData.length === 0"><!--*ngIf="dataSource" breaks pagination hidden not         dataSource.data.length === 0       -->
 
-        <mat-card class="patient-history-data-card">
+        <mat-card class="patient-history-data-card" >
                 <mat-card-header>
                     <mat-card-title>{{patientId}} history medical data</mat-card-title>
                 </mat-card-header>

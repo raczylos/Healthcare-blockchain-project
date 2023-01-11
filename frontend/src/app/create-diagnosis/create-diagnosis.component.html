@@ -1,5 +1,5 @@
 <div *ngIf="!isProgressSpinner">
-    <mat-card class="create-diagnosis-card">
+    <mat-card [ngClass]="{'create-patient-medical-data-card': patientMedicalData, 'create-patient-medical-data-card-no-data': !patientMedicalData}">
         <mat-card-header>
             <mat-card-title>Create {{patientId}} medical data </mat-card-title>
         </mat-card-header>

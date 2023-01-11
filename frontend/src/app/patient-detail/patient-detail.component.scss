@@ -6,15 +6,24 @@
 .patient-current-medical-data-card {
     margin-top: 100px;
     margin-bottom: 50px;
-
     flex: 1;
-    margin-left: 300px;
+    // margin-left: 300px;
+    margin-left: 5%;
 
     padding: 10px;
     border: 1px solid #ded9d9;
     max-width: 30%;
+    // max-width: 400px;
     // max-height: 70%;
 }
+
+.patient-current-medical-data-card-center {
+    margin: 2% auto;
+    padding: 20px;
+    border: 1px solid #ded9d9;
+    max-width: 400px;
+}
+
 
 .create-patient-medical-data-card {
     flex: 1;
@@ -26,8 +35,12 @@
 
 }
 
+
 .patient-history-data-card {
-    margin: 100px;
+    // margin: 100px;
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-bottom: 5%;
     border: 1px solid #ded9d9;
 }
 

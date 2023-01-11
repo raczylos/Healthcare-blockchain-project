@@ -42,12 +42,15 @@ export class RoleGuardService {
                 // route.data['expectedUserRole'] === 'patient'
                 this.userRole === 'patient'
             ) {
-                
+
                 this.canPatientAccessPatientDetails(route, this.userId);
             } else {
 
 
                 const expectedUserRole = route.data['expectedUserRole'];
+                if(!expectedUserRole){ // route without route.data['expectedUserRole']
+                    return true
+                }
                 if (this.userRole !== expectedUserRole) {
                     this.router.navigate(['']);
                     return false;
@@ -82,8 +85,8 @@ export class RoleGuardService {
         userId: string
     ) {
         let patientId = route.paramMap.get('id');
-        console.log("szynka")
-        console.log(userId, patientId)
+
+
         if (userId !== patientId) {
             this.router.navigate(['']);
             return false;

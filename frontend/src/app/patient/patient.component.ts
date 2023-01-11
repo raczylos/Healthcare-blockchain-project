@@ -52,10 +52,11 @@ export class PatientComponent {
         // this.userId = localStorage.getItem('userId')!;
 
         this.getUserRole();
+
         this.getDoctorList();
         this.doctorList$.subscribe((doctorId) => {
             this.getDoctorAccessList(doctorId);
-
+            console.log("test4", this.doctorList)
         });
 
     }

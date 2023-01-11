@@ -1,6 +1,7 @@
 const FabricCAServices = require('fabric-ca-client');
 const { Wallets } = require('fabric-network');
 const fs = require('fs');
+const path = require('path');
 const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 
 exports.updateUserAttributes = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, specialization = '') {
@@ -22,7 +23,9 @@ exports.updateUserAttributes = async function (firstName, lastName, role, userId
     // Create a new fabric-ca-client instance for the Idemix CA
     
     const caInfo = ccp.certificateAuthorities['ca.org1.example.com'];
-    const caTLSCACerts = caInfo.tlsCACerts.pem;ties['ca.org1.example.com'];
+    
+    const caTLSCACerts = caInfo.tlsCACerts.pem;
+    
     const fabricCA = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
     
     // Connect to the wallet and get the user's identity
@@ -32,10 +35,10 @@ exports.updateUserAttributes = async function (firstName, lastName, role, userId
 
     const identity = await wallet.get(userId);
     
-    // if (identity) {
-    //     console.log(`An identity for the user ${userId} already exists in the wallet`);
-    //     return;
-    // }
+    if (!identity) {
+        console.log(`An identity for the user ${userId} doesn't exists in the wallet`);
+        return;
+    }
 
     let attrs = [{
         name: "role",
@@ -76,17 +79,26 @@ if(role === 'doctor'){
         ecert: true
     }
     attrs.push(specializationAttr)
-}
+}   
+    const identityService = fabricCA.newIdentityService();
 
-    // Revoke the existing identity
-    await fabricCA.revoke({ enrollmentID: userId, revocationReason: 'Updating attributes' }, identity);
+    const adminIdentity = await wallet.get('admin');
+    const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
+    const adminUser = await provider.getUserContext(adminIdentity, 'admin');
+    let user = await identityService.getOne(userId, adminUser);
+    console.log(user.result)
+    user.result.attrs = attrs
+    console.log(user.result)
+
+    const test = await identityService.update(userId, user.result, adminUser)
+    console.log("test", test.result)
+
+    // await wallet.remove(previousUserId)
+    // await wallet.put(userId, user)
     
-    // Enroll the user with the new attributes
-    const enrollment = await fabricCA.enroll({ enrollmentID: userId, enrollmentSecret: 'enrollmentSecret', attrs: attrs });
-    const userIdentity = X509WalletMixin.createIdentity('Org1MSP', enrollment.certificate, enrollment.key.toBytes());
-    
-    // Save the new identity in the wallet
-    await wallet.put(userId, userIdentity);
+    //update doctor access list|
+    //update doctor
+
     
     console.log(`Successfully updated attributes for user ${userId}`);
   } catch (error) {

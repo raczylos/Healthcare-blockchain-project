@@ -50,7 +50,7 @@ export class LoginComponent {
                 this.dialogRef.close();
                 this.accountExist = true;
                 this.userService.isLoggedIn = true;
-
+                this.userService.userId = this.userService.getUserIdFromToken()
                 this.userService.getUserRole(this.loginForm.value.username!).subscribe((res: any) => {
                     this.userService.userRole = res.userRole;
                     // localStorage.setItem('userRole', res.userRole);

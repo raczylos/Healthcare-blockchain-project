@@ -15,8 +15,10 @@ import { MedicalData } from '../medicalData';
 })
 export class PatientDetailComponent {
     patientId!: string;
-    patientMedicalData: any = '';
-    patientHistoryData: any = '';
+    // patientMedicalData: any = '';
+    // patientHistoryData: any = '';
+    patientMedicalData: any;
+    patientHistoryData: any;
 
     displayedPatientColumns: string[] = ["allergies", "conditions", "medications", "treatmentPlans"];
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -74,6 +76,9 @@ export class PatientDetailComponent {
                     this.dataSource.paginator = this.paginator;
                     this.dataSource.sort = this.sort;
                     this.loading = false
+
+
+
                 }
             });
     }
