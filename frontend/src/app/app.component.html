@@ -19,7 +19,7 @@
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin/create-user/">Create user</a>
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin/patient-list/">Patient list</a>
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin/doctor-list/">Doctor list</a>
-        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient-details/{{userService.getUserIdFromToken()}}">Patient Details</a>
+        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient-diagnosis/{{userService.getUserIdFromToken()}}">Patient diagnosis</a>
         <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient/{{userService.getUserIdFromToken()}}">Grant access to doctor</a>
         <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/edit-patient/{{userService.getUserIdFromToken()}}">Edit</a>
 

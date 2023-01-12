@@ -1,20 +1,27 @@
 .card-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 5%;
 }
 
 .patient-current-medical-data-card {
-    margin-top: 100px;
+    margin-top: 20px;
     margin-bottom: 50px;
     flex: 1;
-    // margin-left: 300px;
-    margin-left: 5%;
 
     padding: 10px;
     border: 1px solid #ded9d9;
     max-width: 30%;
-    // max-width: 400px;
-    // max-height: 70%;
+
+}
+
+.content {
+
+    overflow: visible;
+    overflow-wrap: break-word;
+    font-size: 16px;
 }
 
 .patient-current-medical-data-card-center {
@@ -40,6 +47,8 @@
     // margin: 100px;
     margin-right: 10%;
     margin-left: 10%;
+
+
     margin-bottom: 5%;
     border: 1px solid #ded9d9;
 }

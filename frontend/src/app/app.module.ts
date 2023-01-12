@@ -21,7 +21,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTableModule} from '@angular/material/table';
 import { DoctorComponent } from './doctor/doctor.component';
-import { PatientDetailComponent } from './patient-detail/patient-detail.component';
+import { PatientDiagnosisComponent } from './patient-diagnosis/patient-diagnosis.component';
 import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -38,7 +38,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 
 @NgModule({
-    declarations: [AppComponent, CreateUserComponent, LoginComponent, DoctorComponent, PatientDetailComponent, CreateDiagnosisComponent, PatientComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent, HomePageComponent, UserDetailsComponent],
+    declarations: [AppComponent, CreateUserComponent, LoginComponent, DoctorComponent, PatientDiagnosisComponent, CreateDiagnosisComponent, PatientComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent, HomePageComponent, UserDetailsComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

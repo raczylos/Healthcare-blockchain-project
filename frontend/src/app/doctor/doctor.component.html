@@ -1,7 +1,7 @@
-<div *ngIf="userRole === 'doctor' && !loading" >
+<div *ngIf="userRole === 'doctor'" [hidden]="loading" >
 
 
-        <mat-card class="granted-patient-list-card">
+        <mat-card class="granted-patient-list-card" >
             <mat-card-header>
                 <mat-card-title>Your patients:</mat-card-title>
             </mat-card-header>
@@ -49,7 +49,7 @@
 
 
                     <tr mat-header-row *matHeaderRowDef="displayedPatientColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;" [style.cursor]="'pointer'" routerLink="/patient-details/{{row.userId}}"  ></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedPatientColumns;" [style.cursor]="'pointer'" routerLink="/patient-diagnosis/{{row.userId}}"  ></tr>
 
 
                     <tr class="mat-row" *matNoDataRow>

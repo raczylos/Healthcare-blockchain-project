@@ -5,17 +5,19 @@
             <mat-card-title>{{patientId}} current medical data</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <!-- <p><strong>Allergies:</strong> <span>{{patientMedicalData.allergies}}</span></p>
-            <p><strong>Conditions:</strong> <span>{{patientMedicalData.conditions}}</span></p>
-            <p><strong>Medications:</strong> <span>{{patientMedicalData.medications}}</span></p>
-            <p><strong>Treatment Plans:</strong> <span>{{patientMedicalData.treatmentPlans}}</span></p> -->
+              <div class="content">
+                  <p><strong>Allergies: </strong>{{patientMedicalData.allergies}}</p>
+                  <p><strong>Conditions: </strong>{{patientMedicalData.conditions}}</p>
+                  <p><strong>Medications: </strong>{{patientMedicalData.medications}}</p>
+                  <p><strong>Treatment Plans: </strong>{{patientMedicalData.treatmentPlans}}</p>
+              </div>
 
-            <mat-list >
+            <!-- <mat-list >
               <mat-list-item><span><strong>Allergies:</strong>{{patientMedicalData.allergies}}</span></mat-list-item>
               <mat-list-item><span><strong>Conditions:</strong> {{patientMedicalData.conditions}}</span></mat-list-item>
               <mat-list-item><span><strong>Medications:</strong> {{patientMedicalData.medications}}</span></mat-list-item>
               <mat-list-item><span><strong>Treatment Plans:</strong> {{patientMedicalData.treatmentPlans}}</span></mat-list-item>
-            </mat-list>
+            </mat-list> -->
 
           </mat-card-content>
         </mat-card>
@@ -39,7 +41,8 @@
           </mat-list>
         </mat-card-content>
       </mat-card> -->
-    <div [hidden]="patientHistoryData.length === 0"><!--*ngIf="dataSource" breaks pagination hidden not         dataSource.data.length === 0       -->
+
+    <div ><!--*ngIf="dataSource" breaks pagination hidden not         dataSource.data.length === 0       -->
 
         <mat-card class="patient-history-data-card" >
                 <mat-card-header>

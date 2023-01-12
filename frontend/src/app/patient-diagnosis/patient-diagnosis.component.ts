@@ -9,11 +9,11 @@ import { MatSort } from '@angular/material/sort';
 import { MedicalData } from '../medicalData';
 
 @Component({
-    selector: 'app-patient-detail',
-    templateUrl: './patient-detail.component.html',
-    styleUrls: ['./patient-detail.component.scss'],
+    selector: 'app-patient-diagnosis',
+    templateUrl: './patient-diagnosis.component.html',
+    styleUrls: ['./patient-diagnosis.component.scss'],
 })
-export class PatientDetailComponent {
+export class PatientDiagnosisComponent {
     patientId!: string;
     // patientMedicalData: any = '';
     // patientHistoryData: any = '';

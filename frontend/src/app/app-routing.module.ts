@@ -3,7 +3,7 @@ import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { DoctorComponent } from './doctor/doctor.component';
-import { PatientDetailComponent } from './patient-detail/patient-detail.component';
+import { PatientDiagnosisComponent } from './patient-diagnosis/patient-diagnosis.component';
 import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
 import { PatientComponent } from './patient/patient.component';
 import { RoleGuardService } from './services/role-guard.service';
@@ -69,8 +69,8 @@ const routes: Routes = [
         },
     },
     {
-        path: 'patient-details/:id',
-        component: PatientDetailComponent,
+        path: 'patient-diagnosis/:id',
+        component: PatientDiagnosisComponent,
         canActivate: [RoleGuardService],
         data: {
             // expectedUserRole: 'patient',

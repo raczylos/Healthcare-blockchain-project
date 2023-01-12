@@ -6,7 +6,6 @@ const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 
 exports.updateUserAttributes = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, specialization = '') {
   try {
-    // load the network configuration
     
     const ccpPath = path.resolve(
         __dirname,
@@ -20,7 +19,7 @@ exports.updateUserAttributes = async function (firstName, lastName, role, userId
     );
     
     const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
-    // Create a new fabric-ca-client instance for the Idemix CA
+    
     
     const caInfo = ccp.certificateAuthorities['ca.org1.example.com'];
     
@@ -28,7 +27,7 @@ exports.updateUserAttributes = async function (firstName, lastName, role, userId
     
     const fabricCA = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
     
-    // Connect to the wallet and get the user's identity
+    
     const walletPath = path.join(process.cwd(), 'wallet');
     const wallet = await Wallets.newFileSystemWallet(walletPath);
     console.log(`Wallet path: ${walletPath}`);
@@ -86,18 +85,10 @@ if(role === 'doctor'){
     const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
     const adminUser = await provider.getUserContext(adminIdentity, 'admin');
     let user = await identityService.getOne(userId, adminUser);
-    console.log(user.result)
+
     user.result.attrs = attrs
-    console.log(user.result)
-
-    const test = await identityService.update(userId, user.result, adminUser)
-    console.log("test", test.result)
-
-    // await wallet.remove(previousUserId)
-    // await wallet.put(userId, user)
-    
-    //update doctor access list|
-    //update doctor
+   
+    await identityService.update(userId, user.result, adminUser)
 
     
     console.log(`Successfully updated attributes for user ${userId}`);
