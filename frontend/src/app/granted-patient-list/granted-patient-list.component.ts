@@ -1,3 +1,4 @@
+import { PatientService } from '../services/patient.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { Router } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
@@ -11,11 +12,11 @@ import { Patient } from '../patient';
 const Buffer = require('buffer').Buffer;
 
 @Component({
-  selector: 'app-doctor',
-  templateUrl: './doctor.component.html',
-  styleUrls: ['./doctor.component.scss']
+  selector: 'app-granted-patient-list',
+  templateUrl: './granted-patient-list.component.html',
+  styleUrls: ['./granted-patient-list.component.scss']
 })
-export class DoctorComponent {
+export class GrantedPatientListComponent {
 
     displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
 
@@ -54,7 +55,7 @@ export class DoctorComponent {
     }
 
     getGrantedAccessPatientList() {
-        this.adminService.getPatientList().subscribe((res) => {
+        this.patientService.getPatientList().subscribe((res) => {
 
             this.grantedAccessPatientList = res.filter(item => this.doctorAccessList.includes(item.userId));
 
@@ -85,11 +86,11 @@ export class DoctorComponent {
     }
 
     constructor(
-        private formBuilder: FormBuilder,
+        private patientService: PatientService,
         private userService: UserService,
         private adminService: AdminService,
         private doctorService: DoctorService,
-        private router: Router
+
     ) {}
 
 }

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Patient } from '../patient';
 import {Location} from '@angular/common';
+import { PatientService } from '../services/patient.service';
 
 @Component({
     selector: 'app-edit-patient',
@@ -87,7 +88,7 @@ export class EditPatientComponent {
         };
         if(this.editPatientForm.valid){
 
-            this.userService.editPatient(editedPatient).subscribe(res => {
+            this.patientService.editPatient(editedPatient).subscribe(res => {
                 if(!res){
 
                 }
@@ -106,5 +107,11 @@ export class EditPatientComponent {
     }
 
 
-    constructor(private userService: UserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private location: Location) {}
+    constructor(
+        private patientService: PatientService,
+        private userService: UserService,
+        private formBuilder: FormBuilder,
+        private activatedRoute: ActivatedRoute,
+        private location: Location
+        ) {}
 }

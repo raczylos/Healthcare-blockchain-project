@@ -61,6 +61,11 @@ exports.getDoctorList = async function () {
 
 exports.getUserById = async function (userId) {
     const userList = await this.getUserList()
+
+    if(!userList){
+        return
+    }
+
     let user = userList.find(user => user.id === userId)
 
     return user
@@ -71,7 +76,10 @@ exports.getUserById = async function (userId) {
 exports.getUserRole = async function (userId) {
 
     const userList = await this.getUserList()
-    
+    if(!userList){
+        return
+    }
+
     const user = userList.find(user => user.id === userId)
     
     if(!user){
@@ -105,44 +113,16 @@ exports.comparePasswords = async function (password, hashedPassword) {
     }
   }
 
-// exports.getAdminEnrollmentSecret = async function () {
-//     try {
-//         const caURL = await this.getCaURL()
-    
-//         const caClient = new FabricCAServices(caURL);
-//         let enrollmentID = 'admin'
-//         const walletPath = path.join(process.cwd(), 'wallet');
-//         const wallet = await Wallets.newFileSystemWallet(walletPath);
-
-//         const adminIdentity = await wallet.get('admin');
-        
-//         const enrollmentCert = adminIdentity.credentials.certificate
-//         const privateKey = adminIdentity.credentials.privateKey
-//         const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
-//         const adminUser = await provider.getUserContext(adminIdentity, 'admin'); //getUserContext(identity, 'doctor1') ale to nie dziala bo doctor1 nie ma permisji
-
-//         // const enrollment = await caClient.reenroll(adminUser);
-//         // const enrollment = await caClient.reenroll({ enrollmentID, enrollmentSecret });
-//         // console.log(enrollment.secret)
-//         // const enrollmentSecret = enrollment.secret;
-//         const enrollmentSecret = adminIdentity.credentials.secret;
-//         console.log(enrollmentSecret)
-//         // Return the enrollment secret
-//         return enrollmentSecret;
-//         } catch (error) {
-//         console.error(`Failed to retrieve the enrollment secret for the admin identity: ${error}`);
-//         return null;
-//         }
-//   }
-
-
-
 exports.getUserAttrs = async function (userId) {
     const userList = await this.getUserList()
-    
+
+    if(!userList){
+        return
+    }
+
     const user = userList.find(user => user.id === userId)
     
-    console.log("tuu1", userId)
+    
     if(!user){
         return
     }

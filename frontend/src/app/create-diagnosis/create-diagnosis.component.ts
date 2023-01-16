@@ -1,3 +1,4 @@
+import { PatientService } from './../services/patient.service';
 import { UserService } from './../services/user.service';
 import { Component, OnInit, Input } from '@angular/core';
 import {
@@ -18,63 +19,77 @@ import { MedicalData } from 'src/app/medicalData';
 })
 export class CreateDiagnosisComponent {
     patientId!: string;
-    conditions!: FormArray;
     doctorId!: string;
-    medicationCounter: number = 0
 
-    isProgressSpinner: boolean = false
+    counterObject: Record<string, number> = {
+        medications: 0,
+        conditions: 0,
+        allergies: 0,
+    };
 
-    doctorAccessList!: Array<string>
-    @Input() patientMedicalData!: any
+    medicationCounter: number = 0;
+
+    isProgressSpinner: boolean = false;
+
+    doctorAccessList!: Array<string>;
+    @Input() patientMedicalData!: any;
 
     createMedicalDataForm = this.formBuilder.group({
-        conditions: [[''], Validators.required],
+        conditions: this.formBuilder.array([
+            this.formBuilder.control('', Validators.required),
+        ]),
         medications: this.formBuilder.array([
-            this.formBuilder.control('', Validators.required)
-          ]),
-        allergies: [[''], Validators.required],
+            this.formBuilder.control('', Validators.required),
+        ]),
+        allergies: this.formBuilder.array([
+            this.formBuilder.control('', Validators.required),
+        ]),
         treatmentPlans: ['', Validators.required],
     });
 
     get medications(): FormArray {
         return this.createMedicalDataForm.get('medications') as FormArray;
-      }
+    }
+
+    get conditions(): FormArray {
+        return this.createMedicalDataForm.get('conditions') as FormArray;
+    }
+
+    get allergies(): FormArray {
+        return this.createMedicalDataForm.get('allergies') as FormArray;
+    }
 
     ngOnInit() {
         // this.doctorId = localStorage.getItem("userId")!
-        this.doctorId = this.userService.getUserIdFromToken()
+        this.doctorId = this.userService.getUserIdFromToken();
 
-        this.getDoctorAccessList(this.doctorId)
+        this.getDoctorAccessList(this.doctorId);
         this.activatedRoute.params.subscribe((params) => {
             this.patientId = params['id'];
 
-            console.log(this.patientId)
-            
-
-
+            console.log(this.patientId);
         });
     }
 
-
-    // addInput() {
-    //     const medications = this.createMedicalDataForm.get('medications') as FormArray
-    //     const medication = this.formBuilder.control('', Validators.required);
-    //     medications.push(medication);
-    //     // this.medicationCounter++;
-    // }
-
     addInput(inputName: string) {
-        const medicalFormArray = this.createMedicalDataForm.get(inputName) as FormArray
-        const medicalArrayItem = this.formBuilder.control('', Validators.required);
+        const medicalFormArray = this.createMedicalDataForm.get(
+            inputName
+        ) as FormArray;
+        const medicalArrayItem = this.formBuilder.control(
+            '',
+            Validators.required
+        );
         medicalFormArray.push(medicalArrayItem);
-        this.medicationCounter++;
+        this.counterObject[inputName] += 1;
     }
 
     removeInput(inputName: string, index: number) {
-        const medicalFormArray = this.createMedicalDataForm.get(inputName) as FormArray;
+        const medicalFormArray = this.createMedicalDataForm.get(
+            inputName
+        ) as FormArray;
         medicalFormArray.removeAt(index);
-        this.medicationCounter--;
-      }
+        this.counterObject[inputName] -= 1;
+    }
 
     getDoctorAccessList(doctorId: string) {
         this.doctorService
@@ -84,7 +99,7 @@ export class CreateDiagnosisComponent {
                 if (!res) {
                     // this.doctorAccessList = '';
                 } else {
-                    this.doctorAccessList = res
+                    this.doctorAccessList = res;
                     console.log(this.doctorAccessList);
                 }
             });
@@ -92,31 +107,38 @@ export class CreateDiagnosisComponent {
 
     onSubmit() {
         let medicalData: MedicalData = {
-            conditions: this.createMedicalDataForm.value.conditions!,
-            medications: (this.createMedicalDataForm.get('medications') as FormArray).value,
-            allergies: this.createMedicalDataForm.value.allergies!,
+            conditions: this.conditions.value,
+            medications: this.medications.value,
+            allergies: this.allergies.value,
             treatmentPlans: this.createMedicalDataForm.value.treatmentPlans!,
         };
 
-        if(this.createMedicalDataForm.valid){
-            if(this.doctorAccessList.find(patient => patient === this.patientId)){
-                console.log("valid createMedicalDataForm")
-                console.log(medicalData)
-                this.isProgressSpinner = true
-                this.doctorService
-                .postPatientMedicalData(this.patientId, medicalData)
-                .subscribe((res) => {
-                    console.log(res);
+        if (this.createMedicalDataForm.valid) {
+            if (
+                this.doctorAccessList.find(
+                    (patient) => patient === this.patientId
+                )
+            ) {
+                console.log('valid createMedicalDataForm');
+                console.log(medicalData);
+                this.isProgressSpinner = true;
+                this.patientService
+                    .postPatientMedicalData(
+                        this.patientId,
+                        medicalData,
+                        this.doctorAccessList
+                    )
+                    .subscribe((res) => {
+                        console.log(res);
 
-                    this.refresh()
-                });
+                        this.refresh();
+                    });
             } else {
-                console.log("you don't have access to that patient")
+                console.log("you don't have access to that patient");
             }
         } else {
-            console.log("invalid createMedicalDataForm")
+            console.log('invalid createMedicalDataForm');
         }
-
     }
 
     refresh(): void {
@@ -126,7 +148,8 @@ export class CreateDiagnosisComponent {
     constructor(
         private activatedRoute: ActivatedRoute,
         private doctorService: DoctorService,
+        private patientService: PatientService,
         private formBuilder: FormBuilder,
-        private userService: UserService,
+        private userService: UserService
     ) {}
 }

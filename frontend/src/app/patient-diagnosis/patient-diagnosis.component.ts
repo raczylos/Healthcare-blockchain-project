@@ -1,3 +1,4 @@
+import { PatientService } from './../services/patient.service';
 import { DoctorService } from '../services/doctor.service';
 import { Component, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -40,7 +41,7 @@ export class PatientDiagnosisComponent {
 
     getPatientMedicalData() {
         this.loading = true
-        this.doctorService
+        this.patientService
             .getPatientMedicalData(this.patientId)
             .subscribe((res: any) => {
                 if (!res) {
@@ -48,6 +49,7 @@ export class PatientDiagnosisComponent {
                 } else {
                     console.log('current patient medical data');
                     console.log(res);
+
                     this.patientMedicalData = res;
                     this.loading = false
                 }
@@ -56,7 +58,7 @@ export class PatientDiagnosisComponent {
 
     getPatientHistoryData() {
         this.loading = true
-        this.doctorService
+        this.patientService
             .getPatientHistoryData(this.patientId)
             .subscribe((res: any) => {
                 if (!res) {
@@ -92,8 +94,8 @@ export class PatientDiagnosisComponent {
     }
 
     constructor(
+        private patientService: PatientService,
         private activatedRoute: ActivatedRoute,
-        private doctorService: DoctorService,
         public userService: UserService
     ) {}
 }

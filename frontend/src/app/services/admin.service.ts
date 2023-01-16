@@ -26,14 +26,6 @@ export class AdminService {
         console.log('admin service constructor');
     }
 
-    // registerUser(user: User): Observable<User> {
-    //     let url = 'register-user/';
-    //     console.log(user);
-    //     return this.http
-    //         .post<User>(this.base_url + url, user, httpOptions)
-    //         .pipe(catchError(this.handleError<User>('registerUser')));
-    // }
-
     registerPatient(patient: Patient): Observable<Patient> {
         let url = 'register-user/';
         console.log("register patient");
@@ -52,21 +44,9 @@ export class AdminService {
             .pipe(catchError(this.handleError<Doctor>('registerDoctor')));
     }
 
-    getPatientList(): Observable<Patient[]> {
-        let url = 'get-patient-list/';
 
-        return this.http
-            .get<Patient[]>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<Patient[]>('getPatientList')));
-    }
 
-    getDoctorList(): Observable<Doctor[]> {
-        let url = 'get-doctor-list/';
 
-        return this.http
-            .get<Doctor[]>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<Doctor[]>('getPatientList')));
-    }
 
 
     private handleError<T>(operation = 'operation', result?: T) {

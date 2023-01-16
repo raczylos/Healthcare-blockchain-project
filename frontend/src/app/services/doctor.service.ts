@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, of, Observable } from 'rxjs';
+import { Doctor } from '../doctor';
 import { MedicalData } from '../medicalData';
 
 
@@ -17,32 +18,14 @@ const httpOptions = {
 export class DoctorService {
     private base_url = 'http://localhost:3000/';
 
-    getPatientMedicalData(patientId: string): Observable<MedicalData> {
-        let url = `get-current-medical-data/${patientId}/`;
+    getDoctorList(): Observable<Doctor[]> {
+        let url = 'get-doctor-list/';
 
         return this.http
-            .get<MedicalData>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<MedicalData>('getPatientMedicalData')));
+            .get<Doctor[]>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<Doctor[]>('getDoctorList')));
     }
 
-    getPatientHistoryData(patientId: string): Observable<MedicalData> {
-        let url = `get-history-medical-data/${patientId}/`;
-
-        return this.http
-            .get<MedicalData>(this.base_url + url, httpOptions)
-            .pipe(catchError(this.handleError<MedicalData>('getPatientHistoryData')));
-    }
-
-    postPatientMedicalData(patientId: string, medicalData: MedicalData): Observable<MedicalData> {
-        let url = `post-patient-medical-data/`;
-        let dataJson = {
-            patientId: patientId,
-            medicalData: medicalData,
-        }
-        return this.http
-            .post<MedicalData>(this.base_url + url, dataJson, httpOptions)
-            .pipe(catchError(this.handleError<MedicalData>('postPatientMedicalData')));
-    }
 
     getDoctorAccessList(doctorId: string): Observable<Array<string>> {
         let url = `get-doctor-access-list/${doctorId}/`;
@@ -75,6 +58,16 @@ export class DoctorService {
             .post<Array<String>>(this.base_url + url, dataJson, httpOptions)
             .pipe(catchError(this.handleError<Array<String>>('revokeDoctorAccess')));
     }
+    
+    editDoctor(editedDoctor: Doctor): Observable<Doctor> {
+        let url = 'edit-user/';
+
+        return this.http
+        .put<Doctor>(this.base_url + url, editedDoctor, httpOptions)
+        .pipe(catchError(this.handleError<Doctor>('editUser')));
+    }
+
+
 
 
     private handleError<T>(operation = 'operation', result?: T) {

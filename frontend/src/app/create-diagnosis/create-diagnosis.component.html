@@ -5,12 +5,37 @@
         </mat-card-header>
         <mat-card-content>
             <form [formGroup]="createMedicalDataForm">
-                <div>
-                    <mat-form-field appearance="fill" >
-                        <mat-label>conditions</mat-label>
-                        <input matInput formControlName="conditions" required>
-                        <mat-error *ngIf="createMedicalDataForm.controls.conditions.errors?.['required']"> Conditions field is required </mat-error>
-                    </mat-form-field>
+
+                <div formArrayName="allergies">
+                    <div *ngFor="let allergy of allergies.controls; let i = index">
+                        <mat-form-field appearance="fill" >
+                            <mat-label>allergy{{i}}</mat-label>
+                            <input matInput [formControlName]="i" required>
+                            <mat-error *ngIf="allergy.errors?.['required']"> Allergy{{i}} field is required </mat-error>
+                            <button mat-icon-button matSuffix (click)="addInput('allergies')" *ngIf="counterObject['allergies'] === i">
+                                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
+                            </button>
+                            <button mat-icon-button matSuffix (click)="removeInput('allergies', i)" *ngIf="counterObject['allergies'] === i && counterObject['allergies'] > 0" >
+                                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div formArrayName="conditions">
+                    <div *ngFor="let condition of conditions.controls; let i = index">
+                        <mat-form-field appearance="fill" >
+                            <mat-label>condition{{i}}</mat-label>
+                            <input matInput [formControlName]="i" required>
+                            <mat-error *ngIf="condition.errors?.['required']"> Condition{{i}} field is required </mat-error>
+                            <button mat-icon-button matSuffix (click)="addInput('conditions')" *ngIf="counterObject['conditions'] === i">
+                                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
+                            </button>
+                            <button mat-icon-button matSuffix (click)="removeInput('conditions', i)" *ngIf="counterObject['conditions'] === i && counterObject['conditions'] > 0" >
+                                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
                 </div>
 
                 <div formArrayName="medications">
@@ -20,10 +45,10 @@
                                 <mat-label>medication{{i}}</mat-label>
                                 <input matInput [formControlName]="i" required>
                                 <mat-error *ngIf="medication.errors?.['required']"> Medication{{i}} field is required </mat-error>
-                                <button mat-icon-button matSuffix (click)="addInput('medications')" *ngIf="medicationCounter === i">
+                                <button mat-icon-button matSuffix (click)="addInput('medications')" *ngIf="counterObject['medications'] === i">
                                     <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
                                 </button>
-                                <button mat-icon-button matSuffix (click)="removeInput('medications', i)" *ngIf="medicationCounter === i && medicationCounter > 0" >
+                                <button mat-icon-button matSuffix (click)="removeInput('medications', i)" *ngIf="counterObject['medications'] === i && counterObject['medications'] > 0" >
                                     <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
                                 </button>
                             </mat-form-field>
@@ -32,15 +57,6 @@
                     </div>
 
                 </div>
-
-                <div>
-                    <mat-form-field appearance="fill" >
-                        <mat-label>allergies</mat-label>
-                        <input matInput  formControlName="allergies" required>
-                        <mat-error *ngIf="createMedicalDataForm.controls.allergies.errors?.['required']"> Allergies field is required </mat-error>
-                    </mat-form-field>
-                </div>
-
 
 
                 <div>

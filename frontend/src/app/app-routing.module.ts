@@ -2,10 +2,10 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { CreateUserComponent } from './create-user/create-user.component';
-import { DoctorComponent } from './doctor/doctor.component';
+import { GrantedPatientListComponent } from './granted-patient-list/granted-patient-list.component';
 import { PatientDiagnosisComponent } from './patient-diagnosis/patient-diagnosis.component';
 import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
-import { PatientComponent } from './patient/patient.component';
+import { GrantAccessToDoctorComponent } from './grant-access-to-doctor/grant-access-to-doctor.component';
 import { RoleGuardService } from './services/role-guard.service';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { DoctorListComponent } from './doctor-list/doctor-list.component';
@@ -54,7 +54,7 @@ const routes: Routes = [
     },
     {
         path: 'doctor/:id',
-        component: DoctorComponent,
+        component: GrantedPatientListComponent,
         canActivate: [RoleGuardService],
         data: {
             expectedUserRole: 'doctor',
@@ -62,7 +62,7 @@ const routes: Routes = [
     },
     {
         path: 'patient/:id',
-        component: PatientComponent,
+        component: GrantAccessToDoctorComponent,
         canActivate: [RoleGuardService],
         data: {
             expectedUserRole: 'patient',

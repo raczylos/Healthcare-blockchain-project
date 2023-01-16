@@ -1,3 +1,5 @@
+import { DoctorService } from 'src/app/services/doctor.service';
+import { PatientService } from './../services/patient.service';
 import { Doctor } from '../doctor';
 import { Patient } from '../patient';
 import { UserService } from '../services/user.service';
@@ -18,14 +20,7 @@ export class CreateUserComponent {
     displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
     displayedDoctorColumns: string[] = ["doctorId", "firstName", "lastName", "age", "gender", "address", "specialization"];
     loading: boolean = true
-    // createUserForm = this.formBuilder.group({
-    //     firstName: [''],
-    //     lastName: [''],
-    //     password: [''],
-    //     userId: [''],
-    //     role: [''],
-    // });
-
+ 
     createDoctorForm = this.formBuilder.group({
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
@@ -64,13 +59,13 @@ export class CreateUserComponent {
             this.userRole = res.userRole;
         });
 
-        this.adminService.getDoctorList().subscribe((res) => {
+        this.doctorService.getDoctorList().subscribe((res) => {
             console.log("doctor list")
             console.log(res)
             this.doctorList = res
             this.loading = false
         })
-        this.adminService.getPatientList().subscribe((res) => {
+        this.patientService.getPatientList().subscribe((res) => {
             console.log("patient list")
             console.log(res)
             this.patientList = res
@@ -164,6 +159,8 @@ export class CreateUserComponent {
     constructor(
         private formBuilder: FormBuilder,
         private userService: UserService,
+        private patientService: PatientService,
+        private doctorService: DoctorService,
         private adminService: AdminService,
         private _snackBar: MatSnackBar
     ) {}

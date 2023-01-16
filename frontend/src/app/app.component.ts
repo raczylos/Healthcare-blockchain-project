@@ -29,8 +29,11 @@ export class AppComponent {
 
             // this.userRole = localStorage.getItem('userRole')!;
             this.userService.getUserRole(this.userId).subscribe((res: any) => {
+                if(!res.userRole){
+                    this.userService.logOut() // if we cannot get userRole just logout
+                }
                 this.userService.userRole = res.userRole;
-                console.log("test", this.userService.userRole)
+
             });
         }
 

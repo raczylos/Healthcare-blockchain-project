@@ -1,4 +1,4 @@
-import { Doctor } from './../doctor';
+import { Doctor } from '../doctor';
 import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { UserService } from '../services/user.service';
@@ -11,11 +11,11 @@ import { ActivatedRoute } from '@angular/router';
 const Buffer = require('buffer').Buffer;
 
 @Component({
-    selector: 'app-patient',
-    templateUrl: './patient.component.html',
-    styleUrls: ['./patient.component.scss'],
+    selector: 'app-grant-access-to-doctor',
+    templateUrl: './grant-access-to-doctor.component.html',
+    styleUrls: ['./grant-access-to-doctor.component.scss'],
 })
-export class PatientComponent {
+export class GrantAccessToDoctorComponent {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
@@ -89,7 +89,7 @@ export class PatientComponent {
     }
 
     getDoctorList() {
-        this.adminService.getDoctorList().subscribe((res) => {
+        this.doctorService.getDoctorList().subscribe((res) => {
             // console.log('doctor list');
             // console.log(res);
             this.doctorList = res;

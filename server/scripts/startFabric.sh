@@ -22,7 +22,7 @@ CC_SRC_PATH="../../server/chaincode/"
 pushd ../../fabric-samples/test-network
 ./network.sh down
 ./network.sh up createChannel -ca -s couchdb
-./network.sh deployCC -ccn medicalContract -cci initLedger10 -ccl javascript -ccp ${CC_SRC_PATH}
+./network.sh deployCC -ccn medicalContract -cci initLedger -ccl javascript -ccp ${CC_SRC_PATH}
 popd
 
 cat <<EOF

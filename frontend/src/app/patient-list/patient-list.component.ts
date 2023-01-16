@@ -1,3 +1,4 @@
+import { PatientService } from './../services/patient.service';
 import { Patient } from './../patient';
 import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,8 +23,8 @@ export class PatientListComponent {
 
 
     ngOnInit() {
-        this.adminService.getPatientList().subscribe((res) => {
-            
+        this.patientService.getPatientList().subscribe((res) => {
+
             console.log(res)
             this.patientList = res
             this.dataSource = new MatTableDataSource(this.patientList);
@@ -44,6 +45,6 @@ export class PatientListComponent {
       }
 
     constructor(
-        private adminService: AdminService,
+        private patientService: PatientService,
     ) {}
 }

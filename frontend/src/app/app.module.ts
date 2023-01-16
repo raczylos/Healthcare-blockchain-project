@@ -20,7 +20,7 @@ import { JwtInterceptor } from './jwt.interceptor';
 import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTableModule} from '@angular/material/table';
-import { DoctorComponent } from './doctor/doctor.component';
+import { GrantedPatientListComponent } from './granted-patient-list/granted-patient-list.component';
 import { PatientDiagnosisComponent } from './patient-diagnosis/patient-diagnosis.component';
 import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -28,7 +28,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatCardModule} from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
-import { PatientComponent } from './patient/patient.component';
+import { GrantAccessToDoctorComponent } from './grant-access-to-doctor/grant-access-to-doctor.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DoctorListComponent } from './doctor-list/doctor-list.component';
 import { PatientListComponent } from './patient-list/patient-list.component';
@@ -38,7 +38,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 
 @NgModule({
-    declarations: [AppComponent, CreateUserComponent, LoginComponent, DoctorComponent, PatientDiagnosisComponent, CreateDiagnosisComponent, PatientComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent, HomePageComponent, UserDetailsComponent],
+    declarations: [AppComponent, CreateUserComponent, LoginComponent, GrantedPatientListComponent, PatientDiagnosisComponent, CreateDiagnosisComponent, GrantAccessToDoctorComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent, HomePageComponent, UserDetailsComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

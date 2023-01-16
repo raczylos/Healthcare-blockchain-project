@@ -22,13 +22,19 @@
     overflow: visible;
     overflow-wrap: break-word;
     font-size: 16px;
+    
+
 }
+// .content::before {
+//     content: ",\A";
+// }
 
 .patient-current-medical-data-card-center {
     margin: 2% auto;
     padding: 20px;
     border: 1px solid #ded9d9;
     max-width: 400px;
+
 }
 
 
@@ -40,7 +46,12 @@
     padding: 10px;
     border: 1px solid #ded9d9;
 
+
 }
+
+
+
+
 
 
 .patient-history-data-card {
@@ -71,7 +82,8 @@ mat-list-item {
 
 
 td , th {
-    white-space: normal;
+
+    // white-space: normal;
     word-wrap: break-word;
     max-width: 200px;
 }

@@ -1,3 +1,4 @@
+import { DoctorService } from 'src/app/services/doctor.service';
 import { Doctor } from './../doctor';
 import { AdminService } from './../services/admin.service';
 import { Component, ViewChild } from '@angular/core';
@@ -22,7 +23,7 @@ export class DoctorListComponent {
     @ViewChild(MatSort) sort!: MatSort;
 
     ngOnInit() {
-        this.adminService.getDoctorList().subscribe((res) => {
+        this.doctorService.getDoctorList().subscribe((res) => {
             console.log("doctor list")
             console.log(res)
             this.doctorList = res
@@ -44,7 +45,7 @@ export class DoctorListComponent {
       }
 
     constructor(
-        private adminService: AdminService,
+        private doctorService: DoctorService,
     ) {}
 
 

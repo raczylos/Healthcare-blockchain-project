@@ -8,11 +8,9 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent {
-    isLoggedIn$ = new Subject<boolean>();
 
     userId!: string
     // userRole!: string
-
     ngOnInit(){
 
         this.userService.userId = this.userService.getUserIdFromToken()
@@ -21,7 +19,6 @@ export class HomePageComponent {
         //     this.userRole = res.userRole
 
         // })
-
 
     }
 

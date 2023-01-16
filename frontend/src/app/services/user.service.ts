@@ -152,24 +152,6 @@ export class UserService {
         .pipe(catchError(this.handleError<String>('getUserDetails')));
     }
 
-
-    editPatient(editedPatient: Patient): Observable<Patient> {
-        let url = 'edit-user/';
-
-
-        return this.http
-        .put<Patient>(this.base_url + url, editedPatient, httpOptions)
-        .pipe(catchError(this.handleError<Patient>('editUser')));
-    }
-
-    editDoctor(editedDoctor: Doctor): Observable<Doctor> {
-        let url = 'edit-user/';
-
-        return this.http
-        .put<Doctor>(this.base_url + url, editedDoctor, httpOptions)
-        .pipe(catchError(this.handleError<Doctor>('editUser')));
-    }
-
     logOut(): void {
         console.log("logout")
         localStorage.clear()

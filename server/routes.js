@@ -6,7 +6,6 @@ const queryDiagnosis = require('./queryDiagnosis')
 const queryDoctorAccessList = require('./queryDoctorAccessList')
 const invokeDoctorAccessList = require('./invokeDoctorAccessList')
 // const patient = require('./patient')
-// const database = require('./database')
 const editUser = require('./editUser')
 const userUtils = require('./user');
 const express = require('express')
@@ -320,8 +319,21 @@ app.post('/post-patient-medical-data', async (req, res) => {
     
     const patientId = req.body.patientId
     const medicalData = req.body.medicalData
+    const accessList = req.body.accessList
+    
+    
+    if(!accessList){
+        res.sendStatus(403)
+        return
+    }
+    
+    if(!accessList.find(patient => patient !== patientId)){
+        res.sendStatus(403)
+        return
+    }
+    
     await diagnosis.invokeDiagnosis(patientId, medicalData)
-
+   
     res.json(medicalData)
 })
 

@@ -1,3 +1,4 @@
+import { DoctorService } from 'src/app/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../services/user.service';
 import { Component } from '@angular/core';
@@ -89,7 +90,7 @@ export class EditDoctorComponent {
         };
         if(this.editDoctorForm.valid){
 
-            this.userService.editDoctor(editedDoctor).subscribe(res => {
+            this.doctorService.editDoctor(editedDoctor).subscribe(res => {
                 if(!res){
 
                 }
@@ -108,5 +109,11 @@ export class EditDoctorComponent {
     }
 
 
-    constructor(private userService: UserService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private location: Location) {}
+    constructor(
+        private doctorService: DoctorService,
+        private userService: UserService,
+        private formBuilder: FormBuilder,
+        private activatedRoute: ActivatedRoute,
+        private location: Location
+        ){}
 }
