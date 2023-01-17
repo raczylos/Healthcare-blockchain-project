@@ -35,30 +35,29 @@ export class DoctorService {
             .pipe(catchError(this.handleError<Array<string>>('getDoctorAccessList')));
     }
 
-    grantDoctorAccess(patientId: string, doctorId: string, doctorAccessList: Array<String>): Observable<Array<String>> {
+    grantDoctorAccess(patientId: string, doctorId: string): Observable<Array<String>> {
         let url = `grant-doctor-access/`;
         let dataJson = {
             patientId: patientId,
             doctorId: doctorId,
-            doctorAccessList: doctorAccessList,
+
         }
         return this.http
             .post<Array<String>>(this.base_url + url, dataJson, httpOptions)
             .pipe(catchError(this.handleError<Array<String>>('grantDoctorAccess')));
     }
 
-    revokeDoctorAccess(patientId: string, doctorId: string, doctorAccessList: Array<String>): Observable<Array<String>> {
+    revokeDoctorAccess(patientId: string, doctorId: string): Observable<Array<String>> {
         let url = `revoke-doctor-access/`;
         let dataJson = {
             patientId: patientId,
             doctorId: doctorId,
-            doctorAccessList: doctorAccessList,
         }
         return this.http
             .post<Array<String>>(this.base_url + url, dataJson, httpOptions)
             .pipe(catchError(this.handleError<Array<String>>('revokeDoctorAccess')));
     }
-    
+
     editDoctor(editedDoctor: Doctor): Observable<Doctor> {
         let url = 'edit-user/';
 

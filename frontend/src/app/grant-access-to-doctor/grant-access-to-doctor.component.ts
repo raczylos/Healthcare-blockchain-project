@@ -45,18 +45,15 @@ export class GrantAccessToDoctorComponent {
         this.userId = this.userService.getUserIdFromToken()
         this.route.params.subscribe((params) => {
             let patientId = params['id'];
-            if(this.userId !== patientId){
-                // unautorized
-            }
+          
         });
-        // this.userId = localStorage.getItem('userId')!;
+
 
         this.getUserRole();
 
         this.getDoctorList();
         this.doctorList$.subscribe((doctorId) => {
             this.getDoctorAccessList(doctorId);
-            console.log("test4", this.doctorList)
         });
 
     }
@@ -114,7 +111,7 @@ export class GrantAccessToDoctorComponent {
                 } else {
                     this.doctorAccessListDict.set(doctorId, res);
                     // console.log('doctorAccessListDict');
-                    // console.log(this.doctorAccessListDict);
+                    console.log("lala", this.doctorAccessListDict);
                     this.loading = false
                 }
             });
@@ -132,8 +129,7 @@ export class GrantAccessToDoctorComponent {
         this.doctorService
             .grantDoctorAccess(
                 patientId,
-                doctorId,
-                this.doctorAccessListDict.get(doctorId)!
+                doctorId
             )
             .subscribe((res) => {
                 console.log(
@@ -152,7 +148,6 @@ export class GrantAccessToDoctorComponent {
             .revokeDoctorAccess(
                 patientId,
                 doctorId,
-                this.doctorAccessListDict.get(doctorId)!
             )
             .subscribe((res) => {
                 console.log(
@@ -165,7 +160,6 @@ export class GrantAccessToDoctorComponent {
 
     constructor(
         private userService: UserService,
-        private adminService: AdminService,
         private doctorService: DoctorService,
         private route: ActivatedRoute
     ) {

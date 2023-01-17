@@ -26,28 +26,29 @@ export class PatientService {
             .pipe(catchError(this.handleError<Patient[]>('getPatientList')));
     }
 
-    getPatientMedicalData(patientId: string): Observable<MedicalData> {
-        let url = `get-current-medical-data/${patientId}/`;
+    getPatientMedicalData(patientId: string, currentUserId: string): Observable<MedicalData> {
+        let url = `get-current-medical-data/${patientId}/${currentUserId}/`;
 
         return this.http
             .get<MedicalData>(this.base_url + url, httpOptions)
             .pipe(catchError(this.handleError<MedicalData>('getPatientMedicalData')));
     }
 
-    getPatientHistoryData(patientId: string): Observable<MedicalData> {
-        let url = `get-history-medical-data/${patientId}/`;
+    getPatientHistoryData(patientId: string, currentUserId: string): Observable<MedicalData> {
+        let url = `get-history-medical-data/${patientId}/${currentUserId}/`;
 
         return this.http
             .get<MedicalData>(this.base_url + url, httpOptions)
             .pipe(catchError(this.handleError<MedicalData>('getPatientHistoryData')));
     }
 
-    postPatientMedicalData(patientId: string, medicalData: MedicalData, accessList: Array<string>): Observable<MedicalData> {
+    postPatientMedicalData(patientId: string, doctorId: string, medicalData: MedicalData, accessList: Array<string>): Observable<MedicalData> {
         let url = `post-patient-medical-data/`;
         let dataJson = {
             patientId: patientId,
             medicalData: medicalData,
             accessList: accessList,
+            doctorId: doctorId,
         }
         return this.http
             .post<MedicalData>(this.base_url + url, dataJson, httpOptions)

@@ -1,7 +1,7 @@
 import { PatientService } from './../services/patient.service';
 import { DoctorService } from '../services/doctor.service';
 import { Component, Input, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, TitleStrategy } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Patient } from '../patient';
@@ -16,8 +16,8 @@ import { MedicalData } from '../medicalData';
 })
 export class PatientDiagnosisComponent {
     patientId!: string;
-    // patientMedicalData: any = '';
-    // patientHistoryData: any = '';
+    currentUserId!: string;
+
     patientMedicalData: any;
     patientHistoryData: any;
 
@@ -31,6 +31,7 @@ export class PatientDiagnosisComponent {
         // this.patientId = this.userService.getUserIdFromToken()
         this.activatedRoute.params.subscribe((params) => {
             this.patientId = params['id'];
+            this.currentUserId = this.userService.getUserIdFromToken()
             // this.patientId = localStorage.getItem('userId')!;
             // this.patientId = this.userService.getUserIdFromToken()
 
@@ -42,7 +43,7 @@ export class PatientDiagnosisComponent {
     getPatientMedicalData() {
         this.loading = true
         this.patientService
-            .getPatientMedicalData(this.patientId)
+            .getPatientMedicalData(this.patientId, this.currentUserId)
             .subscribe((res: any) => {
                 if (!res) {
                     this.patientMedicalData = '';
@@ -59,7 +60,7 @@ export class PatientDiagnosisComponent {
     getPatientHistoryData() {
         this.loading = true
         this.patientService
-            .getPatientHistoryData(this.patientId)
+            .getPatientHistoryData(this.patientId, this.currentUserId)
             .subscribe((res: any) => {
                 if (!res) {
                     // this.patientHistoryData = '';

@@ -25,7 +25,7 @@ exports.getUserList = async function () {
     const wallet = await Wallets.newFileSystemWallet(walletPath);
 
     const adminIdentity = await wallet.get('admin');
-    
+    const doctorIdentity = await wallet.get('doctor1');
     
     if (!adminIdentity) {
         console.log(`Admin identity doesn't exists in the wallet `);
@@ -35,11 +35,14 @@ exports.getUserList = async function () {
 
     const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
     const adminUser = await provider.getUserContext(adminIdentity, 'admin'); //getUserContext(identity, 'doctor1') ale to nie dziala bo doctor1 nie ma permisji
-    
+    // const doctorUser= await provider.getUserContext(adminIdentity, 'doctor1')
+
     const caClient = new FabricCAServices(caURL);
     const identityService = caClient.newIdentityService();
     const identities = await identityService.getAll(adminUser);
+    // const identities2 = await identityService.getAll(doctorUser);
     
+    // console.log("test identities", identities2.result.identities)
     const userList = identities.result.identities;
     
     return userList
@@ -48,7 +51,7 @@ exports.getUserList = async function () {
 exports.getPatientList = async function () {
     const userList = await this.getUserList()
     const patientList = userList.filter(user => user.attrs.find(attr => attr.name === "role" && attr.value === "patient"))
-
+    
     return patientList
 }
 

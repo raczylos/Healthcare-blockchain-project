@@ -2,7 +2,7 @@ const { Gateway, Wallets } = require("fabric-network");
 const fs = require("fs");
 const path = require("path");
 
-exports.postDoctorAccessList = async function (doctorId, doctorAccessList) {
+exports.postRevokeAccess = async function (patientId, doctorId) {
 	try {
 		// load the network configuration
 		const ccpPath = path.resolve(
@@ -17,44 +17,104 @@ exports.postDoctorAccessList = async function (doctorId, doctorAccessList) {
 		);
 		let ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
 
-		// Create a new file system based wallet for managing identities.
 		const walletPath = path.join(process.cwd(), "wallet");
 		const wallet = await Wallets.newFileSystemWallet(walletPath);
-		console.log(`Wallet path: ${walletPath}`);
-
-		// Check to see if we've already enrolled the user.
-		const identity = await wallet.get(doctorId);
-		if (!identity) {
+		
+		const doctorIdentity = await wallet.get(doctorId);
+		if (!doctorIdentity) {
 			console.log(
 				`An identity for the doctor ${doctorId} does not exist in the wallet`
 			);
 			return;
 		}
 
-		// Create a new gateway for connecting to our peer node.
+		const patientIdentity = await wallet.get(patientId);
+		if (!patientIdentity) {
+			console.log(
+				`An identity for the patient ${patientId} does not exist in the wallet`
+			);
+			return;
+		}
+
 		const gateway = new Gateway();
 		await gateway.connect(ccp, {
 			wallet,
-			identity: doctorId,
+			identity: patientId,
 			discovery: { enabled: true, asLocalhost: true },
 		});
 
-		// Get the network (channel) our contract is deployed to.
 		const network = await gateway.getNetwork("mychannel");
 
-		// Get the contract from the network.
-		// const contract = network.getContract('fabcar');
-		// const contract = network.getContract("adminContract");
 		const contract = network.getContract("medicalContract");
 
-	
-        
 		await contract.submitTransaction(
-			"writeData",
+			"revokeAccess",
+			patientId,
 			doctorId,
-			JSON.stringify(doctorAccessList)
 		);
-			
+
+	
+		await gateway.disconnect();
+		
+	} catch (error) {
+		console.error(`Failed to submit transaction: ${error}`);
+		// process.exit(1);
+	}
+};
+
+exports.postGrantAccess = async function (patientId, doctorId) {
+	try {
+		// load the network configuration
+		const ccpPath = path.resolve(
+			__dirname,
+			"..",
+			"fabric-samples",
+			"test-network",
+			"organizations",
+			"peerOrganizations",
+			"org1.example.com",
+			"connection-org1.json"
+		);
+		let ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
+
+		const walletPath = path.join(process.cwd(), "wallet");
+		const wallet = await Wallets.newFileSystemWallet(walletPath);
+		
+		const doctorIdentity = await wallet.get(doctorId);
+		if (!doctorIdentity) {
+			console.log(
+				`An identity for the doctor ${doctorId} does not exist in the wallet`
+			);
+			return;
+		}
+
+		const patientIdentity = await wallet.get(patientId);
+		if (!patientIdentity) {
+			console.log(
+				`An identity for the patient ${patientId} does not exist in the wallet`
+			);
+			return;
+		}
+
+		const gateway = new Gateway();
+		await gateway.connect(ccp, {
+			wallet,
+			identity: patientId,
+			discovery: { enabled: true, asLocalhost: true },
+		});
+
+		const network = await gateway.getNetwork("mychannel");
+
+		const contract = network.getContract("medicalContract");
+
+		
+		await contract.submitTransaction(
+			"grantAccess",
+			patientId,
+			doctorId,
+		);
+		
+		
 		console.log("Transaction has been submitted.");
 
 		// Disconnect from the gateway.
@@ -62,6 +122,6 @@ exports.postDoctorAccessList = async function (doctorId, doctorAccessList) {
 		// return
 	} catch (error) {
 		console.error(`Failed to submit transaction: ${error}`);
-		process.exit(1);
+		// process.exit(1);
 	}
 };

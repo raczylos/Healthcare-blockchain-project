@@ -125,13 +125,15 @@ export class CreateDiagnosisComponent {
                 this.patientService
                     .postPatientMedicalData(
                         this.patientId,
+                        this.doctorId,
                         medicalData,
-                        this.doctorAccessList
+                        this.doctorAccessList,
+
                     )
                     .subscribe((res) => {
-                        console.log(res);
-
                         this.refresh();
+
+                        console.log("medical data", res);
                     });
             } else {
                 console.log("you don't have access to that patient");

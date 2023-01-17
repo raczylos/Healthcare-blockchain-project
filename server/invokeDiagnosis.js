@@ -2,10 +2,12 @@ const { Gateway, Wallets } = require("fabric-network");
 const fs = require("fs");
 const path = require("path");
 
-exports.invokeDiagnosis = async function (patientId, medicalData) {
+
+
+
+exports.invokeDiagnosis = async function (patientId, medicalData, doctorId) {
 	try {
 		
-		// load the network configuration
 		const ccpPath = path.resolve(
 			__dirname,
 			"..",
@@ -18,50 +20,52 @@ exports.invokeDiagnosis = async function (patientId, medicalData) {
 		);
 		let ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
 
-		// Create a new file system based wallet for managing identities.
 		const walletPath = path.join(process.cwd(), "wallet");
 		const wallet = await Wallets.newFileSystemWallet(walletPath);
-		console.log(`Wallet path: ${walletPath}`);
 
-		// Check to see if we've already enrolled the user.
-		const identity = await wallet.get(patientId);
-		if (!identity) {
+		const patientIdentity = await wallet.get(patientId);
+		if (!patientIdentity) {
 			console.log(
 				`An identity for the patient ${patientId} does not exist in the wallet`
 			);
 			return;
 		}
 
-		// Create a new gateway for connecting to our peer node.
+		const doctorIdentity = await wallet.get(doctorId);
+
+		if (!doctorIdentity) {
+			console.log(
+				`An identity for the doctor ${doctorId} does not exist in the wallet`
+			);
+			return;
+		}
+
 		const gateway = new Gateway();
 		await gateway.connect(ccp, {
 			wallet,
-			identity: patientId,
+			identity: doctorId,
 			discovery: { enabled: true, asLocalhost: true },
 		});
 
-		// Get the network (channel) our contract is deployed to.
+
 		const network = await gateway.getNetwork("mychannel");
 
-		// Get the contract from the network.
-		// const contract = network.getContract('fabcar');
-		// const contract = network.getContract("adminContract");
 		const contract = network.getContract("medicalContract");
 
-	
 		await contract.submitTransaction(
-			"writeData",
+			"writePatientMedicalData",
 			patientId,
-			JSON.stringify(medicalData)
+			doctorId,
+			JSON.stringify(medicalData),
+
 		);
 
-		console.log("Transaction has been submitted.");
 
-		// Disconnect from the gateway.
+
 		await gateway.disconnect();
-		// return
 	} catch (error) {
-		console.error(`Failed to submit transaction: ${error}`);
-		process.exit(1);
+		console.error(`Error in invokeDiagnosis: ${error}`);
+		// process.exit(1);
 	}
-};
+
+}

@@ -82,7 +82,7 @@ app.post('/register-user', authMiddleware, async (req, res) => {
 //     res.json(user)
 // })
 
-app.get('/get-user-attrs/:userId', async (req, res) => {
+app.get('/get-user-attrs/:userId', authMiddleware, async (req, res) => {
     const userId = req.params.userId
     let userAttrs = await userUtils.getUserAttrs(userId)
 
@@ -214,9 +214,8 @@ app.put('/edit-user', authMiddleware, async (req, res) => {
 })
 
 app.get('/get-user-role/:userId', authMiddleware, async (req, res) => {
-    
+    console.log("xddddd")
     const userId = req.params.userId
-    
     
     let userRole = await userUtils.getUserRole(userId)
     
@@ -224,7 +223,7 @@ app.get('/get-user-role/:userId', authMiddleware, async (req, res) => {
 
 })
 
-app.get('/get-patient-list', async (req, res) => {
+app.get('/get-patient-list', authMiddleware,  async (req, res) => {
     const patientList = await userUtils.getPatientList()
     let patientListInfo = []
 
@@ -255,7 +254,7 @@ app.get('/get-patient-list', async (req, res) => {
     res.json(patientListInfo)
 })
 
-app.get('/get-doctor-list', async (req, res) => {
+app.get('/get-doctor-list', authMiddleware,  async (req, res) => {
     const doctorList = await userUtils.getDoctorList()
     let doctorListInfo = []
 
@@ -287,7 +286,7 @@ app.get('/get-doctor-list', async (req, res) => {
     res.json(doctorListInfo)
 })
 
-app.get('/get-user-details/:userId/:role', async (req, res) => {
+app.get('/get-user-details/:userId/:role', authMiddleware, async (req, res) => {
     const userId = req.params.userId
     const role = req.params.role
     let userAttrs = await userUtils.getUserAttrs(userId)
@@ -315,40 +314,43 @@ app.get('/get-user-details/:userId/:role', async (req, res) => {
     res.json(userInfo)
 })
 
-app.post('/post-patient-medical-data', async (req, res) => {
+app.post('/post-patient-medical-data', authMiddleware, async (req, res) => {
     
     const patientId = req.body.patientId
     const medicalData = req.body.medicalData
     const accessList = req.body.accessList
-    
-    
+    const doctorId = req.body.doctorId
+
     if(!accessList){
         res.sendStatus(403)
         return
     }
     
-    if(!accessList.find(patient => patient !== patientId)){
+    if(accessList.find(patient => patient !== patientId)){
         res.sendStatus(403)
         return
     }
     
-    await diagnosis.invokeDiagnosis(patientId, medicalData)
+    await diagnosis.invokeDiagnosis(patientId, medicalData, doctorId)
    
     res.json(medicalData)
 })
 
-app.get('/get-current-medical-data/:patientId', async (req, res) => {
+app.get('/get-current-medical-data/:patientId/:currentUserId', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
+    const currentUserId = req.params.currentUserId
     console.log("get-current-medical-data")
     console.log(patientId)
-    const medicalData = await queryDiagnosis.readPatientMedicalData(patientId)
-
+    const medicalData = await queryDiagnosis.readPatientMedicalData(currentUserId, patientId)
+    
     res.json(medicalData)
 })
 
-app.get('/get-history-medical-data/:patientId', async (req, res) => {
+app.get('/get-history-medical-data/:patientId/:currentUserId', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
-    const medicalHistoryData = await queryDiagnosis.readPatientHistoryData(patientId)
+    const currentUserId = req.params.currentUserId
+    const medicalHistoryData = await queryDiagnosis.readPatientHistoryData(currentUserId, patientId)
+    
     if(!medicalHistoryData){
         return
     }   
@@ -356,7 +358,7 @@ app.get('/get-history-medical-data/:patientId', async (req, res) => {
     res.json(medicalHistoryData)
 })
 
-app.get('/get-doctor-access-list/:doctorId', async (req, res) => {
+app.get('/get-doctor-access-list/:doctorId', authMiddleware, async (req, res) => {
     const doctorId = req.params.doctorId
     const doctorAccessList = await queryDoctorAccessList.getDoctorAccessList(doctorId)
     
@@ -364,55 +366,41 @@ app.get('/get-doctor-access-list/:doctorId', async (req, res) => {
         let list = []
         res.json(list)
     } else {
-        
         res.json(doctorAccessList)
     }
     
 })
 
-app.post('/grant-doctor-access', async (req, res) => {
+
+app.post('/grant-doctor-access', authMiddleware, async (req, res) => {
 
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId
-    let doctorAccessList = req.body.doctorAccessList
-    
-    // await diagnosis.invokeDiagnosis(doctorId, medicalData)
-    if(doctorAccessList.find(item => item === patientId)){
-        console.log(`doctor: ${doctorId}  has already access to patient: ${patientId}`)
-        return;
-    }
-    doctorAccessList.push(patientId)
 
-    await invokeDoctorAccessList.postDoctorAccessList(doctorId, doctorAccessList)
+    let doctorAccessList = await invokeDoctorAccessList.postGrantAccess(patientId, doctorId)
 
     res.json(doctorAccessList)
 })
 
-app.post('/revoke-doctor-access', async (req, res) => {
+
+app.post('/revoke-doctor-access', authMiddleware, async (req, res) => {
 
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId
-    let doctorAccessList = req.body.doctorAccessList
     
-    if(!doctorAccessList.find(item => item === patientId)){
-        console.log(`doctor: ${doctorId}  doesn't have access to patient: ${patientId} so it cannot be revoked`)
-        return;
-    }
-    doctorAccessList = doctorAccessList.filter(item => item !== patientId)
-
-    await invokeDoctorAccessList.postDoctorAccessList(doctorId, doctorAccessList)
+    let doctorAccessList =  await invokeDoctorAccessList.postRevokeAccess(patientId, doctorId)
 
     res.json(doctorAccessList)
 })
 
 
 
-app.delete('/logout', (req, res) => {
-    const {refreshToken} = req.body
-    // refreshToken = refreshTokens.filter(token => token !== refreshToken)
-    res.sendStatus(204)
+// app.delete('/logout', (req, res) => {
+//     const {refreshToken} = req.body
+//     // refreshToken = refreshTokens.filter(token => token !== refreshToken)
+//     res.sendStatus(204)
 
-})
+// })
 
 let port = 3000
 
