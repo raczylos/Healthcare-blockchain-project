@@ -45,7 +45,7 @@ export class GrantAccessToDoctorComponent {
         this.userId = this.userService.getUserIdFromToken()
         this.route.params.subscribe((params) => {
             let patientId = params['id'];
-          
+
         });
 
 

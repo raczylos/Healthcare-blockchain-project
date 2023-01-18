@@ -16,7 +16,7 @@
                                 <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
                             </button>
                             <button mat-icon-button matSuffix (click)="removeInput('allergies', i)" *ngIf="counterObject['allergies'] === i && counterObject['allergies'] > 0" >
-                                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                                <mat-icon [ngStyle]="{'color': 'red'}" aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
                             </button>
                         </mat-form-field>
                     </div>
@@ -32,7 +32,7 @@
                                 <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
                             </button>
                             <button mat-icon-button matSuffix (click)="removeInput('conditions', i)" *ngIf="counterObject['conditions'] === i && counterObject['conditions'] > 0" >
-                                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                                <mat-icon [ngStyle]="{'color': 'red'}" aria-hidden="false" aria-label="Example close icon" fontIcon="close"></mat-icon>
                             </button>
                         </mat-form-field>
                     </div>
@@ -49,7 +49,7 @@
                                     <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="add"></mat-icon>
                                 </button>
                                 <button mat-icon-button matSuffix (click)="removeInput('medications', i)" *ngIf="counterObject['medications'] === i && counterObject['medications'] > 0" >
-                                    <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                                    <mat-icon [ngStyle]="{'color': 'red'}" aria-hidden="false" aria-label="Example close icon" fontIcon="close"></mat-icon>
                                 </button>
                             </mat-form-field>
 
@@ -61,7 +61,7 @@
 
                 <div>
                     <mat-form-field appearance="fill">
-                        <mat-label>treatmentPlans</mat-label>
+                        <mat-label>treatment plans</mat-label>
                         <textarea matInput formControlName="treatmentPlans" required></textarea>
                         <mat-error *ngIf="createMedicalDataForm.controls.treatmentPlans.errors?.['required']"> Treatment plans field is required </mat-error>
                     </mat-form-field>

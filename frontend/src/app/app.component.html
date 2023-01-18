@@ -19,7 +19,7 @@
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin/create-user/">Create user</a>
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin/patient-list/">Patient list</a>
         <a *ngIf="userService.userRole === 'admin'" mat-button routerLink="/admin/doctor-list/">Doctor list</a>
-        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient-diagnosis/{{userService.getUserIdFromToken()}}">Patient diagnosis</a>
+        <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient-diagnosis/{{userService.getUserIdFromToken()}}">Patient medical data</a>
         <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/patient/{{userService.getUserIdFromToken()}}">Grant access to doctor</a>
         <a *ngIf="userService.userRole === 'patient'" mat-button routerLink="/edit-patient/{{userService.getUserIdFromToken()}}">Edit</a>
 
@@ -38,9 +38,11 @@
 
         <mat-menu #menu="matMenu">
             <button *ngIf="!userService.isLoggedIn" mat-menu-item (click)="openDialog()" >Login</button>
-            <!-- <button *ngIf="!userService.isLoggedIn" mat-menu-item >Login as doctor</button>
-            <button *ngIf="!userService.isLoggedIn" mat-menu-item>Login as admin</button> -->
+
             <button *ngIf="userService.isLoggedIn" mat-menu-item (click)="userService.logOut()" >Log out</button>
+
+            <button *ngIf="userService.userRole === 'doctor' && userService.isLoggedIn" mat-menu-item  routerLink="/edit-doctor/{{userService.getUserIdFromToken()}}">Edit</button>
+            <button *ngIf="userService.userRole === 'patient' && userService.isLoggedIn" mat-menu-item  routerLink="/edit-patient/{{userService.getUserIdFromToken()}}">Edit</button>
         </mat-menu>
 
     </mat-toolbar>

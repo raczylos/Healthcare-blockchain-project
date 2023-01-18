@@ -123,7 +123,7 @@ app.post('/login', async (req, res) => {
 
     let userJson = {userId: username}
 
-    let accessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '2m'})
+    let accessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'})
     let refreshToken = jwt.sign(userJson, process.env.REFRESH_TOKEN_SECRET)
     res.json({accessToken, refreshToken})
 })
@@ -145,7 +145,7 @@ app.post('/refresh-access-token', (req, res) => {
         const userJson = {
             userId: data.userId
         }
-        let newAccessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '2m'})
+        let newAccessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'})
         res.json({accessToken: newAccessToken, refreshToken: refreshToken})
     })
 })

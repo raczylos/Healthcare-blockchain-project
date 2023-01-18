@@ -31,12 +31,7 @@ export class JwtInterceptor implements HttpInterceptor {
         request: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
-        // if (
-        //     this.router.url !== '/' ||
-        //     request.url.match('http://192.168.43.244:9000/accounts/login/')
-        // ) {
-        //     request = this.addAuthenticationToken(request);
-        // }
+
         console.log('in interceptor');
         request = this.addAuthenticationToken(request);
 
@@ -99,8 +94,7 @@ export class JwtInterceptor implements HttpInterceptor {
         let tokensJSON = JSON.parse(tokens);
         let accessToken = tokensJSON['accessToken'];
 
-        console.log(tokens);
-        console.log(request);
+        
         request = request.clone({
             setHeaders: { Authorization: `Bearer ${accessToken}` },
         });

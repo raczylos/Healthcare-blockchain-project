@@ -1,16 +1,16 @@
 <div *ngIf="!userService.isLoggedIn">
-<!-- login button think about sth-->
-    <p>You aren't logged in :(</p>
+<!-- not logged in -->
+
 </div>
 
 <div *ngIf="userService.userRole === 'admin'">
-<!-- redirect to create user? -->
+
     <app-create-user></app-create-user>
 </div>
 
 <div *ngIf="userService.userRole === 'patient'">
     <app-user-details [userId]="userService.userId" [userRole]="userService.userRole"></app-user-details>
-<!-- show patient info and redirect button -->
+
 </div>
 
 <div *ngIf="userService.userRole === 'doctor'">

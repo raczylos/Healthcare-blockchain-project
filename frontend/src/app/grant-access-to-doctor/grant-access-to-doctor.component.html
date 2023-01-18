@@ -46,7 +46,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Grant/Revoke </th>
                             <td mat-cell *matCellDef="let doctor">
                                 <button class="grant-revoke-button" mat-raised-button color="primary"  (click)="isAccessGranted(doctor.userId) ? revokeDoctorAccess(doctor.userId) : grantDoctorAccess(doctor.userId)"
                                 [ngClass]="isAccessGranted(doctor.userId) ? 'red' : 'green'">{{isAccessGranted(doctor.userId) ? 'Revoke access': 'Grant access' }}</button>

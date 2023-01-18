@@ -1,7 +1,7 @@
 <div *ngIf="!loading">
     <mat-card class="edit-doctor-card">
         <mat-card-header>
-            <mat-card-title>Edit doctor</mat-card-title>
+            <mat-card-title>Edit doctor: {{doctorId}}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <form [formGroup]="editDoctorForm" >

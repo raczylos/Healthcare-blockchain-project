@@ -158,7 +158,7 @@ export class UserService {
         this.isLoggedIn = false
         this.userRole = undefined
         this.router.navigate(['/'])
-        // location.reload()
+        
     }
 
 
