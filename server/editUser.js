@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 
-exports.updateUserAttributes = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, specialization = '') {
+exports.updateUserAttributes = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization = '') {
   try {
     
     const ccpPath = path.resolve(
@@ -68,7 +68,12 @@ exports.updateUserAttributes = async function (firstName, lastName, role, userId
         name: "address",
         value: address,
         ecert: true
+    },{
+        name: "phoneNumber",
+        value: phoneNumber,
+        ecert: true
     }
+
 ]
 
 if(role === 'doctor'){

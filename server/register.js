@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const fs = require('fs');
 const path = require('path');
 
-exports.registerUser = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, specialization = '') {
+exports.registerUser = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization = '') {
     try {
         console.log(userId)
         // load the network configuration
@@ -70,6 +70,10 @@ exports.registerUser = async function (firstName, lastName, role, userId, hashed
             },{
                 name: "address",
                 value: address,
+                ecert: true
+            },{
+                name: "phoneNumber",
+                value: phoneNumber,
                 ecert: true
             }
         ]

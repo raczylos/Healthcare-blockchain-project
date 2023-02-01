@@ -55,6 +55,14 @@
 
                     <div>
                         <mat-form-field appearance="fill" >
+                            <mat-label>Phone number</mat-label>
+                            <input matInput formControlName="phoneNumber" required>
+                            <mat-error *ngIf="createPatientForm.controls.phoneNumber.errors?.['required']"> Phone number field is required </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <mat-form-field appearance="fill" >
                             <mat-label>Username</mat-label>
                             <input matInput formControlName="userId" required>
                             <mat-error *ngIf="createPatientForm.controls.userId.errors?.['required']"> Username field is required </mat-error>
@@ -133,6 +141,14 @@
                             <mat-label>Address</mat-label>
                             <input matInput formControlName="address" required>
                             <mat-error *ngIf="createDoctorForm.controls.address.errors?.['required']"> Address field is required </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <mat-form-field appearance="fill" >
+                            <mat-label>Phone number</mat-label>
+                            <input matInput formControlName="phoneNumber" required>
+                            <mat-error *ngIf="createDoctorForm.controls.phoneNumber.errors?.['required']"> Phone number field is required </mat-error>
                         </mat-form-field>
                     </div>
 

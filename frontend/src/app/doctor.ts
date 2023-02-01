@@ -7,5 +7,6 @@ export interface Doctor {
     age: string;
     address: string;
     gender: string;
+    phoneNumber: string;
     specialization: string;
 }

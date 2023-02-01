@@ -59,6 +59,7 @@ app.post('/register-user', authMiddleware, async (req, res) => {
     let age = (req.body.age).toString()
     let gender = req.body.gender
     let address = req.body.address
+    let phoneNumber = req.body.phoneNumber
     let specialization = req.body.specialization
 
     let user = await userUtils.getUserById(username)
@@ -67,9 +68,9 @@ app.post('/register-user', authMiddleware, async (req, res) => {
     }
 
     if(role === 'doctor'){
-        register.registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, specialization)
+        register.registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, phoneNumber, specialization)
     } else {
-        register.registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address)
+        register.registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, phoneNumber)
     }
     
 
@@ -195,6 +196,7 @@ app.put('/edit-user', authMiddleware, async (req, res) => {
     let age = (req.body.age).toString()
     let gender = req.body.gender
     let address = req.body.address
+    let phoneNumber = req.body.phoneNumber
     let specialization = req.body.specialization
 
     // let user = await userUtils.getUserById(username)
@@ -203,9 +205,9 @@ app.put('/edit-user', authMiddleware, async (req, res) => {
     // }
 
     if(role === 'doctor'){
-        editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, specialization)
+        editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization)
     } else {
-        editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address)
+        editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, phoneNumber, address)
     }
     
     
@@ -214,7 +216,7 @@ app.put('/edit-user', authMiddleware, async (req, res) => {
 })
 
 app.get('/get-user-role/:userId', authMiddleware, async (req, res) => {
-    console.log("xddddd")
+    
     const userId = req.params.userId
     
     let userRole = await userUtils.getUserRole(userId)
@@ -226,7 +228,9 @@ app.get('/get-user-role/:userId', authMiddleware, async (req, res) => {
 app.get('/get-patient-list', authMiddleware,  async (req, res) => {
     const patientList = await userUtils.getPatientList()
     let patientListInfo = []
-
+    if(!patientList){
+        return res.sendStatus(404)
+    }
     patientList.forEach((patient, index, array) => {
         // console.log(patient);
         let patientId = patient.id
@@ -235,6 +239,7 @@ app.get('/get-patient-list', authMiddleware,  async (req, res) => {
         let age = patient.attrs.find(attr => attr.name === "age")
         let gender = patient.attrs.find(attr => attr.name === "gender")
         let address = patient.attrs.find(attr => attr.name === "address")
+        let phoneNumber = patient.attrs.find(attr => attr.name === "phoneNumber")
         
 
         let patientInfo = {
@@ -244,6 +249,7 @@ app.get('/get-patient-list', authMiddleware,  async (req, res) => {
             age: age.value,
             gender: gender.value,
             address: address.value,
+            phoneNumber: phoneNumber.value
 
         }
         patientListInfo.push(patientInfo)
@@ -266,6 +272,7 @@ app.get('/get-doctor-list', authMiddleware,  async (req, res) => {
         let age = doctor.attrs.find(attr => attr.name === "age")
         let gender = doctor.attrs.find(attr => attr.name === "gender")
         let address = doctor.attrs.find(attr => attr.name === "address")
+        let phoneNumber = doctor.attrs.find(attr => attr.name === "phoneNumber")
         let specialization = doctor.attrs.find(attr => attr.name === "specialization")
 
         let doctorInfo = {
@@ -275,6 +282,7 @@ app.get('/get-doctor-list', authMiddleware,  async (req, res) => {
             age: age.value,
             gender: gender.value,
             address: address.value,
+            phoneNumber: phoneNumber.value,
             specialization: specialization.value
 
         }
@@ -290,6 +298,7 @@ app.get('/get-user-details/:userId/:role', authMiddleware, async (req, res) => {
     const userId = req.params.userId
     const role = req.params.role
     let userAttrs = await userUtils.getUserAttrs(userId)
+    
     if(!userAttrs){
         return res.sendStatus(404)
     }
@@ -300,8 +309,7 @@ app.get('/get-user-details/:userId/:role', authMiddleware, async (req, res) => {
         age: userAttrs.find(attr => attr.name === "age").value,
         gender: userAttrs.find(attr => attr.name === "gender").value,
         address: userAttrs.find(attr => attr.name === "address").value,
-        
-
+        phoneNumber: userAttrs.find(attr => attr.name === "phoneNumber").value,
     }
     
     if(role === "doctor"){

@@ -17,7 +17,7 @@ export class DoctorListComponent {
     userRole!: string;
     doctorList!: Array<any>;
     loading: boolean = true
-    displayedDoctorColumns: string[] = ["doctorId", "firstName", "lastName", "age", "gender", "address", "specialization"];
+    displayedDoctorColumns: string[] = ["doctorId", "firstName", "lastName", "age", "gender", "address", "phoneNumber",  "specialization"];
     dataSource!: MatTableDataSource<Doctor>;
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;

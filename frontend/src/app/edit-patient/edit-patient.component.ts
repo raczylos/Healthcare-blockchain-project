@@ -26,6 +26,7 @@ export class EditPatientComponent {
         password: ['', [Validators.required, Validators.minLength(8)]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required]],
         address: ['', [Validators.required]],
 
     });
@@ -68,6 +69,7 @@ export class EditPatientComponent {
                 lastName: this.patientDetails.lastName,
                 password: '',
                 age: this.patientDetails.age,
+                phoneNumber: this.patientDetails.phoneNumber,
                 gender: this.patientDetails.gender,
                 address: this.patientDetails.address
             });
@@ -83,7 +85,9 @@ export class EditPatientComponent {
             password: this.editPatientForm.value.password!,
             role: 'patient',
             gender: this.editPatientForm.value.gender!,
+            phoneNumber: this.editPatientForm.value.phoneNumber!,
             age: this.editPatientForm.value.age!,
+
             address: this.editPatientForm.value.address!,
         };
         if(this.editPatientForm.valid){

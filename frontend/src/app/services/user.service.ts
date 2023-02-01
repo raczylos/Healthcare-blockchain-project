@@ -2,7 +2,6 @@ import { Patient } from './../patient';
 import { Router} from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../user';
 import { catchError, of, Observable } from 'rxjs';
 import { Login } from '../login';
 import jwtDecode from "jwt-decode";
@@ -158,7 +157,7 @@ export class UserService {
         this.isLoggedIn = false
         this.userRole = undefined
         this.router.navigate(['/'])
-        
+
     }
 
 

@@ -26,6 +26,7 @@ export class EditDoctorComponent {
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
         address: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required]],
         specialization: ['', [Validators.required]],
 
     });
@@ -70,6 +71,7 @@ export class EditDoctorComponent {
                 age: this.patientDetails.age,
                 gender: this.patientDetails.gender,
                 address: this.patientDetails.address,
+                phoneNumber: this.patientDetails.phoneNumber,
                 specialization: this.patientDetails.specialization
             });
             this.loading = false
@@ -86,6 +88,7 @@ export class EditDoctorComponent {
             gender: this.editDoctorForm.value.gender!,
             age: this.editDoctorForm.value.age!,
             address: this.editDoctorForm.value.address!,
+            phoneNumber: this.editDoctorForm.value.phoneNumber!,
             specialization: this.editDoctorForm.value.specialization!,
         };
         if(this.editDoctorForm.valid){

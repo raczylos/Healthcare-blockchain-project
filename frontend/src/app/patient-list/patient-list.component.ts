@@ -15,7 +15,7 @@ export class PatientListComponent {
     userRole!: string;
     patientList!: Array<any>;
     loading: boolean = true
-    displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
+    displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address", "phoneNumber",];
     dataSource!: MatTableDataSource<Patient>;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;

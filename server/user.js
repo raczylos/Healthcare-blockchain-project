@@ -50,6 +50,10 @@ exports.getUserList = async function () {
 
 exports.getPatientList = async function () {
     const userList = await this.getUserList()
+
+    if(!userList){
+        return ;
+    }
     const patientList = userList.filter(user => user.attrs.find(attr => attr.name === "role" && attr.value === "patient"))
     
     return patientList
@@ -57,6 +61,10 @@ exports.getPatientList = async function () {
 
 exports.getDoctorList = async function () {
     const userList = await this.getUserList()
+
+    if(!userList){
+        return ;
+    }
     const doctorList = userList.filter(user => user.attrs.find(attr => attr.name === "role" && attr.value === "doctor"))
 
     return doctorList

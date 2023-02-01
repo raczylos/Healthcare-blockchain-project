@@ -20,7 +20,7 @@ export class CreateUserComponent {
     displayedPatientColumns: string[] = ["patientId", "firstName", "lastName", "age", "gender", "address"];
     displayedDoctorColumns: string[] = ["doctorId", "firstName", "lastName", "age", "gender", "address", "specialization"];
     loading: boolean = true
- 
+
     createDoctorForm = this.formBuilder.group({
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
@@ -29,6 +29,7 @@ export class CreateUserComponent {
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
         address: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required]],
         specialization: ['', [Validators.required]],
 
     });
@@ -40,6 +41,7 @@ export class CreateUserComponent {
         userId: ['', [Validators.required]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required]],
         address: ['', [Validators.required]],
 
     });
@@ -94,6 +96,7 @@ export class CreateUserComponent {
             role: 'patient',
             gender: this.createPatientForm.value.gender!,
             age: this.createPatientForm.value.age!,
+            phoneNumber: this.createPatientForm.value.phoneNumber!,
             address: this.createPatientForm.value.address!,
         };
 
@@ -130,6 +133,7 @@ export class CreateUserComponent {
             role: 'doctor',
             gender: this.createDoctorForm.value.gender!,
             age: this.createDoctorForm.value.age!,
+            phoneNumber: this.createDoctorForm.value.phoneNumber!,
             address: this.createDoctorForm.value.address!,
             specialization: this.createDoctorForm.value.specialization!,
         };
