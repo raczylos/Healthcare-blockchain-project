@@ -3,4 +3,6 @@ export interface MedicalData {
 	medications: string[]
 	allergies: string[]
 	treatmentPlans: string
+    addedBy: string
+    addedAt: Date
 }

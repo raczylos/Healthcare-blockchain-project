@@ -21,7 +21,7 @@ export class PatientDiagnosisComponent {
     patientMedicalData: any;
     patientHistoryData: any;
 
-    displayedPatientColumns: string[] = ["allergies", "conditions", "medications", "treatmentPlans"];
+    displayedPatientColumns: string[] = ["allergies", "conditions", "medications", "treatmentPlans", "addedBy", "addedAt"];
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
     dataSource!: MatTableDataSource<MedicalData>;

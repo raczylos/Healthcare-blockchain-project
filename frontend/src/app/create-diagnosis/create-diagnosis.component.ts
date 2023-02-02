@@ -106,11 +106,15 @@ export class CreateDiagnosisComponent {
     }
 
     onSubmit() {
+        let currentDate = new Date()
+
         let medicalData: MedicalData = {
             conditions: this.conditions.value,
             medications: this.medications.value,
             allergies: this.allergies.value,
             treatmentPlans: this.createMedicalDataForm.value.treatmentPlans!,
+            addedBy: this.doctorId!,
+            addedAt: currentDate,
         };
 
         if (this.createMedicalDataForm.valid) {
