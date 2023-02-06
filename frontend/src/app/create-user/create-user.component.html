@@ -57,7 +57,15 @@
                         <mat-form-field appearance="fill" >
                             <mat-label>Phone number</mat-label>
                             <input matInput formControlName="phoneNumber" required>
+                            <mat-icon matSuffix>phone</mat-icon>
                             <mat-error *ngIf="createPatientForm.controls.phoneNumber.errors?.['required']"> Phone number field is required </mat-error>
+                            <mat-error *ngIf="createPatientForm.get('phoneNumber')?.hasError('maxlength')">
+                                Phone number cannot be longer than 9 digits.
+                            </mat-error>
+
+                            <mat-error *ngIf="createPatientForm.get('phoneNumber')?.hasError('minlength')">
+                                Phone number must be at least 9 digits.
+                            </mat-error>
                         </mat-form-field>
                     </div>
 
@@ -147,8 +155,17 @@
                     <div>
                         <mat-form-field appearance="fill" >
                             <mat-label>Phone number</mat-label>
-                            <input matInput formControlName="phoneNumber" required>
+                            <input matInput formControlName="phoneNumber" required >
+                            <mat-icon matSuffix>phone</mat-icon>
                             <mat-error *ngIf="createDoctorForm.controls.phoneNumber.errors?.['required']"> Phone number field is required </mat-error>
+                            <mat-error *ngIf="createDoctorForm.get('phoneNumber')?.hasError('maxlength')">
+                                Phone number cannot be longer than 9 digits.
+                            </mat-error>
+
+                            <mat-error *ngIf="createDoctorForm.get('phoneNumber')?.hasError('minlength')">
+                                Phone number must be at least 9 digits.
+                            </mat-error>
+
                         </mat-form-field>
                     </div>
 

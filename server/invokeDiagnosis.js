@@ -60,7 +60,7 @@ exports.invokeDiagnosis = async function (patientId, medicalData, doctorId) {
 
 		);
 
-
+			
 
 		await gateway.disconnect();
 	} catch (error) {

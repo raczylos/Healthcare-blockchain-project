@@ -29,7 +29,7 @@ export class CreateUserComponent {
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
         address: ['', [Validators.required]],
-        phoneNumber: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9), Validators.pattern("^[0-9]*$")]],
         specialization: ['', [Validators.required]],
 
     });
@@ -41,7 +41,7 @@ export class CreateUserComponent {
         userId: ['', [Validators.required]],
         age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
         gender: ['', [Validators.required]],
-        phoneNumber: ['', [Validators.required]],
+        phoneNumber: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9), Validators.pattern("^[0-9]*$")]],
         address: ['', [Validators.required]],
 
     });
@@ -118,6 +118,7 @@ export class CreateUserComponent {
             });
         } else {
             console.log("invalid createPatientForm")
+
         }
 
 
@@ -156,6 +157,8 @@ export class CreateUserComponent {
             });
         } else {
             console.log("invalid createDoctorForm")
+            console.log(this.createDoctorForm.controls.phoneNumber.errors?.['pattern'])
+
         }
 
     }

@@ -48,11 +48,9 @@ exports.getDoctorAccessList = async function (doctorId) {
 			"readAccessList",
 			doctorId
 		);
-
 		const buffer = Buffer.from(doctorAccessList);
 		const strData = buffer.toString();
 		const doctorAccessListJson = JSON.parse(strData);
-		
 		// Disconnect from the gateway.
 		await gateway.disconnect();
 

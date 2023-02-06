@@ -1,5 +1,11 @@
 import { Doctor } from '../doctor';
-import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    Input,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { UserService } from '../services/user.service';
 import { DoctorService } from '../services/doctor.service';
@@ -8,7 +14,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
-const Buffer = require('buffer').Buffer;
+import { doctorAccessData } from '../doctorAccessData';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
     selector: 'app-grant-access-to-doctor',
@@ -25,9 +32,9 @@ export class GrantAccessToDoctorComponent {
     // selectedDoctor: any;
     doctorList$: Subject<any> = new Subject<any>();
 
-    doctorAccessListDict: Map<string, Array<string>> = new Map<
+    doctorAccessListDict: Map<string, Array<doctorAccessData>> = new Map<
         string,
-        Array<string>
+        Array<doctorAccessData>
     >();
 
     dataSource!: MatTableDataSource<Doctor>;
@@ -38,16 +45,14 @@ export class GrantAccessToDoctorComponent {
         'specialization',
         'action',
     ];
-
+    // currentDate = new Date();
+    tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
     loading: boolean = true;
-
     ngOnInit() {
-        this.userId = this.userService.getUserIdFromToken()
+        this.userId = this.userService.getUserIdFromToken();
         this.route.params.subscribe((params) => {
             let patientId = params['id'];
-
         });
-
 
         this.getUserRole();
 
@@ -55,17 +60,26 @@ export class GrantAccessToDoctorComponent {
         this.doctorList$.subscribe((doctorId) => {
             this.getDoctorAccessList(doctorId);
         });
-
     }
 
     isAccessGranted(doctorId: string) {
+        let currentDate = new Date();
 
-        if (this.doctorAccessListDict.get(doctorId)?.find(patient => patient === this.userId)) {
+        if (
+            this.doctorAccessListDict
+                .get(doctorId)
+                ?.find(
+                    (patient) =>
+                        patient.clientId === this.userId &&
+                        new Date(patient.accessExpirationDate) >= currentDate
+                )
+        ) {
+            // console.log('true');
             return true;
         } else {
+            // console.log('false');
             return false;
         }
-
     }
 
     applyFilter(event: Event) {
@@ -76,8 +90,6 @@ export class GrantAccessToDoctorComponent {
             this.dataSource.paginator.firstPage();
         }
     }
-
-
 
     getUserRole() {
         this.userService.getUserRole(this.userId).subscribe((res: any) => {
@@ -102,17 +114,31 @@ export class GrantAccessToDoctorComponent {
     }
 
     getDoctorAccessList(doctorId: string) {
-        this.loading = true
+        this.loading = true;
+
         this.doctorService
             .getDoctorAccessList(doctorId)
-            .subscribe((res: Array<string>) => {
+            .subscribe((res: any) => {
                 if (!res) {
                     // this.doctorAccessList = '';
                 } else {
-                    this.doctorAccessListDict.set(doctorId, res);
-                    // console.log('doctorAccessListDict');
-                    console.log("lala", this.doctorAccessListDict);
-                    this.loading = false
+                    let currentDate = new Date();
+                    if (
+                        res.find(
+                            (patient: any) =>
+                                new Date(patient.accessExpirationDate) <
+                                currentDate
+                        )
+                    ) {
+
+
+                        this.revokeDoctorAccess(doctorId);
+
+                    } else {
+                        this.doctorAccessListDict.set(doctorId, res);
+                        
+                    }
+                    this.loading = false;
                 }
             });
     }
@@ -121,23 +147,37 @@ export class GrantAccessToDoctorComponent {
         window.location.reload();
     }
 
-    grantDoctorAccess(doctorId: string) {
-        this.loading = true;
+    grantDoctorAccess(
+        doctorId: string,
+        picker: MatDatepicker<Date>,
+        selectedDate: any
+    ) {
+        picker.open();
+        picker.closedStream.subscribe(() => {
+            if (selectedDate.value) {
+                this.loading = true;
+                let patientId = this.userId;
+                let accessExpirationDate = new Date(Date.parse(selectedDate.value));
 
-        let patientId = this.userId;
-
-        this.doctorService
-            .grantDoctorAccess(
-                patientId,
-                doctorId
-            )
-            .subscribe((res) => {
-                console.log(
-                    `trying to grant doctor: ${doctorId} access to patient: ${patientId}`
-                );
-                console.log(res);
-                this.refresh();
-            });
+                // accessExpirationDate.setHours(0, 25);
+                console.log('accessExpirationDate', accessExpirationDate);
+                // console.log('accessExpirationDate', accessExpirationDate);
+                // accessExpirationDate.setDate(accessExpirationDate.getDate() + 10);
+                this.doctorService
+                    .grantDoctorAccess(
+                        patientId,
+                        doctorId,
+                        accessExpirationDate
+                    )
+                    .subscribe((res) => {
+                        console.log(
+                            `trying to grant doctor: ${doctorId} access to patient: ${patientId}`
+                        );
+                        console.log(res);
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     revokeDoctorAccess(doctorId: string) {
@@ -145,16 +185,13 @@ export class GrantAccessToDoctorComponent {
 
         let patientId = this.userId;
         this.doctorService
-            .revokeDoctorAccess(
-                patientId,
-                doctorId,
-            )
+            .revokeDoctorAccess(patientId, doctorId)
             .subscribe((res) => {
                 console.log(
                     `trying to revoke doctor: ${doctorId} access to patient: ${patientId}`
                 );
                 console.log(res);
-                this.refresh();
+                // this.refresh();
             });
     }
 
@@ -162,6 +199,5 @@ export class GrantAccessToDoctorComponent {
         private userService: UserService,
         private doctorService: DoctorService,
         private route: ActivatedRoute
-    ) {
-    }
+    ) {}
 }

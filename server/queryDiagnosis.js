@@ -61,9 +61,12 @@ exports.readPatientHistoryData = async function (userId, patientId) {
 		);
 		
 		await gateway.disconnect();
-
+		
 		const buffer = Buffer.from(readPatientHistoryData);
         const strData = buffer.toString();
+		if(!strData){
+			return ;
+		}
 		let readPatientHistoryDataJson = JSON.parse(strData);
 
 		return readPatientHistoryDataJson;
@@ -127,11 +130,13 @@ exports.readPatientMedicalData = async function (userId, patientId) {
 			"readPatientMedicalData",
 			patientId
 		);
-		
 		const buffer = Buffer.from(patientData);
         const strData = buffer.toString();
+		if(!strData){
+			return ;
+		}
 		let patientDataJson = JSON.parse(strData);
-	
+		
 		await gateway.disconnect();
 
 		return patientDataJson;

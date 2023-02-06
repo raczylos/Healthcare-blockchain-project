@@ -53,8 +53,12 @@
                         <ng-container matColumnDef="action">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Grant/Revoke </th>
                             <td mat-cell *matCellDef="let doctor">
-                                <button class="grant-revoke-button" mat-raised-button color="primary"  (click)="isAccessGranted(doctor.userId) ? revokeDoctorAccess(doctor.userId) : grantDoctorAccess(doctor.userId)"
+                                <input [min]="tomorrow"  class="hidden-input" #selectedDate [matDatepicker]="picker"  >
+
+                                <mat-datepicker #picker></mat-datepicker>
+                                <button class="grant-revoke-button" mat-raised-button color="primary"  (click)="isAccessGranted(doctor.userId) ? revokeDoctorAccess(doctor.userId) : grantDoctorAccess(doctor.userId, picker, selectedDate)"
                                 [ngClass]="isAccessGranted(doctor.userId) ? 'red' : 'green'">{{isAccessGranted(doctor.userId) ? 'Revoke access': 'Grant access' }}</button>
+
                              </td>
                         </ng-container>
 

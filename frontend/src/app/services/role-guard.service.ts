@@ -68,13 +68,15 @@ export class RoleGuardService {
         userId: string
     ) {
         let patientId = route.paramMap.get('id');
-        this.doctorService.getDoctorAccessList(this.userId).subscribe((res) => {
+        this.doctorService.getDoctorAccessList(this.userId).subscribe((res: any) => {
             let accessList = res;
 
-            if (accessList.find((patient) => patient === patientId)) {
+            if (accessList.find((patient: any) => patient.clientId === patientId)) {
+
                 return true;
             } else {
                 this.router.navigate(['']);
+
                 return false;
             }
         });

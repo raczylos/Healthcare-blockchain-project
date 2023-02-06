@@ -36,6 +36,8 @@ import { EditPatientComponent } from './edit-patient/edit-patient.component';
 import { EditDoctorComponent } from './edit-doctor/edit-doctor.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
     declarations: [AppComponent, CreateUserComponent, LoginComponent, GrantedPatientListComponent, PatientDiagnosisComponent, CreateDiagnosisComponent, GrantAccessToDoctorComponent, DoctorListComponent, PatientListComponent, EditPatientComponent, EditDoctorComponent, HomePageComponent, UserDetailsComponent],
@@ -62,9 +64,12 @@ import { UserDetailsComponent } from './user-details/user-details.component';
         MatCardModule,
         MatChipsModule,
         MatProgressSpinnerModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+        MatDatepickerModule,
 
     ],
     bootstrap: [AppComponent],

@@ -35,11 +35,12 @@ export class DoctorService {
             .pipe(catchError(this.handleError<Array<string>>('getDoctorAccessList')));
     }
 
-    grantDoctorAccess(patientId: string, doctorId: string): Observable<Array<String>> {
+    grantDoctorAccess(patientId: string, doctorId: string, accessExpirationDate: Date): Observable<Array<String>> {
         let url = `grant-doctor-access/`;
         let dataJson = {
             patientId: patientId,
             doctorId: doctorId,
+            accessExpirationDate: accessExpirationDate
 
         }
         return this.http

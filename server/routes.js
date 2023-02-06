@@ -93,6 +93,9 @@ app.get('/get-user-attrs/:userId', authMiddleware, async (req, res) => {
 app.post('/login', async (req, res) => {
     console.log("login")
     console.log(req.body)
+
+    let test = await userUtils.getUserList()
+    console.log("login all users in wallet", test)
     
     let username = req.body.username
     let password = req.body.password
@@ -322,22 +325,22 @@ app.get('/get-user-details/:userId/:role', authMiddleware, async (req, res) => {
     res.json(userInfo)
 })
 
-app.post('/post-patient-medical-data', authMiddleware, async (req, res) => {
+app.post('/post-patient-medical-data', async (req, res) => {
     
     const patientId = req.body.patientId
     const medicalData = req.body.medicalData
     const accessList = req.body.accessList
     const doctorId = req.body.doctorId
-
-    if(!accessList){
-        res.sendStatus(403)
-        return
-    }
+    console.log("hahahahhaha")
+    // if(!accessList){
+    //     res.sendStatus(403)
+    //     return
+    // }
     
-    if(accessList.find(patient => patient !== patientId)){
-        res.sendStatus(403)
-        return
-    }
+    // if(accessList.find(patient => patient !== patientId)){
+    //     res.sendStatus(403)
+    //     return
+    // }
     
     await diagnosis.invokeDiagnosis(patientId, medicalData, doctorId)
    
@@ -384,8 +387,9 @@ app.post('/grant-doctor-access', authMiddleware, async (req, res) => {
 
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId
+    const accessExpirationDate = req.body.accessExpirationDate
 
-    let doctorAccessList = await invokeDoctorAccessList.postGrantAccess(patientId, doctorId)
+    let doctorAccessList = await invokeDoctorAccessList.postGrantAccess(patientId, doctorId, accessExpirationDate)
 
     res.json(doctorAccessList)
 })

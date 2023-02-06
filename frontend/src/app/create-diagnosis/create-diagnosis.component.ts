@@ -120,7 +120,7 @@ export class CreateDiagnosisComponent {
         if (this.createMedicalDataForm.valid) {
             if (
                 this.doctorAccessList.find(
-                    (patient) => patient === this.patientId
+                    (patient: any) => patient.clientId === this.patientId
                 )
             ) {
                 console.log('valid createMedicalDataForm');

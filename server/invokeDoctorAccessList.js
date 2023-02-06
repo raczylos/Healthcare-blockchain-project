@@ -62,7 +62,7 @@ exports.postRevokeAccess = async function (patientId, doctorId) {
 	}
 };
 
-exports.postGrantAccess = async function (patientId, doctorId) {
+exports.postGrantAccess = async function (patientId, doctorId, accessExpirationDate) {
 	try {
 		// load the network configuration
 		const ccpPath = path.resolve(
@@ -112,6 +112,7 @@ exports.postGrantAccess = async function (patientId, doctorId) {
 			"grantAccess",
 			patientId,
 			doctorId,
+			accessExpirationDate
 		);
 		
 		
