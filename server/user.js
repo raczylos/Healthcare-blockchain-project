@@ -72,13 +72,13 @@ exports.getDoctorList = async function () {
 
 exports.getUserById = async function (userId) {
     const userList = await this.getUserList()
-
+    
     if(!userList){
         return
     }
 
     let user = userList.find(user => user.id === userId)
-
+    
     return user
 }
 

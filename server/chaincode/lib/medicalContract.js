@@ -120,7 +120,7 @@ class MedicalContract extends Contract {
 		
 		if(accessList.length !== 0){
 			accessList = JSON.parse(accessList.toString());
-		 }
+		}
         
 		if (role === "doctor") {
 
@@ -129,7 +129,9 @@ class MedicalContract extends Contract {
 				return Buffer.from(JSON.stringify(patientData));
                 
 			} else {
-				return `doctor: ${doctorId}  doesn't have access to patient: ${patientId}`;
+				// return `doctor: ${doctorId}  doesn't have access to patient: ${patientId}`;
+				return JSON.parse(`{"error": "doctor: ${doctorId} doesn't have access to patient ${patientId}"}`);
+
 			}
 		} else {
 			return `user: ${doctorId}  isn't a doctor`;
