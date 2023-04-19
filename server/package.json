@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "app.js",
 	"dependencies": {
+		"@theledger/fabric-mock-stub": "^5.0.1",
 		"bcrypt": "^5.1.0",
 		"body-parser": "^1.20.1",
 		"chai": "^4.3.7",
@@ -14,7 +15,6 @@
 		"fabric-ca-client": "^2.2.4",
 		"fabric-contract-api": "^2.5.2",
 		"fabric-network": "^2.2.4",
-		"fabric-shim": "^2.5.2",
 		"jsonwebtoken": "^8.5.1",
 		"mocha": "^10.2.0",
 		"mysql": "^2.18.1",

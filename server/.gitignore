@@ -1,2 +1,4 @@
-/node_modules
-/wallet
+node_modules/
+wallet/
+
+./chaincode/node_modules/

@@ -3,6 +3,12 @@
 const { Contract } = require('fabric-contract-api');
 const { crypto } = require('crypto')
 const { X509Identity } = require('fabric-shim');
+const util = require('util');
+
+// import { Contract } from 'fabric-contract-api';
+// import crypto from 'crypto';
+// import { X509Identity } from 'fabric-shim';
+
 
 class MedicalContract extends Contract {
 	async initLedger(ctx) {
@@ -10,36 +16,37 @@ class MedicalContract extends Contract {
 		return "success";
 	}
 
-	async writeData(ctx, patientId, data) {
-		let patientData = JSON.parse(data);
-		await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)));
-		return Buffer.from(JSON.stringify(patientData));
-	}
+	// async writeData(ctx, patientId, data) {
+	// 	let patientData = JSON.parse(data);
+	// 	await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)));
+	// 	return Buffer.from(JSON.stringify(patientData));
+	// }
 
-	async readData(ctx, patientId) {
-		let patientDataAsBuffer = await ctx.stub.getState(patientId);
+	// async readData(ctx, patientId) {
+	// 	let patientDataAsBuffer = await ctx.stub.getState(patientId);
 
-		const patientData = JSON.parse(patientDataAsBuffer.toString());
-		return JSON.stringify(patientData);
-	}
+	// 	const patientData = JSON.parse(patientDataAsBuffer.toString());
+	// 	return JSON.stringify(patientData);
+	// }
 
-	async readHistoryData(ctx, patientId) {
-		let iterator = await ctx.stub.getHistoryForKey(patientId);
-		let result = await this.getIteratorData(iterator);
-		return JSON.stringify(result);
-	}
+	// async readHistoryData(ctx, patientId) {
+	// 	let iterator = await ctx.stub.getHistoryForKey(patientId);
+	// 	let result = await this.getIteratorData(iterator);
+	// 	return JSON.stringify(result);
+	// }
 
 	async getIteratorData(iterator) {
 		let resultArray = [];
 
 		while (true) {
 			let res = await iterator.next();
-			let resJson = {};
-
+			// let resJson = {};
 			if (res.value && res.value.value.toString()) {
-				resJson.key = res.value.key;
-				resJson.value = JSON.parse(res.value.value.toString("utf-8"));
-				resultArray.push(resJson);
+				// resJson.key = res.value.key;
+				// resJson.value = JSON.parse(res.value.value.toString("utf-8"));
+				// resultArray.push(resJson);
+				const obj = JSON.parse(res.value.value.toString('utf8'));
+				resultArray.push(obj);
 			}
 
 			if (res.done) {
@@ -49,89 +56,98 @@ class MedicalContract extends Contract {
 		}
 	}
 
+	
+	// async test(ctx, patientId) {
+	// 	const iterator = await ctx.stub.getHistoryForKey(patientId);
+
+	// 	// const resultArray = [];
+	// 	// let res = await iterator.next();
+	// 	// while (!res.done) {
+	// 	// 	resultArray.push(res);
+	// 	// 	res = await iterator.next();
+	// 	// }
+
+  	// 	// return JSON.stringify(resultArray);
+	// 	  return util.inspect(iterator.next());
+	// }
+
+	//write case if accessExpirationDate < currentDate
 	async grantAccess(ctx, patientId, doctorId, accessExpirationDate) {
 		let role = ctx.clientIdentity.getAttributeValue("role").toString();
 		let accessList = await ctx.stub.getState(doctorId);
-		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1];
-        
+		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
 
 		if (role === "patient") {
-            if(!clientId === patientId){
-                return `patient: ${patientId} cannot change other patients access`;
-            }
+			if (clientId !== patientId) {
+				return `patient: ${patientId} cannot change other patients access`;
+			}
 
-            if(!accessList || !accessList.length){
-                accessList = []
-            } else {
-                accessList = JSON.parse(accessList.toString());
-            }
-			
+			if (!accessList || !accessList.length) {
+				accessList = [];
+			} else {
+				accessList = JSON.parse(accessList.toString());
+			}
+
 			// if (!accessList.includes(clientId)) {
-			if (!accessList.find(item => item.clientId === clientId)) {
-				accessList.push({clientId, accessExpirationDate});
-                
+			if (!accessList.find((item) => item.clientId === clientId)) {
+				accessList.push({ clientId, accessExpirationDate });
+
 				await ctx.stub.putState(doctorId, Buffer.from(JSON.stringify(accessList)));
 				return accessList;
 			} else {
-				
 				return `doctor: ${doctorId}  has already access to patient: ${patientId}`;
 			}
+		} else {
+			return `only patients can grant access to doctors`;
 		}
 	}
 
 	async revokeAccess(ctx, patientId, doctorId) {
 		let role = ctx.clientIdentity.getAttributeValue("role").toString();
 		let accessList = await ctx.stub.getState(doctorId);
-        let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1];
+		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
 
-		if(accessList.length !== 0){
+		if (accessList.length !== 0) {
 			accessList = JSON.parse(accessList.toString());
-		 }
+		}
 
 		if (role === "patient") {
-            if(!clientId === patientId){
-                return `patient: ${patientId} cannot change other patients access`;
-            }
-			if (accessList.find(item => item.clientId === clientId)) {
-                
+			if (clientId !== patientId) {
+				return `patient: ${patientId} cannot change other patients access`;
+			}
+			if (accessList.find((item) => item.clientId === clientId)) {
 				accessList = accessList.filter((item) => item.clientId !== clientId);
-                if(!accessList || !accessList.length){
-                    accessList = []
-                }
+				if (!accessList || !accessList.length) {
+					accessList = [];
+				}
 				await ctx.stub.putState(doctorId, Buffer.from(JSON.stringify(accessList)));
 				return accessList;
 			} else {
-				
 				return `doctor: ${doctorId}  doesn't have access to patient: ${patientId} so it cannot be revoked`;
 			}
 		} else {
-            return `user is not a patient`
-        }
-    
+			return `only patients can revoke access to doctors`;
+		}
 	}
 
 	async writePatientMedicalData(ctx, patientId, doctorId, medicalData) {
-        
-        let patientData = JSON.parse(medicalData);
+		let patientData = JSON.parse(medicalData);
 		let role = ctx.clientIdentity.getAttributeValue("role");
-        role = role.toString()
-        let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1];
-        let accessList = await ctx.stub.getState(clientId);
-		
-		if(accessList.length !== 0){
+		role = role.toString();
+		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
+		let accessList = await ctx.stub.getState(clientId);
+
+		if (accessList.length !== 0) {
 			accessList = JSON.parse(accessList.toString());
 		}
-        
-		if (role === "doctor") {
 
-			if (accessList.find(item => item.clientId === patientId)) {
+		if (role === "doctor") {
+			if (accessList.find((item) => item.clientId === patientId)) {
 				await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)));
 				return Buffer.from(JSON.stringify(patientData));
-                
 			} else {
 				// return `doctor: ${doctorId}  doesn't have access to patient: ${patientId}`;
 				return JSON.parse(`{"error": "doctor: ${doctorId} doesn't have access to patient ${patientId}"}`);
-
 			}
 		} else {
 			return `user: ${doctorId}  isn't a doctor`;
@@ -140,17 +156,17 @@ class MedicalContract extends Contract {
 
 	async readPatientHistoryData(ctx, patientId) {
 		let role = ctx.clientIdentity.getAttributeValue("role").toString();
-		
-        let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1];
+
+		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
 
 		let iterator = await ctx.stub.getHistoryForKey(patientId);
 		let result = await this.getIteratorData(iterator);
 
-   
+
 		if (role === "doctor") {
 			let accessList = await ctx.stub.getState(clientId);
 			accessList = JSON.parse(accessList.toString());
-			if (accessList.find(item => item.clientId === patientId)) {
+			if (accessList.find((item) => item.clientId === patientId)) {
 				return JSON.stringify(result);
 			} else {
 				return `doctor: ${clientId}  doesn't have access to patient: ${patientId}`;
@@ -169,35 +185,32 @@ class MedicalContract extends Contract {
 
 	async readPatientMedicalData(ctx, patientId) {
 		let role = ctx.clientIdentity.getAttributeValue("role").toString();
-        let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1];
-		
+		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
+
 		let patientDataAsBuffer = await ctx.stub.getState(patientId);
 
 		if (role === "doctor") {
-            let accessList = await ctx.stub.getState(clientId);
+			let accessList = await ctx.stub.getState(clientId);
 			accessList = JSON.parse(accessList.toString());
-			if (accessList.find(item => item.clientId === patientId)) {
-
-				if(patientDataAsBuffer.length !== 0){
+			if (accessList.find((item) => item.clientId === patientId)) {
+				if (patientDataAsBuffer.length !== 0) {
 					let patientData = JSON.parse(patientDataAsBuffer.toString());
 					return JSON.stringify(patientData);
-
 				} else {
-					return ;
+					return;
 				}
 				// return JSON.stringify(accessList);
 			} else {
-
 				return `doctor: ${clientId}  doesn't have access to patient: ${patientId}`;
 			}
 		}
 		if (role === "patient") {
 			if (patientId === clientId) {
-				if(patientDataAsBuffer.length !== 0){
+				if (patientDataAsBuffer.length !== 0) {
 					let patientData = JSON.parse(patientDataAsBuffer.toString());
 					return JSON.stringify(patientData);
 				} else {
-					return ;
+					return;
 				}
 			} else {
 				return `patient ${clientId} cannot see other patients records ${patientId}`;
@@ -207,37 +220,33 @@ class MedicalContract extends Contract {
 		return;
 	}
 
-    async readAccessList(ctx, doctorId) {
-        
-        let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1];
+	//TO CHANGE ()
+	async readAccessList(ctx, doctorId) {
+		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
 
-		if(clientId === doctorId){
-            let accessListAsBuffer = await ctx.stub.getState(doctorId);
+		if (clientId === doctorId) {
+			let accessListAsBuffer = await ctx.stub.getState(doctorId);
 
-            // if(!accessListAsBuffer || accessListAsBuffer.length === 0){
-            //     accessListAsBuffer = []
-            // }
-        
-            const accessList = JSON.parse(accessListAsBuffer.toString());
+			// if (!accessListAsBuffer || accessListAsBuffer.length === 0) {
+			// 	accessListAsBuffer = [];
+			// }
 
-            return JSON.stringify(accessList);
-        } 
-        return;
+			const accessList = JSON.parse(accessListAsBuffer.toString());
 
+			return JSON.stringify(accessList);
+		}
+		return;
 	}
 
-    async writeAccessList(ctx, doctorId, accessList) {
-        let role = ctx.clientIdentity.getAttributeValue("role").toString();
-        let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1]; //patient
-        if(role === "patient"){
-            let accessListJson = JSON.parse(accessList);
-            await ctx.stub.putState(doctorId, Buffer.from(JSON.stringify(accessListJson)));
-            return Buffer.from(JSON.stringify(accessListJson));
-        }
-
-
-	}
-
+	// async writeAccessList(ctx, doctorId, accessList) {
+	//     let role = ctx.clientIdentity.getAttributeValue("role").toString();
+	//     let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split('=')[1]; //patient
+	//     if(role === "patient"){
+	//         let accessListJson = JSON.parse(accessList);
+	//         await ctx.stub.putState(doctorId, Buffer.from(JSON.stringify(accessListJson)));
+	//         return Buffer.from(JSON.stringify(accessListJson));
+	//     }
+	// }
 }
 
 module.exports = MedicalContract;

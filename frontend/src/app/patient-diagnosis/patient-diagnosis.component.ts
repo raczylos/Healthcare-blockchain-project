@@ -71,8 +71,8 @@ export class PatientDiagnosisComponent {
                     console.log(res)
                     let patientHistoryDataValues: any = []
                     this.patientHistoryData.forEach((medicalData: any) => {
-                        patientHistoryDataValues.push(medicalData.value)
-
+                        patientHistoryDataValues.push(medicalData)
+                        // patientHistoryDataValues.push(medicalData.value)
                     });
 
                     this.dataSource = new MatTableDataSource(patientHistoryDataValues);

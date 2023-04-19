@@ -54,7 +54,7 @@ exports.readPatientHistoryData = async function (userId, patientId) {
 		const network = await gateway.getNetwork("mychannel");
 
 		const contract = network.getContract("medicalContract");
-
+		;
 		let readPatientHistoryData = await contract.evaluateTransaction(
 			"readPatientHistoryData",
 			patientId

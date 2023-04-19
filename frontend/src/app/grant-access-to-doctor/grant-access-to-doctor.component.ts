@@ -136,7 +136,7 @@ export class GrantAccessToDoctorComponent {
 
                     } else {
                         this.doctorAccessListDict.set(doctorId, res);
-                        
+
                     }
                     this.loading = false;
                 }
@@ -174,6 +174,7 @@ export class GrantAccessToDoctorComponent {
                             `trying to grant doctor: ${doctorId} access to patient: ${patientId}`
                         );
                         console.log(res);
+                        // this.loading = false;
                         this.refresh();
                     });
             }
@@ -191,7 +192,8 @@ export class GrantAccessToDoctorComponent {
                     `trying to revoke doctor: ${doctorId} access to patient: ${patientId}`
                 );
                 console.log(res);
-                // this.refresh();
+                // this.loading = false;
+                this.refresh();
             });
     }
 
