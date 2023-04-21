@@ -2,7 +2,7 @@ const { Gateway, Wallets } = require("fabric-network");
 const fs = require("fs");
 const path = require("path");
 
-exports.postRevokeAccess = async function (patientId, doctorId) {
+async function revokeAccess(patientId, doctorId) {
 	try {
 		// load the network configuration
 		const ccpPath = path.resolve(
@@ -62,7 +62,7 @@ exports.postRevokeAccess = async function (patientId, doctorId) {
 	}
 };
 
-exports.postGrantAccess = async function (patientId, doctorId, accessExpirationDate) {
+async function grantAccess(patientId, doctorId, accessExpirationDate) {
 	try {
 		// load the network configuration
 		const ccpPath = path.resolve(
@@ -126,3 +126,5 @@ exports.postGrantAccess = async function (patientId, doctorId, accessExpirationD
 		// process.exit(1);
 	}
 };
+
+module.exports = {revokeAccess, grantAccess};

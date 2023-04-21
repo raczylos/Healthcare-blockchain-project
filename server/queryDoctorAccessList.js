@@ -2,21 +2,12 @@ const { Gateway, Wallets } = require("fabric-network");
 const path = require("path");
 const fs = require("fs");
 
-exports.getDoctorAccessList = async function (doctorId) {
+async function getDoctorAccessList(doctorId) {
 	try {
-		console.log("getDoctorAccessList")
-		console.log(doctorId)
+		console.log("getDoctorAccessList");
+		console.log(doctorId);
 		// load the network configuration
-		const ccpPath = path.resolve(
-			__dirname,
-			"..",
-			"fabric-samples",
-			"test-network",
-			"organizations",
-			"peerOrganizations",
-			"org1.example.com",
-			"connection-org1.json"
-		);
+		const ccpPath = path.resolve(__dirname, "..", "fabric-samples", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.json");
 		const ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
 
 		const walletPath = path.join(process.cwd(), "wallet");
@@ -25,11 +16,9 @@ exports.getDoctorAccessList = async function (doctorId) {
 
 		const identity = await wallet.get(doctorId);
 		if (!identity) {
-			console.log("getDoctorAccessList")
-			console.log(
-				`An identity for the user ${doctorId} does not exist in the wallet`
-			);
-			
+			console.log("getDoctorAccessList");
+			console.log(`An identity for the user ${doctorId} does not exist in the wallet`);
+
 			return;
 		}
 
@@ -43,25 +32,23 @@ exports.getDoctorAccessList = async function (doctorId) {
 		const network = await gateway.getNetwork("mychannel");
 
 		const contract = network.getContract("medicalContract");
-		
-		const doctorAccessList = await contract.evaluateTransaction(
-			"readAccessList",
-			doctorId
-		);
-		
+
+		const doctorAccessList = await contract.evaluateTransaction("readAccessList", doctorId);
+
 		const buffer = Buffer.from(doctorAccessList);
-		
+
 		const strData = buffer.toString();
-		
+
 		const doctorAccessListJson = JSON.parse(strData);
-		
+
 		// Disconnect from the gateway.
 		gateway.disconnect();
 
-		return doctorAccessListJson
-
+		return doctorAccessListJson;
 	} catch (error) {
 		console.error(`Failed to evaluate transaction in getDoctorAccessList: ${error}`);
 		// process.exit(1);
 	}
 };
+
+module.exports = getDoctorAccessList;

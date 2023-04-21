@@ -1,51 +1,53 @@
 require('dotenv').config()
 
-const register = require('./register')
-const diagnosis = require('./invokeDiagnosis')
-const queryDiagnosis = require('./queryDiagnosis')
-const queryDoctorAccessList = require('./queryDoctorAccessList')
-const invokeDoctorAccessList = require('./invokeDoctorAccessList')
+const registerUser = require('./register')
+
+const invokeDiagnosis = require('./invokeDiagnosis')
+
+const {readPatientHistoryData, readPatientMedicalData} = require('./queryDiagnosis')
+const getDoctorAccessList = require('./queryDoctorAccessList')
+const {revokeAccess, grantAccess} = require('./invokeDoctorAccessList')
 // const patient = require('./patient')
-const editUser = require('./editUser')
+const updateUserAttributes = require('./editUser')
 const userUtils = require('./user');
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
-const { use } = require('express/lib/application');
-const req = require('express/lib/request')
 
-let csrf = require('csurf');
+// const userRoute = require('./routes/user')
+// const patientRoute = require('./routes/patient')
+// const doctorRoute = require('./routes/doctor')
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(bodyParser.json())
+app.use(cors());
+app.use(bodyParser.json());
 
-
-
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+app.use(function (req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
 });
 
+// app.use('/user', userRoute)
+// app.use('/patient', patientRoute)
+// app.use('/doctor', doctorRoute)
+
 const authMiddleware = (req, res, next) => {
-    
-    const token = req.headers['authorization']?.split(' ')[1]
-    if(!token){
-        return res.sendStatus(401) // unauthorized
-    }
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
-        if(err){
-            return res.sendStatus(403)  // forbidden
-        }
-        req.user = data
-        next()
-    })
-}
+	const token = req.headers["authorization"]?.split(" ")[1];
+	if (!token) {
+		return res.sendStatus(401); // unauthorized
+	}
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			return res.sendStatus(403); // forbidden
+		}
+		req.user = data;
+		next();
+	});
+};
 
 // const authAdminMiddleware = (req, res, next) => {
 // 	const token = req.headers["authorization"]?.split(" ")[1];
@@ -98,9 +100,9 @@ app.post("/register-user", authMiddleware, isAdmin, async (req, res) => {
 	}
 
 	if (role === "doctor") {
-		register.registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, phoneNumber, specialization);
+		await registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, phoneNumber, specialization);
 	} else {
-		register.registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, phoneNumber);
+		await registerUser(firstName, lastName, role, username, hashedPassword, age, gender, address, phoneNumber);
 	}
 
 	res.json(req.body);
@@ -123,8 +125,8 @@ app.post("/login", async (req, res) => {
 	console.log("login");
 	console.log(req.body);
 
-	let test = await userUtils.getUserList();
-	console.log("login all users in wallet", test);
+	// let test = await userUtils.getUserList();
+	// console.log("view all users", test);
 
 	let username = req.body.username;
 	let password = req.body.password;
@@ -224,9 +226,9 @@ app.put("/edit-user", authMiddleware, async (req, res) => {
 	// }
 
 	if (role === "doctor") {
-		editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization);
+		updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization);
 	} else {
-		editUser.updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, phoneNumber, address);
+		updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, phoneNumber, address);
 	}
 
 	res.json(req.body);
@@ -302,14 +304,16 @@ app.get("/get-doctor-list", authMiddleware, async (req, res) => {
 	res.json(doctorListInfo);
 });
 
-app.get("/get-user-details/:userId/:role", authMiddleware, async (req, res) => {
+app.get("/get-user-details/:userId", authMiddleware, async (req, res) => {
 	const userId = req.params.userId;
-	const role = req.params.role;
+	// const role = req.params.role;
 	let userAttrs = await userUtils.getUserAttrs(userId);
 
 	if (!userAttrs) {
 		return res.sendStatus(404);
 	}
+	const role = userAttrs.find((attr) => attr.name === "role").value;
+	// console.log(userAttrs)
 	let userInfo = {
 		userId: userId,
 		firstName: userAttrs.find((attr) => attr.name === "firstName").value,
@@ -328,7 +332,7 @@ app.get("/get-user-details/:userId/:role", authMiddleware, async (req, res) => {
 	res.json(userInfo);
 });
 
-app.post("/post-patient-medical-data", async (req, res) => {
+app.post("/post-patient-medical-data", authMiddleware, async (req, res) => {
 	const patientId = req.body.patientId;
 	const medicalData = req.body.medicalData;
 	const accessList = req.body.accessList;
@@ -344,7 +348,7 @@ app.post("/post-patient-medical-data", async (req, res) => {
 	//     return
 	// }
 
-	await diagnosis.invokeDiagnosis(patientId, medicalData, doctorId);
+	await invokeDiagnosis(patientId, medicalData, doctorId);
 
 	res.json(medicalData);
 });
@@ -354,7 +358,8 @@ app.get('/get-current-medical-data/:patientId/:currentUserId', authMiddleware, a
     const currentUserId = req.params.currentUserId
     console.log("get-current-medical-data")
     console.log(patientId)
-    const medicalData = await queryDiagnosis.readPatientMedicalData(currentUserId, patientId)
+    const medicalData = await readPatientMedicalData(currentUserId, patientId)
+	
     
     res.json(medicalData)
 })
@@ -362,7 +367,7 @@ app.get('/get-current-medical-data/:patientId/:currentUserId', authMiddleware, a
 app.get('/get-history-medical-data/:patientId/:currentUserId', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
     const currentUserId = req.params.currentUserId
-    const medicalHistoryData = await queryDiagnosis.readPatientHistoryData(currentUserId, patientId)
+    const medicalHistoryData = await readPatientHistoryData(currentUserId, patientId)
     
     if(!medicalHistoryData){
         return
@@ -373,7 +378,7 @@ app.get('/get-history-medical-data/:patientId/:currentUserId', authMiddleware, a
 
 app.get('/get-doctor-access-list/:doctorId', authMiddleware, async (req, res) => {
     const doctorId = req.params.doctorId
-    const doctorAccessList = await queryDoctorAccessList.getDoctorAccessList(doctorId)
+    const doctorAccessList = await getDoctorAccessList(doctorId)
     
     if(!doctorAccessList){ // if undefined doctor doesn't have any access
         let list = []
@@ -391,7 +396,7 @@ app.post('/grant-doctor-access', authMiddleware, async (req, res) => {
     const doctorId = req.body.doctorId
     const accessExpirationDate = req.body.accessExpirationDate
 
-    let doctorAccessList = await invokeDoctorAccessList.postGrantAccess(patientId, doctorId, accessExpirationDate)
+    let doctorAccessList = await grantAccess(patientId, doctorId, accessExpirationDate)
 
     res.json(doctorAccessList)
 })
@@ -402,7 +407,7 @@ app.post('/revoke-doctor-access', authMiddleware, async (req, res) => {
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId
     
-    let doctorAccessList =  await invokeDoctorAccessList.postRevokeAccess(patientId, doctorId)
+    let doctorAccessList =  await revokeAccess(patientId, doctorId)
 
     res.json(doctorAccessList)
 })
@@ -423,3 +428,4 @@ app.listen(port, () => {
 })
 
 
+module.exports = {authMiddleware, isAdmin};

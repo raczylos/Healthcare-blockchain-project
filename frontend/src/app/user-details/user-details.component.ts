@@ -15,7 +15,7 @@ export class UserDetailsComponent {
     @Input() userDetails!: any
 
     ngOnInit(){
-        this.userService.getUserDetails(this.userId, this.userRole).subscribe(res => {
+        this.userService.getUserDetails(this.userId).subscribe(res => {
             this.userDetails = res
         })
     }

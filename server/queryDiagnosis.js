@@ -2,7 +2,7 @@ const { Gateway, Wallets } = require("fabric-network");
 const path = require("path");
 const fs = require("fs");
 
-exports.readPatientHistoryData = async function (userId, patientId) {
+async function readPatientHistoryData(userId, patientId) {
 	try {
 		
 		const ccpPath = path.resolve(
@@ -78,7 +78,7 @@ exports.readPatientHistoryData = async function (userId, patientId) {
 };
 
 
-exports.readPatientMedicalData = async function (userId, patientId) {
+async function readPatientMedicalData(userId, patientId) {
 	try {
 		const ccpPath = path.resolve(
 			__dirname,
@@ -147,3 +147,5 @@ exports.readPatientMedicalData = async function (userId, patientId) {
 		// process.exit(1);
 	}
 };
+
+module.exports = {readPatientHistoryData, readPatientMedicalData};

@@ -141,10 +141,10 @@ export class UserService {
         .get<String>(this.base_url + url, httpOptions)
         .pipe(catchError(this.handleError<String>('getUserAttrs')));
     }
-    // /get-user-details/:userId/:role
 
-    getUserDetails(userId: string, role: string): Observable<String> {
-        let url = `get-user-details/${userId}/${role}/`;
+
+    getUserDetails(userId: string): Observable<String> {
+        let url = `get-user-details/${userId}`;
 
         return this.http
         .get<String>(this.base_url + url, httpOptions)

@@ -4,8 +4,7 @@ const path = require("path");
 
 
 
-
-exports.invokeDiagnosis = async function (patientId, medicalData, doctorId) {
+async function invokeDiagnosis(patientId, medicalData, doctorId) {
 	try {
 		
 		const ccpPath = path.resolve(
@@ -51,7 +50,7 @@ exports.invokeDiagnosis = async function (patientId, medicalData, doctorId) {
 		const network = await gateway.getNetwork("mychannel");
 
 		const contract = network.getContract("medicalContract");
-
+		
 		await contract.submitTransaction(
 			"writePatientMedicalData",
 			patientId,
@@ -59,7 +58,7 @@ exports.invokeDiagnosis = async function (patientId, medicalData, doctorId) {
 			JSON.stringify(medicalData),
 
 		);
-
+		
 			
 
 		await gateway.disconnect();
@@ -69,3 +68,5 @@ exports.invokeDiagnosis = async function (patientId, medicalData, doctorId) {
 	}
 
 }
+
+module.exports = invokeDiagnosis;

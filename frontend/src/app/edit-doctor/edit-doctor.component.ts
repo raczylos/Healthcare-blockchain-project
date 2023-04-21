@@ -61,7 +61,7 @@ export class EditDoctorComponent {
     }
 
     getUserDetails() {
-        this.userService.getUserDetails(this.doctorId, 'doctor').subscribe(res => {
+        this.userService.getUserDetails(this.doctorId).subscribe(res => {
             this.patientDetails = res
 
             this.editDoctorForm.setValue({

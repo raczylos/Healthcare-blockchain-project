@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { FileSystemWallet, X509WalletMixin } = require('fabric-network');
 
-exports.updateUserAttributes = async function (firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization = '') {
+async function updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization = '') {
   try {
     
     const ccpPath = path.resolve(
@@ -101,3 +101,5 @@ if(role === 'doctor'){
     console.error(`Error updating attributes for user ${userId}: ${error}`);
   }
 }
+
+module.exports = updateUserAttributes;
