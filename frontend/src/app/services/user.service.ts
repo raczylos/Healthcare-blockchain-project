@@ -21,7 +21,7 @@ const httpOptions = {
 })
 export class UserService {
 
-    private base_url = 'http://localhost:3000/';
+    private base_url = 'http://localhost:3000/user/';
     public isLoggedIn: boolean = !!this.getAccessToken()
     public userId: string  = this.getUserIdFromToken();
     public userRole: any = this.getUserRole(this.userId)
@@ -31,15 +31,16 @@ export class UserService {
     }
 
     getUserRole(userId: string): Observable<string> {
-        let url = `get-user-role/${userId}/`;
-        console.log(`get-user-role/${userId}/`)
+        // let url = `get-user-role/${userId}/`;
+        let url = `${userId}/role`;
+        // console.log(`get-user-role/${userId}/`)
         return this.http
             .get<string>(this.base_url + url, httpOptions)
             .pipe(catchError(this.handleError<any>('getUserRole')));
     }
 
     getAuthToken(login: Login): Observable<Login> {
-        let url = 'login/';
+        let url = 'login';
         return this.http
             .post<Login>(this.base_url + url, login, httpOptions)
             .pipe(catchError(this.handleError<Login>('getAuthToken')));
@@ -47,7 +48,7 @@ export class UserService {
 
     updateAuthToken(): Observable<String> {
         console.log('updating token');
-        let url = 'refresh-access-token/';
+        let url = 'refresh-access-token';
 
         const refreshToken = {
             refreshToken: this.getRefreshToken(),
@@ -81,7 +82,7 @@ export class UserService {
 
     getAccessToken(): String {
 
-        let url = 'get-access-token/';
+        let url = 'get-access-token';
 
         let tokens = this.getTokensFromLocalStorage()
         if(!tokens){
@@ -135,7 +136,7 @@ export class UserService {
     // }
 
     getUserAttrs(userId: string): Observable<String> {
-        let url = `get-user-attrs/${userId}/`;
+        let url = `${userId}/attrs`;
 
         return this.http
         .get<String>(this.base_url + url, httpOptions)
@@ -144,7 +145,7 @@ export class UserService {
 
 
     getUserDetails(userId: string): Observable<String> {
-        let url = `get-user-details/${userId}`;
+        let url = `${userId}/details`;
 
         return this.http
         .get<String>(this.base_url + url, httpOptions)

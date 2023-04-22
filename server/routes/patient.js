@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const userUtils = require('../user');
 
 const {readPatientHistoryData, readPatientMedicalData} = require('../queryDiagnosis')
 const {revokeAccess, grantAccess} = require('../invokeDoctorAccessList')
@@ -45,7 +45,8 @@ router.get("/list", authMiddleware, async (req, res) => {
 //get-current-medical-data/:patientId/:currentUserId
 router.get('/:patientId/medical-data', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
-    const currentUserId = req.params.currentUserId
+    // const currentUserId = req.params.currentUserId
+	const currentUserId = req.query.currentUserId
     console.log("get-current-medical-data")
     console.log(patientId)
     const medicalData = await readPatientMedicalData(currentUserId, patientId)
@@ -56,7 +57,8 @@ router.get('/:patientId/medical-data', authMiddleware, async (req, res) => {
 // get-history-medical-data/:patientId/:currentUserId
 router.get('/:patientId/history-medical-data/list', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
-    const currentUserId = req.params.currentUserId
+    // const currentUserId = req.params.currentUserId
+	const currentUserId = req.query.currentUserId
     const medicalHistoryData = await readPatientHistoryData(currentUserId, patientId)
     
     if(!medicalHistoryData){

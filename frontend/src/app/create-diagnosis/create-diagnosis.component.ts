@@ -126,7 +126,7 @@ export class CreateDiagnosisComponent {
                 console.log('valid createMedicalDataForm');
                 console.log(medicalData);
                 this.isProgressSpinner = true;
-                this.patientService
+                this.doctorService
                     .postPatientMedicalData(
                         this.patientId,
                         this.doctorId,

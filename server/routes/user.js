@@ -3,10 +3,14 @@ const router = express.Router()
 
 const registerUser = require('../register')
 const updateUserAttributes = require('../editUser')
+const userUtils = require('../user');
+const jwt = require('jsonwebtoken');
 
-const { authMiddleware } = require('../routes')
+const { authMiddleware, isAdmin } = require('../routes')
 
-router.post("/register-user", authMiddleware, isAdmin, async (req, res) => {
+
+router.post("/register", authMiddleware, isAdmin, async (req, res) => {
+	console.log(req.body);
 	console.log("registerUser");
 	console.log(req.body);
 
@@ -35,6 +39,7 @@ router.post("/register-user", authMiddleware, isAdmin, async (req, res) => {
 	}
 
 	res.json(req.body);
+	
 });
 
 router.post("/login", async (req, res) => {
@@ -147,5 +152,53 @@ router.get("/:userId/details", authMiddleware, async (req, res) => {
 
 	res.json(userInfo);
 });
+
+router.post("/refresh-access-token", (req, res) => {
+	const { refreshToken } = req.body;
+	// if(!refreshTokens.includes(refreshToken)){
+	//     return res.sendStatus(403)
+	// }
+	console.log(refreshToken);
+	jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			console.log("error in refresh access token");
+			return res.sendStatus(403);
+		}
+
+		console.log("no error in refresh access token");
+
+		const userJson = {
+			userId: data.userId,
+		};
+		let newAccessToken = jwt.sign(userJson, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30m" });
+		res.json({ accessToken: newAccessToken, refreshToken: refreshToken });
+	});
+});
+
+router.post("/access-token", (req, res) => {
+	const { accessToken } = req.body;
+
+	jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			return res.sendStatus(403); // unauthorized
+		}
+		req.user = data;
+		res.json(accessToken);
+	});
+});
+
+router.post("/refresh-token", (req, res) => {
+	const { refreshToken } = req.body;
+
+	jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			return res.sendStatus(403); // unauthorized
+		}
+		req.user = data;
+		// next()
+		res.json(refreshToken);
+	});
+});
+
 
 module.exports = router;

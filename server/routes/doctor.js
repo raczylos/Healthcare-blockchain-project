@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
+const userUtils = require('../user');
 const { authMiddleware } = require('../routes')
 const invokeDiagnosis = require('../invokeDiagnosis')
 const getDoctorAccessList = require('../queryDoctorAccessList')
@@ -60,7 +60,7 @@ router.post("/:doctorId/medical-data", authMiddleware, async (req, res) => {
 	res.json(medicalData);
 });
 
-router.get('/:doctorId/access-list/', authMiddleware, async (req, res) => {
+router.get('/:doctorId/access-list', authMiddleware, async (req, res) => {
     const doctorId = req.params.doctorId
     const doctorAccessList = await getDoctorAccessList(doctorId)
     

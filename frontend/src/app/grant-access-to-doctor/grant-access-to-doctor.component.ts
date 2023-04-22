@@ -1,3 +1,4 @@
+import { PatientService } from './../services/patient.service';
 import { Doctor } from '../doctor';
 import {
     Component,
@@ -163,7 +164,7 @@ export class GrantAccessToDoctorComponent {
                 console.log('accessExpirationDate', accessExpirationDate);
                 // console.log('accessExpirationDate', accessExpirationDate);
                 // accessExpirationDate.setDate(accessExpirationDate.getDate() + 10);
-                this.doctorService
+                this.patientService
                     .grantDoctorAccess(
                         patientId,
                         doctorId,
@@ -185,7 +186,7 @@ export class GrantAccessToDoctorComponent {
         this.loading = true;
 
         let patientId = this.userId;
-        this.doctorService
+        this.patientService
             .revokeDoctorAccess(patientId, doctorId)
             .subscribe((res) => {
                 console.log(
@@ -200,6 +201,7 @@ export class GrantAccessToDoctorComponent {
     constructor(
         private userService: UserService,
         private doctorService: DoctorService,
+        private patientService: PatientService,
         private route: ActivatedRoute
     ) {}
 }

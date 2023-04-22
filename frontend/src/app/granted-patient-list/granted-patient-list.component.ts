@@ -131,7 +131,7 @@ export class GrantedPatientListComponent {
 
     revokeDoctorAccess(doctorId: string, patientId: string) {
 
-        return this.doctorService.revokeDoctorAccess(patientId, doctorId);
+        return this.patientService.revokeDoctorAccess(patientId, doctorId);
         // this.doctorService
         //     .revokeDoctorAccess(
         //         patientId,

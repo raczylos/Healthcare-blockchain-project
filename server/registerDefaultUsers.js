@@ -1,5 +1,5 @@
 const userUtils = require("./user");
-const register = require("./register");
+const registerUser = require("./register");
 
 const users = [
 	{
@@ -53,9 +53,9 @@ const users = [
 async function registerDefaultUser(user) {
 	const hashedPassword = await userUtils.encryptPassword(user.password);
 	if (user.role === "doctor") {
-		register.registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.ender, user.address, user.phoneNumber, user.specialization);
+		registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.ender, user.address, user.phoneNumber, user.specialization);
 	} else {
-		register.registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.gender, user.address, user.phoneNumber);
+		registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.gender, user.address, user.phoneNumber);
 	}
 }
 
