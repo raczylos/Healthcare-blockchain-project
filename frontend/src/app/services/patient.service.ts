@@ -40,7 +40,7 @@ export class PatientService {
 
     getPatientHistoryData(patientId: string, currentUserId: string): Observable<MedicalData> {
         // let url = `get-history-medical-data/${patientId}/${currentUserId}/`;
-        let url = `${patientId}/history-medical-data/list/?currentUserId=${currentUserId}/`;
+        let url = `${patientId}/history-medical-data/list?currentUserId=${currentUserId}`;
 
         return this.http
             .get<MedicalData>(this.base_url + url, httpOptions)
@@ -49,10 +49,11 @@ export class PatientService {
 
 
     editPatient(editedPatient: Patient): Observable<Patient> {
-        let url = 'edit-user';
+        const patientId = editedPatient.userId
+        let url = `http://localhost:3000/user/${patientId}/edit`;
 
         return this.http
-        .put<Patient>(this.base_url + url, editedPatient, httpOptions)
+        .put<Patient>(url, editedPatient, httpOptions)
         .pipe(catchError(this.handleError<Patient>('editUser')));
     }
 

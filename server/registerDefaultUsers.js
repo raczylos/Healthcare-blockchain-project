@@ -53,9 +53,9 @@ const users = [
 async function registerDefaultUser(user) {
 	const hashedPassword = await userUtils.encryptPassword(user.password);
 	if (user.role === "doctor") {
-		registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.ender, user.address, user.phoneNumber, user.specialization);
+		await registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.ender, user.address, user.phoneNumber, user.specialization);
 	} else {
-		registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.gender, user.address, user.phoneNumber);
+		await registerUser(user.firstName, user.lastName, user.role, user.username, hashedPassword, user.age, user.gender, user.address, user.phoneNumber);
 	}
 }
 

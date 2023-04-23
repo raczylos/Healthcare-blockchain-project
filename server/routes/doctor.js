@@ -1,10 +1,33 @@
 const express = require('express')
 const router = express.Router()
 const userUtils = require('../user');
-const { authMiddleware } = require('../routes')
+// const { authMiddleware } = require('../routes')
 const invokeDiagnosis = require('../invokeDiagnosis')
 const getDoctorAccessList = require('../queryDoctorAccessList')
+const jwt = require('jsonwebtoken');
 
+const authMiddleware = (req, res, next) => {
+	const token = req.headers["authorization"]?.split(" ")[1];
+	if (!token) {
+		return res.sendStatus(401); // unauthorized
+	}
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			return res.sendStatus(403); // forbidden
+		}
+		req.user = data;
+		next();
+	});
+};
+
+const isAdmin = async (req, res, next) => {
+	const userRole = await userUtils.getUserRole(req.user.userId);
+	if (userRole === "admin") {
+		next();
+	} else {
+		res.status(403).send();
+	}
+};
 
 //get-doctor-list
 router.get("/list", authMiddleware, async (req, res) => {
@@ -43,8 +66,8 @@ router.post("/:doctorId/medical-data", authMiddleware, async (req, res) => {
 	const patientId = req.body.patientId;
 	const medicalData = req.body.medicalData;
 	const accessList = req.body.accessList;
-	const doctorId = req.body.doctorId;
-
+	const doctorId = req.params.doctorId;
+	
 	// if(!accessList){
 	//     res.sendStatus(403)
 	//     return
@@ -63,7 +86,8 @@ router.post("/:doctorId/medical-data", authMiddleware, async (req, res) => {
 router.get('/:doctorId/access-list', authMiddleware, async (req, res) => {
     const doctorId = req.params.doctorId
     const doctorAccessList = await getDoctorAccessList(doctorId)
-    
+    console.log(doctorId)
+	console.log(doctorAccessList)
     if(!doctorAccessList){ // if undefined doctor doesn't have any access
         let list = []
         res.json(list)

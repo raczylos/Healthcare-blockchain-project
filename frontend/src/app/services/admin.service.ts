@@ -27,7 +27,7 @@ export class AdminService {
     }
 
     registerPatient(patient: Patient): Observable<Patient> {
-        let url = 'register-user/';
+        let url = 'user/register';
         console.log("register patient");
         console.log(patient);
         return this.http
@@ -36,7 +36,7 @@ export class AdminService {
     }
 
     registerDoctor(doctor: Doctor): Observable<Doctor> {
-        let url = 'register-user/';
+        let url = 'user/register';
         console.log("register doctor")
         console.log(doctor);
         return this.http

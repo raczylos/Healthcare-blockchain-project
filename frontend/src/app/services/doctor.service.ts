@@ -31,7 +31,7 @@ export class DoctorService {
 
     getDoctorAccessList(doctorId: string): Observable<Array<string>> {
         // let url = `get-doctor-access-list/${doctorId}/`;
-        let url = `${doctorId}/access-list'`;
+        let url = `${doctorId}/access-list`;
 
         return this.http
             .get<Array<string>>(this.base_url + url, httpOptions)
@@ -76,10 +76,12 @@ export class DoctorService {
     }
 
     editDoctor(editedDoctor: Doctor): Observable<Doctor> {
-        let url = 'edit-user';
+        const doctorId = editedDoctor.userId
+        let url = `http://localhost:3000/user/${doctorId}/edit`;
+
 
         return this.http
-        .put<Doctor>(this.base_url + url, editedDoctor, httpOptions)
+        .put<Doctor>(url, editedDoctor, httpOptions)
         .pipe(catchError(this.handleError<Doctor>('editUser')));
     }
 

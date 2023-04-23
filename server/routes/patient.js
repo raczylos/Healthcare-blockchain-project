@@ -4,9 +4,31 @@ const userUtils = require('../user');
 
 const {readPatientHistoryData, readPatientMedicalData} = require('../queryDiagnosis')
 const {revokeAccess, grantAccess} = require('../invokeDoctorAccessList')
-const { authMiddleware } = require('../routes')
+const jwt = require('jsonwebtoken');
+// const { authMiddleware } = require('../routes')
 
+const authMiddleware = (req, res, next) => {
+	const token = req.headers["authorization"]?.split(" ")[1];
+	if (!token) {
+		return res.sendStatus(401); // unauthorized
+	}
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			return res.sendStatus(403); // forbidden
+		}
+		req.user = data;
+		next();
+	});
+};
 
+const isAdmin = async (req, res, next) => {
+	const userRole = await userUtils.getUserRole(req.user.userId);
+	if (userRole === "admin") {
+		next();
+	} else {
+		res.status(403).send();
+	}
+};
 
 // get-patient-list
 router.get("/list", authMiddleware, async (req, res) => {
@@ -57,8 +79,10 @@ router.get('/:patientId/medical-data', authMiddleware, async (req, res) => {
 // get-history-medical-data/:patientId/:currentUserId
 router.get('/:patientId/history-medical-data/list', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
+	
     // const currentUserId = req.params.currentUserId
 	const currentUserId = req.query.currentUserId
+	
     const medicalHistoryData = await readPatientHistoryData(currentUserId, patientId)
     
     if(!medicalHistoryData){

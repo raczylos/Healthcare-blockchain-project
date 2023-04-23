@@ -6,11 +6,33 @@ const updateUserAttributes = require('../editUser')
 const userUtils = require('../user');
 const jwt = require('jsonwebtoken');
 
-const { authMiddleware, isAdmin } = require('../routes')
+// const { authMiddleware, isAdmin } = require('../routes')
 
+const authMiddleware = (req, res, next) => {
+	const token = req.headers["authorization"]?.split(" ")[1];
+	if (!token) {
+		return res.sendStatus(401); // unauthorized
+	}
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+		if (err) {
+			return res.sendStatus(403); // forbidden
+		}
+		req.user = data;
+		next();
+	});
+};
+
+const isAdmin = async (req, res, next) => {
+	const userRole = await userUtils.getUserRole(req.user.userId);
+	if (userRole === "admin") {
+		next();
+	} else {
+		res.status(403).send();
+	}
+};
 
 router.post("/register", authMiddleware, isAdmin, async (req, res) => {
-	console.log(req.body);
+	
 	console.log("registerUser");
 	console.log(req.body);
 
