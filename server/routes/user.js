@@ -31,6 +31,12 @@ const isAdmin = async (req, res, next) => {
 	}
 };
 
+// const myRoute = (request, response) => {
+// 	const csrfToken = generateToken(response, request);
+	
+// 	res.json({ csrfToken });
+// };
+
 router.post("/register", authMiddleware, isAdmin, async (req, res) => {
 	
 	console.log("registerUser");
@@ -222,5 +228,11 @@ router.post("/refresh-token", (req, res) => {
 	});
 });
 
+router.get("/csrf-token", (req, res) => {
+	 const csrfToken = req.csrfToken()
 
+	 res.json({csrfToken})
+})
+
+	
 module.exports = router;

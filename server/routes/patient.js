@@ -7,6 +7,13 @@ const {revokeAccess, grantAccess} = require('../invokeDoctorAccessList')
 const jwt = require('jsonwebtoken');
 // const { authMiddleware } = require('../routes')
 
+// const csrfDSC = require("express-csrf-double-submit-cookie");
+
+// const csrfProtection = csrfDSC();
+
+
+
+
 const authMiddleware = (req, res, next) => {
 	const token = req.headers["authorization"]?.split(" ")[1];
 	if (!token) {
@@ -93,7 +100,7 @@ router.get('/:patientId/history-medical-data/list', authMiddleware, async (req, 
 })
 
 //grant-doctor-access
-router.post('/:patientId/grant-access/:doctorId', authMiddleware, async (req, res) => {
+router.post('/:patientId/grant-access/:doctorId', authMiddleware , async (req, res) => {
 
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId

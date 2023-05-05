@@ -2,9 +2,9 @@ import { Patient } from './../patient';
 import { Router} from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, of, Observable } from 'rxjs';
+import { catchError, of, Observable, mergeMap } from 'rxjs';
 import { Login } from '../login';
-import jwtDecode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 import { Doctor } from '../doctor';
 
 const httpOptions = {
@@ -14,17 +14,15 @@ const httpOptions = {
     }),
 };
 
-
-
 @Injectable({
     providedIn: 'root',
 })
 export class UserService {
-
-    private base_url = 'http://localhost:3000/user/';
-    public isLoggedIn: boolean = !!this.getAccessToken()
-    public userId: string  = this.getUserIdFromToken();
-    public userRole: any = this.getUserRole(this.userId)
+    // private base_url = 'http://localhost:3000/user/';
+    private base_url = '/api/user/';
+    public isLoggedIn: boolean = !!this.getAccessToken();
+    public userId: string = this.getUserIdFromToken();
+    public userRole: any = this.getUserRole(this.userId);
 
     constructor(private http: HttpClient, private router: Router) {
         console.log('user service constructor');
@@ -61,12 +59,11 @@ export class UserService {
 
     getTokensFromLocalStorage() {
         let tokens = localStorage.getItem('authTokens');
-        let tokensJSON
+        let tokensJSON;
         if (tokens) {
             tokensJSON = JSON.parse(tokens);
-
         }
-        return tokensJSON
+        return tokensJSON;
     }
 
     // getAccessToken(): Observable<String> {
@@ -81,25 +78,23 @@ export class UserService {
     // }
 
     getAccessToken(): String {
-
         let url = 'get-access-token';
 
-        let tokens = this.getTokensFromLocalStorage()
-        if(!tokens){
-            return ''
+        let tokens = this.getTokensFromLocalStorage();
+        if (!tokens) {
+            return '';
         }
         let accessToken = tokens['accessToken'];
-            return accessToken
-
+        return accessToken;
     }
 
     getRefreshToken(): String {
-        let tokens = this.getTokensFromLocalStorage()!
+        let tokens = this.getTokensFromLocalStorage()!;
         let refreshToken = tokens['refreshToken'];
-        if(!tokens){
-            return ''
+        if (!tokens) {
+            return '';
         }
-        return refreshToken
+        return refreshToken;
     }
 
     // getRefreshToken(): Observable<String> {
@@ -113,17 +108,14 @@ export class UserService {
     //     .pipe(catchError(this.handleError<String>('getRefreshToken')));
     // }
 
-
-
     getUserIdFromToken() {
-
         let tokens = localStorage.getItem('authTokens');
         if (tokens) {
             let tokensJSON = JSON.parse(tokens!);
-        let accessToken = tokensJSON['accessToken'];
+            let accessToken = tokensJSON['accessToken'];
 
-        const decodedToken: any = jwtDecode(accessToken);
-        return decodedToken.userId;
+            const decodedToken: any = jwtDecode(accessToken);
+            return decodedToken.userId;
         }
     }
 
@@ -139,29 +131,33 @@ export class UserService {
         let url = `${userId}/attrs`;
 
         return this.http
-        .get<String>(this.base_url + url, httpOptions)
-        .pipe(catchError(this.handleError<String>('getUserAttrs')));
+            .get<String>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<String>('getUserAttrs')));
     }
-
 
     getUserDetails(userId: string): Observable<String> {
         let url = `${userId}/details`;
 
         return this.http
-        .get<String>(this.base_url + url, httpOptions)
-        .pipe(catchError(this.handleError<String>('getUserDetails')));
+            .get<String>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<String>('getUserDetails')));
+    }
+
+    getCsrfToken(): Observable<String> {
+        let url = `csrf-token`;
+
+        return this.http
+            .get<String>(this.base_url + url, httpOptions)
+            .pipe(catchError(this.handleError<String>('getUserDetails')));
     }
 
     logOut(): void {
-        console.log("logout")
-        localStorage.clear()
-        this.isLoggedIn = false
-        this.userRole = undefined
-        this.router.navigate(['/'])
-
+        console.log('logout');
+        localStorage.clear();
+        this.isLoggedIn = false;
+        this.userRole = undefined;
+        this.router.navigate(['/']);
     }
-
-
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {

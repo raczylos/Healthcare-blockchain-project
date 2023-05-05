@@ -21,7 +21,11 @@ import { UserService } from './services/user.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor(private inject: Injector, private router: Router) {}
+    constructor(
+        private inject: Injector,
+        private router: Router,
+        private userService: UserService
+    ) {}
 
     private refreshTokenInProgress = false;
     private refreshTokenSubject: BehaviorSubject<any> =
@@ -31,8 +35,17 @@ export class JwtInterceptor implements HttpInterceptor {
         request: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
-
         console.log('in interceptor');
+
+        // return this.userService.getCsrfToken(req).switchMap((modifiedReq)=> {
+        //     const newReq = req.clone(modifiedReq);
+        //     return next.handle(newReq);
+        // });
+
+        this.userService.getCsrfToken().subscribe((res) => {
+            console.log('laaa', res);
+        });
+
         request = this.addAuthenticationToken(request);
 
         return next.handle(request).pipe(
@@ -76,11 +89,19 @@ export class JwtInterceptor implements HttpInterceptor {
                 }
             })
         );
+
+
     }
 
     private refreshAccessToken(): Observable<any> {
         let authService = this.inject.get(UserService);
-        console.log("refreshing token")
+        console.log('refreshing token');
+        return authService.updateAuthToken();
+    }
+
+    private getCsrfToken(): Observable<any> {
+        let authService = this.inject.get(UserService);
+        console.log('refreshing token');
         return authService.updateAuthToken();
     }
 
@@ -94,10 +115,10 @@ export class JwtInterceptor implements HttpInterceptor {
         let tokensJSON = JSON.parse(tokens);
         let accessToken = tokensJSON['accessToken'];
 
-        
         request = request.clone({
             setHeaders: { Authorization: `Bearer ${accessToken}` },
         });
+
         return request;
     }
 }

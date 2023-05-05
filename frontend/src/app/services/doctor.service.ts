@@ -16,8 +16,9 @@ const httpOptions = {
     providedIn: 'root',
 })
 export class DoctorService {
-    // private base_url = 'http://localhost:3000/';
-    private base_url = 'http://localhost:3000/doctor/';
+
+    // private base_url = 'http://localhost:3000/doctor/';
+    private base_url = '/api/doctor/';
 
     getDoctorList(): Observable<Doctor[]> {
         // let url = 'get-doctor-list/';

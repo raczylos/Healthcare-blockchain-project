@@ -1,0 +1,29 @@
+.spinner {
+  margin-top: 150px;
+}
+
+.create-diagnosis-card {
+  max-width: 400px;
+  margin: auto;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+}
+
+.create-patient-medical-data-card {
+  flex: 1;
+  max-width: 400px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+}
+
+.create-patient-medical-data-card-no-data {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+}
+
+mat-form-field {
+  width: 300px;
+}/*# sourceMappingURL=create-diagnosis.component.css.map */

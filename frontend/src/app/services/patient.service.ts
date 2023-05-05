@@ -7,6 +7,7 @@ import { Patient } from '../patient';
 const httpOptions = {
     headers: new HttpHeaders({
         'Content-Type': 'application/json;charset=UTF-8',
+
         // 'Content-Type': 'text/html; charset=utf-8',
     }),
 };
@@ -16,8 +17,9 @@ const httpOptions = {
 })
 
 export class PatientService {
-    // private base_url = 'http://localhost:3000/';
-    private base_url = 'http://localhost:3000/patient/';
+
+    // private base_url = 'http://localhost:3000/patient/';
+    private base_url = '/api/patient/';
 
     getPatientList(): Observable<Patient[]> {
         // let url = 'get-patient-list/';
@@ -57,6 +59,8 @@ export class PatientService {
         .pipe(catchError(this.handleError<Patient>('editUser')));
     }
 
+
+
     grantDoctorAccess(patientId: string, doctorId: string, accessExpirationDate: Date): Observable<Array<String>> {
         // let url = `grant-doctor-access/`;
         let url = `${patientId}/grant-access/${doctorId}`
@@ -66,6 +70,7 @@ export class PatientService {
             accessExpirationDate: accessExpirationDate
 
         }
+
         return this.http
             .post<Array<String>>(this.base_url + url, dataJson, httpOptions)
             .pipe(catchError(this.handleError<Array<String>>('grantDoctorAccess')));

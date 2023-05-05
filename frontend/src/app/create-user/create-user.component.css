@@ -1,0 +1,36 @@
+.table-container {
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-item {
+  flex-grow: 1;
+  margin-right: 8px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.create-patient-card {
+  flex: 1;
+  max-width: 400px;
+  margin-left: 20%;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+  margin-bottom: 100px;
+}
+
+.create-doctor-card {
+  flex: 1;
+  max-width: 400px;
+  margin-right: 20%;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+}
+
+mat-form-field {
+  width: 300px;
+}/*# sourceMappingURL=create-user.component.css.map */

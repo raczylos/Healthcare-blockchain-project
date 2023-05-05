@@ -1,0 +1,25 @@
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.grant-revoke-button {
+  width: 150px;
+}
+
+.doctor-list-card {
+  margin: 100px;
+  border: 1px solid #ded9d9;
+}
+
+.hidden-input {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  visibility: hidden;
+}/*# sourceMappingURL=grant-access-to-doctor.component.css.map */

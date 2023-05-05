@@ -20,7 +20,8 @@ const httpOptions = {
 })
 
 export class AdminService {
-    private base_url = 'http://localhost:3000/';
+    // private base_url = 'http://localhost:3000/admin/';
+    private base_url = '/api/admin/';
 
     constructor(private http: HttpClient, private router: Router) {
         console.log('admin service constructor');

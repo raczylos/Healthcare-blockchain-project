@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientXsrfModule, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import {MatSelectModule} from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -65,7 +65,11 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatChipsModule,
         MatProgressSpinnerModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        HttpClientXsrfModule.withOptions({
+            cookieName: 'XSRF-TOKEN',
+            headerName: 'X-XSRF-TOKEN'
+          }),
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},

@@ -1,0 +1,54 @@
+.card-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 5%;
+}
+
+.patient-current-medical-data-card {
+  margin-top: 20px;
+  margin-bottom: 50px;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+  max-width: 30%;
+}
+
+.content {
+  overflow: visible;
+  overflow-wrap: break-word;
+  font-size: 16px;
+}
+
+.patient-current-medical-data-card-center {
+  margin: 2% auto;
+  padding: 20px;
+  border: 1px solid #ded9d9;
+  max-width: 400px;
+}
+
+.create-patient-medical-data-card {
+  flex: 1;
+  max-width: 400px;
+  margin-top: 20px;
+  margin-right: 400px;
+  padding: 10px;
+  border: 1px solid #ded9d9;
+}
+
+.patient-history-data-card {
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-bottom: 5%;
+  border: 1px solid #ded9d9;
+}
+
+mat-list-item {
+  word-break: break-all;
+}
+
+td, th {
+  word-wrap: break-word;
+  max-width: 200px;
+}/*# sourceMappingURL=patient-diagnosis.component.css.map */
