@@ -26,6 +26,8 @@ export class JwtInterceptor implements HttpInterceptor {
         private router: Router,
         private userService: UserService
     ) {}
+    private csrfToken!: String;
+    private csrfTokenRequested: boolean = false;
 
     private refreshTokenInProgress = false;
     private refreshTokenSubject: BehaviorSubject<any> =
@@ -37,20 +39,22 @@ export class JwtInterceptor implements HttpInterceptor {
     ): Observable<HttpEvent<any>> {
         console.log('in interceptor');
 
-        // return this.userService.getCsrfToken(req).switchMap((modifiedReq)=> {
-        //     const newReq = req.clone(modifiedReq);
-        //     return next.handle(newReq);
-        // });
-
-        this.userService.getCsrfToken().subscribe((res) => {
-            console.log('laaa', res);
-        });
+        if (!this.csrfTokenRequested) {
+            this.csrfTokenRequested = true;
+            this.userService.getCsrfToken().subscribe((token: any) => {
+                console.log('token', token);
+                this.csrfToken = token.csrfToken;
+                this.csrfTokenRequested = false;
+                this.refreshTokenInProgress = false
+            });
+        }
 
         request = this.addAuthenticationToken(request);
 
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 if (error && (error.status === 401 || error.status === 403)) {
+                    console.log('403', error.status);
                     if (this.refreshTokenInProgress) {
                         return this.refreshTokenSubject.pipe(
                             filter((result) => result !== null),
@@ -66,7 +70,9 @@ export class JwtInterceptor implements HttpInterceptor {
                     }
                     this.refreshTokenSubject.next(null);
                     return this.refreshAccessToken().pipe(
+
                         switchMap((response) => {
+                            console.log("response", response)
                             if (response) {
                                 localStorage.setItem(
                                     'authTokens',
@@ -81,15 +87,15 @@ export class JwtInterceptor implements HttpInterceptor {
                             return next.handle(
                                 this.addAuthenticationToken(request)
                             );
+
                         }),
-                        finalize(() => (this.refreshTokenInProgress = false))
+                        finalize(() =>(this.refreshTokenInProgress = false))
                     );
                 } else {
                     return throwError(error);
                 }
             })
         );
-
 
     }
 
@@ -99,25 +105,38 @@ export class JwtInterceptor implements HttpInterceptor {
         return authService.updateAuthToken();
     }
 
-    private getCsrfToken(): Observable<any> {
-        let authService = this.inject.get(UserService);
-        console.log('refreshing token');
-        return authService.updateAuthToken();
-    }
-
     private addAuthenticationToken(
         request: HttpRequest<any>
     ): HttpRequest<any> {
         let tokens = localStorage.getItem('authTokens');
+
         if (!tokens) {
+            if (this.csrfToken) {
+                request = request.clone({
+                    setHeaders: {
+                        'X-CSRF-Token': `${this.csrfToken}`,
+                    },
+                });
+            }
             return request;
         }
         let tokensJSON = JSON.parse(tokens);
         let accessToken = tokensJSON['accessToken'];
 
-        request = request.clone({
-            setHeaders: { Authorization: `Bearer ${accessToken}` },
-        });
+        if (this.csrfToken) {
+            request = request.clone({
+                setHeaders: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'X-CSRF-Token': `${this.csrfToken}`,
+                },
+            });
+        } else {
+            request = request.clone({
+                setHeaders: { Authorization: `Bearer ${accessToken}` },
+            });
+        }
+
+
 
         return request;
     }

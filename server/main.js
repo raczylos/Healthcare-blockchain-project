@@ -5,6 +5,9 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+const session = require("express-session");
+
+const crypto = require("crypto");
 
 const cookieParser = require("cookie-parser");
 // const csrfDSC = require("express-csrf-double-submit-cookie");
@@ -13,58 +16,48 @@ const userRoute = require("./routes/user");
 const patientRoute = require("./routes/patient");
 const doctorRoute = require("./routes/doctor");
 
-// const csrfProtection = csrfDSC();
-
 const app = express();
+
+app.set("trust proxy", 1);
+
+app.use(
+	session({
+		secret: generateSecret(32),
+		resave: false,
+		saveUninitialized: false,
+	})
+);
 
 app.use(cookieParser());
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.use(csrfProtection);
-
-// const csurf = require("csurf");
-// const csrfProtection = csurf({ cookie: true, ignoreMethods: ["GET", "HEAD", "OPTIONS"] });
-
 const { doubleCsrf } = require("csrf-csrf");
 
-// const doubleCsrfUtilities = doubleCsrf({
-// 	getSecret: () => "Secret", // A function that optionally takes the request and returns a secret
-// });
+function generateSecret(length) {
+	let secret = crypto.randomBytes(length).toString("hex");
+
+	return secret;
+}
 
 const doubleCsrfUtilities = {
-	getSecret: () => "Secret",
+	getSecret: (req) => {
+		if (!req.session.secret) {
+			req.session.secret = generateSecret(32);
+		}
+		return req.session.secret;
+	},
+	cookieName: "psifi.x-csrf-token",
 };
+
+// const doubleCsrfUtilities = {
+// 	getSecret: (req) => "Secret"
+// };
 
 const { generateToken, doubleCsrfProtection } = doubleCsrf(doubleCsrfUtilities);
 
-// app.use((req, res, next) => {
-// 	const csrf = generateToken(res, req);
-// 	// const csrf = req.csrfToken();
-// 	console.log(csrf);
-// 	res.cookie("XSRF-TOKEN", csrf, { httpOnly: false, secure: false });
-// 	res.json({ csrfToken });
-// 	next();
-// });
 
-// app.use(csrfProtection);
-
-// const myRoute = (request, response) => {
-// 	const csrfToken = generateToken(response, request);
-// 	// You could also pass the token into the context of a HTML response.
-// 	res.json({ csrfToken });
-// };
-
-// app.use(doubleCsrfProtection);
-
-// app.use(doubleCsrfProtection, (req, res, next) => {
-// 	const csrfToken = req.csrfToken();
-// 	// const csrfToken = generateToken(res, req);
-// 	console.log(csrfToken);
-// 	res.cookie("XSRF-TOKEN", csrfToken);
-// 	next();
-// });
 
 app.use(doubleCsrfProtection);
 

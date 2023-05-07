@@ -7,78 +7,73 @@ import { Doctor } from '../doctor';
 import {Location} from '@angular/common';
 
 @Component({
-  selector: 'app-edit-doctor',
-  templateUrl: './edit-doctor.component.html',
-  styleUrls: ['./edit-doctor.component.scss']
+    selector: 'app-edit-doctor',
+    templateUrl: './edit-doctor.component.html',
+    styleUrls: ['./edit-doctor.component.scss'],
 })
 export class EditDoctorComponent {
-    userId!: string
-    hide = true
-    doctorId!: string
-    patientDetails!: any
-    userRole!: any
-    loading: boolean = true
+    userId!: string;
+    hide = true;
+    doctorId!: string;
+    doctorDetails!: any;
+    userRole!: any;
+    loading: boolean = true;
 
     editDoctorForm = this.formBuilder.group({
         firstName: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
         password: ['', [Validators.required, Validators.minLength(8)]],
-        age: ['', [Validators.required, Validators.min(1), Validators.max(110)]],
+        age: [
+            '',
+            [Validators.required, Validators.min(1), Validators.max(110)],
+        ],
         gender: ['', [Validators.required]],
         address: ['', [Validators.required]],
         phoneNumber: ['', [Validators.required]],
         specialization: ['', [Validators.required]],
-
     });
 
-
-    ngOnInit(){
-        this.userId = this.userService.getUserIdFromToken()
+    ngOnInit() {
+        this.userId = this.userService.getUserIdFromToken();
         this.activatedRoute.params.subscribe((params) => {
             this.doctorId = params['id'];
 
             this.userService.getUserRole(this.userId).subscribe((res: any) => {
-                this.loading = true
-                this.userRole = res.userRole
-                if(this.userRole === 'doctor'){
-                    if(this.userId !== this.doctorId){
-                        this.back()
+                this.loading = true;
+                this.userRole = res.userRole;
+                if (this.userRole === 'doctor') {
+                    if (this.userId !== this.doctorId) {
+                        this.back();
+                    } else {
+                        // user is patient
+                        this.getUserDetails();
                     }
-                    else { // user is patient
-                        this.getUserDetails()
-                    }
-                } else { // user is admin
-                    this.getUserDetails()
+                } else {
+                    // user is admin
+                    this.getUserDetails();
                 }
-
-            })
-
-
-
-
-
-        })
+            });
+        });
     }
 
     getUserDetails() {
-        this.userService.getUserDetails(this.doctorId).subscribe(res => {
-            this.patientDetails = res
-
+        this.userService.getUserDetails(this.doctorId).subscribe((res) => {
+            this.doctorDetails = res;
             this.editDoctorForm.setValue({
-                firstName: this.patientDetails.firstName,
-                lastName: this.patientDetails.lastName,
+                firstName: this.doctorDetails.firstName,
+                lastName: this.doctorDetails.lastName,
                 password: '',
-                age: this.patientDetails.age,
-                gender: this.patientDetails.gender,
-                address: this.patientDetails.address,
-                phoneNumber: this.patientDetails.phoneNumber,
-                specialization: this.patientDetails.specialization
+                age: this.doctorDetails.age,
+                gender: this.doctorDetails.gender,
+                address: this.doctorDetails.address,
+                phoneNumber: this.doctorDetails.phoneNumber,
+                specialization: this.doctorDetails.specialization,
             });
-            this.loading = false
-        })
+            this.loading = false;
+        });
     }
 
-    onSubmit(){
+    onSubmit() {
         let editedDoctor: Doctor = {
             firstName: this.editDoctorForm.value.firstName!,
             lastName: this.editDoctorForm.value.lastName!,
@@ -91,26 +86,22 @@ export class EditDoctorComponent {
             phoneNumber: this.editDoctorForm.value.phoneNumber!,
             specialization: this.editDoctorForm.value.specialization!,
         };
-        if(this.editDoctorForm.valid){
-
-            this.doctorService.editDoctor(editedDoctor).subscribe(res => {
-                if(!res){
-
+        if (this.editDoctorForm.valid) {
+            this.doctorService.editDoctor(editedDoctor).subscribe((res) => {
+                if (!res) {
                 }
-                console.log("editUser")
-                console.log(res)
-                this.back()
-            })
+                console.log('editUser');
+                console.log(res);
+                this.back();
+            });
         } else {
-            console.log("invalid editDoctorForm")
+            console.log('invalid editDoctorForm');
         }
-
     }
 
     back() {
-        this.location.back()
+        this.location.back();
     }
-
 
     constructor(
         private doctorService: DoctorService,
@@ -118,5 +109,5 @@ export class EditDoctorComponent {
         private formBuilder: FormBuilder,
         private activatedRoute: ActivatedRoute,
         private location: Location
-        ){}
+    ) {}
 }

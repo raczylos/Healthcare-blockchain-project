@@ -60,10 +60,9 @@ export class LoginComponent {
         });
     }
 
-    handleKeyUp(e: any): void {
-        if (e.keyCode === 13) {
-            // enter - key code
-            this.onSubmit();
-        }
-    }
+    // handleKeyUp(e: any): void {
+
+    //     this.onSubmit();
+
+    // }
 }

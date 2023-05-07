@@ -78,7 +78,8 @@ export class DoctorService {
 
     editDoctor(editedDoctor: Doctor): Observable<Doctor> {
         const doctorId = editedDoctor.userId
-        let url = `http://localhost:3000/user/${doctorId}/edit`;
+        // let url = `http://localhost:3000/user/${doctorId}/edit`;
+        let url = `/api/user/${doctorId}/edit`;
 
 
         return this.http

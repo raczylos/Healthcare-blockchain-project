@@ -52,7 +52,8 @@ export class PatientService {
 
     editPatient(editedPatient: Patient): Observable<Patient> {
         const patientId = editedPatient.userId
-        let url = `http://localhost:3000/user/${patientId}/edit`;
+        // let url = `http://localhost:3000/user/${patientId}/edit`;
+        let url = `/api/user/${patientId}/edit`;
 
         return this.http
         .put<Patient>(url, editedPatient, httpOptions)

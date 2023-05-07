@@ -74,8 +74,8 @@ router.post("/login", async (req, res) => {
 	console.log("login");
 	console.log(req.body);
 
-	let test = await userUtils.getUserList();
-	console.log("login all users in wallet", test);
+	// let userList = await userUtils.getUserList();
+	// console.log("login all users in wallet", userList);
 
 	let username = req.body.username;
 	let password = req.body.password;
@@ -138,7 +138,7 @@ router.put("/:userId/edit", authMiddleware, async (req, res) => {
 	if (role === "doctor") {
 		await updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber, specialization);
 	} else {
-		await updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, phoneNumber, address);
+		await updateUserAttributes(firstName, lastName, role, userId, hashedPassword, age, gender, address, phoneNumber);
 	}
 
 	res.json(req.body);
@@ -161,7 +161,7 @@ router.get("/:userId/details", authMiddleware, async (req, res) => {
 	if (!userAttrs) {
 		return res.sendStatus(404);
 	}
-	const role = userAttrs.find((attr) => attr.name === "role").value
+	const role = userAttrs.find((attr) => attr.name === "role").value;
 	// console.log(userAttrs)
 	let userInfo = {
 		userId: userId,

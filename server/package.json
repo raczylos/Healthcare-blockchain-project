@@ -16,6 +16,7 @@
 		"dotenv": "^16.0.3",
 		"express": "^4.18.2",
 		"express-csrf-double-submit-cookie": "^1.2.1",
+		"express-session": "^1.17.3",
 		"fabric-ca-client": "^2.2.4",
 		"fabric-contract-api": "^2.5.2",
 		"fabric-network": "^2.2.4",
