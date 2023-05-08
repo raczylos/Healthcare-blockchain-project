@@ -22,18 +22,24 @@ app.set("trust proxy", 1);
 
 app.use(
 	session({
-		secret: generateSecret(32),
+		secret: generateSecret(64),
 		resave: false,
 		saveUninitialized: false,
 	})
 );
 
-app.use(cookieParser());
+// app.use(cookieParser());
 
 app.use(cors());
 app.use(bodyParser.json());
 
-const { doubleCsrf } = require("csrf-csrf");
+const { csrfSync } = require("csrf-sync");
+
+const { csrfSynchronisedProtection } = csrfSync();
+
+
+
+// const { doubleCsrf } = require("csrf-csrf");
 
 function generateSecret(length) {
 	let secret = crypto.randomBytes(length).toString("hex");
@@ -41,25 +47,22 @@ function generateSecret(length) {
 	return secret;
 }
 
-const doubleCsrfUtilities = {
-	getSecret: (req) => {
-		if (!req.session.secret) {
-			req.session.secret = generateSecret(32);
-		}
-		return req.session.secret;
-	},
-	cookieName: "psifi.x-csrf-token",
-};
+app.use(csrfSynchronisedProtection);
 
 // const doubleCsrfUtilities = {
-// 	getSecret: (req) => "Secret"
+// 	getSecret: (req) => {
+// 		if (!req.session.secret) {
+// 			req.session.secret = generateSecret(32);
+// 		}
+// 		return req.session.secret;
+// 	},
+// 	cookieName: "psifi.x-csrf-token",
 // };
 
-const { generateToken, doubleCsrfProtection } = doubleCsrf(doubleCsrfUtilities);
 
+// const { generateToken, doubleCsrfProtection } = doubleCsrf(doubleCsrfUtilities);
 
-
-app.use(doubleCsrfProtection);
+// app.use(doubleCsrfProtection);
 
 app.use(function (req, res, next) {
 	// res.header("Access-Control-Allow-Origin", "*");
@@ -111,5 +114,4 @@ app.listen(port, () => {
 
 module.exports = { authMiddleware, isAdmin };
 
-// exports.authMiddleware = authMiddleware
-// exports.isAdmin = isAdmin
+
