@@ -2,7 +2,7 @@
 Electronic healthcare record (EHR) project to store sensitive patient medical data in Hyperledger Fabric (HLF) blockchain with CSRF protection and Unit tests for smart contract functions.
 
 # Functionality
-- grant access to doctor with time range
+- grant a doctor access for a limited time period chosen by the patient
 - view patient data (if access granted)
 - create patient data (if access granted)
 - create patients/doctors by admin
@@ -13,7 +13,7 @@ Electronic healthcare record (EHR) project to store sensitive patient medical da
 - Follow prerequisites: **https://hyperledger-fabric.readthedocs.io/en/latest/prereqs.html**
 - Intall script in fabric-samples directory:  
   **curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh**
-- Type: **./install-fabric.sh -f 2.2.2 -c 1.4.9 docker binary** - https://hyperledger-fabric.readthedocs.io/en/latest/install.html
+- Type: **./install-fabric.sh -f 2.2.2 -c 1.4.9 docker binary** - to create docker images and binary https://hyperledger-fabric.readthedocs.io/en/latest/install.html
 - In directory **"server/scripts"** type:  
   **chmod +x startFabric.sh networkDown.sh** - to give executable rights  
   **./startFabric.sh** - to start network  
