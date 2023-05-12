@@ -39,3 +39,13 @@ Electronic healthcare record (EHR) project to store sensitive patient medical da
  - In directory "frontend" type:  
    **npm install**  
    **npm start** - to start frontend server  
+ 
+ # Demo screens
+ Grant access to doctor  
+![image](https://github.com/raczylos/Healthcare-blockchain-project/assets/82103059/1b659639-c6fe-4cf4-9c3d-0e9eac1b783a)
+![image](https://github.com/raczylos/Healthcare-blockchain-project/assets/82103059/a3078130-ef30-4052-9719-aac86917f85a)
+
+
+Add patient medical data  
+![image](https://github.com/raczylos/Healthcare-blockchain-project/assets/82103059/34f1b602-ee8a-4c30-aca8-5678f4304ba7)
+![image](https://github.com/raczylos/Healthcare-blockchain-project/assets/82103059/9fac7338-ef10-45de-b476-38c2a81d3c8e)
