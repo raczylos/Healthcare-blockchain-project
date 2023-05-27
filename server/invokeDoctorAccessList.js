@@ -85,7 +85,7 @@ async function grantAccess(patientId, doctorId, accessExpirationDate) {
 			console.log(
 				`An identity for the doctor ${doctorId} does not exist in the wallet`
 			);
-			return;
+			return `An identity for the doctor ${doctorId} does not exist in the wallet`;
 		}
 
 		const patientIdentity = await wallet.get(patientId);
@@ -93,7 +93,7 @@ async function grantAccess(patientId, doctorId, accessExpirationDate) {
 			console.log(
 				`An identity for the patient ${patientId} does not exist in the wallet`
 			);
-			return;
+			return `An identity for the patient ${patientId} does not exist in the wallet`;
 		}
 
 		const gateway = new Gateway();

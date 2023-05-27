@@ -1,13 +1,12 @@
 'use strict';
 
 const { Contract } = require('fabric-contract-api');
-const { crypto } = require('crypto')
+const  crypto  = require('crypto')
 const { X509Identity } = require('fabric-shim');
 const util = require('util');
 
-// import { Contract } from 'fabric-contract-api';
-// import crypto from 'crypto';
-// import { X509Identity } from 'fabric-shim';
+
+
 
 
 class MedicalContract extends Contract {
@@ -57,19 +56,6 @@ class MedicalContract extends Contract {
 	}
 
 	
-	// async test(ctx, patientId) {
-	// 	const iterator = await ctx.stub.getHistoryForKey(patientId);
-
-	// 	// const resultArray = [];
-	// 	// let res = await iterator.next();
-	// 	// while (!res.done) {
-	// 	// 	resultArray.push(res);
-	// 	// 	res = await iterator.next();
-	// 	// }
-
-  	// 	// return JSON.stringify(resultArray);
-	// 	  return util.inspect(iterator.next());
-	// }
 
 	//write case if accessExpirationDate < currentDate
 	async grantAccess(ctx, patientId, doctorId, accessExpirationDate) {
@@ -115,7 +101,7 @@ class MedicalContract extends Contract {
 			if (clientId !== patientId) {
 				return `patient: ${patientId} cannot change other patients access`;
 			}
-			if (accessList.find((item) => item.clientId === clientId)) {
+			if (accessList.find((item) => item.clientId === clientId )) {
 				accessList = accessList.filter((item) => item.clientId !== clientId);
 				if (!accessList || !accessList.length) {
 					accessList = [];
@@ -131,23 +117,32 @@ class MedicalContract extends Contract {
 	}
 
 	async writePatientMedicalData(ctx, patientId, doctorId, medicalData) {
-		let patientData = JSON.parse(medicalData);
+		// let patientData = JSON.stringify(medicalData);
+		// console.log("patientData1", medicalData);
+		// console.log("patientData2", patientData);
+
+		// const patientData = JSON.stringify(medicalData);
 		let role = ctx.clientIdentity.getAttributeValue("role");
 		role = role.toString();
 		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
 		let accessList = await ctx.stub.getState(clientId);
+
+		let currentDate = new Date();
 
 		if (accessList.length !== 0) {
 			accessList = JSON.parse(accessList.toString());
 		}
 
 		if (role === "doctor") {
-			if (accessList.find((item) => item.clientId === patientId)) {
-				await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)));
-				return Buffer.from(JSON.stringify(patientData));
+			if (accessList.find((item) => item.clientId === patientId && new Date(item.accessExpirationDate) >  currentDate)) {
+				await ctx.stub.putState(patientId, Buffer.from(medicalData));
+				return Buffer.from(medicalData);
+				
+				// await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)));
+				// return Buffer.from(JSON.stringify(patientData));
 			} else {
 				// return `doctor: ${doctorId}  doesn't have access to patient: ${patientId}`;
-				return JSON.parse(`{"error": "doctor: ${doctorId} doesn't have access to patient ${patientId}"}`);
+				return JSON.parse(`{"error": "doctor: ${doctorId} doesn't have access to patient ${patientId} or accessExpirationDate expired"}`);
 			}
 		} else {
 			return `user: ${doctorId}  isn't a doctor`;
@@ -161,15 +156,15 @@ class MedicalContract extends Contract {
 
 		let iterator = await ctx.stub.getHistoryForKey(patientId);
 		let result = await this.getIteratorData(iterator);
-
+		let currentDate = new Date();
 
 		if (role === "doctor") {
 			let accessList = await ctx.stub.getState(clientId);
 			accessList = JSON.parse(accessList.toString());
-			if (accessList.find((item) => item.clientId === patientId)) {
+			if (accessList.find((item) => item.clientId === patientId && new Date(item.accessExpirationDate) >  currentDate)) {
 				return JSON.stringify(result);
 			} else {
-				return `doctor: ${clientId}  doesn't have access to patient: ${patientId}`;
+				return `doctor: ${clientId}  doesn't have access to patient: ${patientId} or accessExpirationDate expired`;
 			}
 		}
 		if (role === "patient") {
@@ -189,10 +184,12 @@ class MedicalContract extends Contract {
 
 		let patientDataAsBuffer = await ctx.stub.getState(patientId);
 
+		let currentDate = new Date();
+
 		if (role === "doctor") {
 			let accessList = await ctx.stub.getState(clientId);
 			accessList = JSON.parse(accessList.toString());
-			if (accessList.find((item) => item.clientId === patientId)) {
+			if (accessList.find((item) => item.clientId === patientId && new Date(item.accessExpirationDate) >  currentDate)) {
 				if (patientDataAsBuffer.length !== 0) {
 					let patientData = JSON.parse(patientDataAsBuffer.toString());
 					return JSON.stringify(patientData);
@@ -201,7 +198,8 @@ class MedicalContract extends Contract {
 				}
 				// return JSON.stringify(accessList);
 			} else {
-				return `doctor: ${clientId}  doesn't have access to patient: ${patientId}`;
+	
+				return `doctor: ${clientId}  doesn't have access to patient: ${patientId} or accessExpirationDate expired`;
 			}
 		}
 		if (role === "patient") {

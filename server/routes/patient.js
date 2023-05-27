@@ -101,11 +101,14 @@ router.get('/:patientId/history-medical-data/list', authMiddleware, async (req, 
 
 //grant-doctor-access
 router.post('/:patientId/grant-access/:doctorId', authMiddleware , async (req, res) => {
-
+	
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId
     const accessExpirationDate = req.body.accessExpirationDate
-
+	console.log(req.body.patientId)
+	console.log(req.body.doctorId)
+	console.log(req.body.accessExpirationDate)
+	console.log(req.body)
     let doctorAccessList = await grantAccess(patientId, doctorId, accessExpirationDate)
 
     res.json(doctorAccessList)

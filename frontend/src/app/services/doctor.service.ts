@@ -63,12 +63,11 @@ export class DoctorService {
     //         .pipe(catchError(this.handleError<Array<String>>('revokeDoctorAccess')));
     // }
 
-    postPatientMedicalData(patientId: string, doctorId: string, medicalData: MedicalData, accessList: Array<string>): Observable<MedicalData> {
+    postPatientMedicalData(patientId: string, doctorId: string, medicalData: MedicalData): Observable<MedicalData> {
         let url = `${doctorId}/medical-data`;
         let dataJson = {
             patientId: patientId,
             medicalData: medicalData,
-            accessList: accessList,
             // doctorId: doctorId,
         }
         return this.http

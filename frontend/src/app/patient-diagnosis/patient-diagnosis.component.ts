@@ -51,7 +51,9 @@ export class PatientDiagnosisComponent {
                     console.log('current patient medical data');
                     console.log(res);
 
-                    this.patientMedicalData = res;
+
+                    // this.patientMedicalData = JSON.parse(res);
+                    this.patientMedicalData = res
                     this.loading = false
                 }
             });
@@ -59,6 +61,7 @@ export class PatientDiagnosisComponent {
 
     getPatientHistoryData() {
         this.loading = true
+
         this.patientService
             .getPatientHistoryData(this.patientId, this.currentUserId)
             .subscribe((res: any) => {
@@ -66,13 +69,12 @@ export class PatientDiagnosisComponent {
                     // this.patientHistoryData = '';
                 } else {
                     this.patientHistoryData = res;
-                    console.log('patient history medical data');
-                    console.log(this.patientHistoryData);
-                    console.log(res)
+                    console.log('patient history medical data', this.patientHistoryData);
+
+
                     let patientHistoryDataValues: any = []
                     this.patientHistoryData.forEach((medicalData: any) => {
                         patientHistoryDataValues.push(medicalData)
-                        // patientHistoryDataValues.push(medicalData.value)
                     });
 
                     this.dataSource = new MatTableDataSource(patientHistoryDataValues);

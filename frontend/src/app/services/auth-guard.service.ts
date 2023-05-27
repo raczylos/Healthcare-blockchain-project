@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 @Injectable({
     providedIn: 'root',
 })
-export class RoleGuardService {
+export class AuthGuardService {
     constructor(
         private router: Router,
         private userService: UserService,

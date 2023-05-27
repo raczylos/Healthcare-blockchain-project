@@ -21,8 +21,6 @@ async function main() {
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = await Wallets.newFileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
-        console.log(wallet)
         let doctorId = "doctor1"
         // Check to see if we've already enrolled the user.
         const identity = await wallet.get(doctorId);
@@ -87,10 +85,20 @@ async function main() {
 
 
         //CRYPTO !!!
+
+        const identityPatient = await wallet.get("patient1");
+        const identityDoctor = await wallet.get("doctor1");
+
         let patient1Identity = await wallet.get('patient1');
         let provider1 = wallet.getProviderRegistry().getProvider(patient1Identity.type)
-        console.log("STOP1")
-        let patientUser = await provider1.getUserContext(identity, 'patient1')
+
+        let doctor1Identity = await wallet.get('doctor1');
+        let provider2 = wallet.getProviderRegistry().getProvider(doctor1Identity.type)
+
+
+        let patientUser = await provider1.getUserContext(identityPatient, 'patient1')
+
+        let doctorUser = await provider2.getUserContext(identityDoctor, 'doctor1')
         // console.log(patientUser.getSigningIdentity())
         // console.log(patientUser.getSigningIdentity()._publicKey._key.pubKeyHex) // public key in hex form
 
@@ -100,16 +108,27 @@ async function main() {
 
         const patientPublicKey = publicKeyBytes.toString('base64') 
 
-        console.log(patientPublicKey) 
+        // console.log(patientPublicKey) 
 
-        const patientPrivateKey = identity.credentials.privateKey
-
+        const patientPrivateKey = identityPatient.credentials.privateKey
+        const doctorPrivateKey = identityDoctor.credentials.privateKey
         
-        console.log(patientUser.getIdentity()._publicKey._key.pubKeyHex)
+        // console.log(patientUser.getIdentity()._publicKey._key.pubKeyHex)
+
+        // console.log(patientPrivateKey)
 
         let patientPublicKeyHexAlternative = patientUser.getIdentity()._publicKey._key.pubKeyHex // inny sposob odczytu public key
 
-        console.log(patient1Identity)
+        let doctorPublicKeyHexAlternative = doctorUser.getIdentity()._publicKey._key.pubKeyHex
+
+        console.log("public key patient", patientPublicKeyHexAlternative) // chyba najlepszy sposob
+        console.log("patientPrivateKey", patientPrivateKey)
+
+        console.log("public key doctor", doctorPublicKeyHexAlternative) // chyba najlepszy sposob
+        console.log("doctorPrivateKey", doctorPrivateKey)
+
+
+        console.log(patient1Identity.credentials.certificate)
 
         // const publicKeyBytes1 = Buffer.from(patientPublicKey, 'base64')
         // const patientPublicKey1 = publicKeyBytes1.toString('hex') 
@@ -125,7 +144,7 @@ async function main() {
             "age": 18
         }
 
-        console.log(identities[5])
+        // console.log(identities[5])
         // const encrypted = crypto.privateEncrypt(privateKey, Buffer.from(JSON.stringify(patientData)))
 
         // console.log(encrypted)
@@ -136,8 +155,8 @@ async function main() {
         // let result = await contract.evaluateTransaction('readPatientData', "patient1");
         // result = result.toString('utf-8') // convert buffer to string
         // console.log(JSON.parse(result))
-        console.log(userList.result)
-        console.log('Transaction has been submitted');
+        // console.log(userList.result)
+        // console.log('Transaction has been submitted');
         // Disconnect from the gateway.
 
 

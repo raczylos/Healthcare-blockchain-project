@@ -1,6 +1,20 @@
 const { Gateway, Wallets } = require("fabric-network");
 const path = require("path");
 const fs = require("fs");
+const  crypto  = require('crypto')
+
+
+
+function decryptMessage(encryptedData, iv) {
+	const algorithm = 'aes-256-cbc';
+	const key = Buffer.from(process.env.SYMMETRIC_KEY, 'hex');
+	const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from(iv, 'hex'));
+
+	let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+	decrypted += decipher.final('utf8');
+
+	return decrypted;
+}
 
 async function readPatientHistoryData(userId, patientId) {
 	try {
@@ -35,7 +49,7 @@ async function readPatientHistoryData(userId, patientId) {
 
 		const userIdentity = await wallet.get(userId);
 		if (!userIdentity) {
-			console.log("readPatientHistoryData")
+			
 			console.log(
 				`An identity for the user ${userId} does not exist in the wallet`
 			);
@@ -55,21 +69,33 @@ async function readPatientHistoryData(userId, patientId) {
 
 		const contract = network.getContract("medicalContract");
 		;
-		let readPatientHistoryData = await contract.evaluateTransaction(
+		let readPatientHistoryDataArray = await contract.evaluateTransaction(
 			"readPatientHistoryData",
 			patientId
 		);
 		
-		await gateway.disconnect();
+
 		
-		const buffer = Buffer.from(readPatientHistoryData);
+		const buffer = Buffer.from(readPatientHistoryDataArray);
+		
         const strData = buffer.toString();
 		if(!strData){
 			return ;
 		}
 		let readPatientHistoryDataJson = JSON.parse(strData);
+		
+		let encryptedHistoryArray = []
+		readPatientHistoryDataJson.forEach(patientData => {
+			let encryptedData = patientData.encryptedData
+			let iv = patientData.iv
+			let decryptedData = decryptMessage(encryptedData, iv)
+			encryptedHistoryArray.push(JSON.parse(decryptedData))
+		});
 
-		return readPatientHistoryDataJson;
+		await gateway.disconnect();
+		
+		// return readPatientHistoryDataJson;
+		return encryptedHistoryArray;
 
 	} catch (error) {
 		console.error(`Failed to evaluate transaction in readPatientHistoryData: ${error}`);
@@ -130,16 +156,20 @@ async function readPatientMedicalData(userId, patientId) {
 			"readPatientMedicalData",
 			patientId
 		);
-		const buffer = Buffer.from(patientData);
-        const strData = buffer.toString();
-		if(!strData){
-			return ;
-		}
+	
+
+		const strData = patientData.toString();
 		let patientDataJson = JSON.parse(strData);
-		
+	
+		let encryptedData = patientDataJson.encryptedData
+		let iv = patientDataJson.iv
+	
+		let decryptedData = decryptMessage(encryptedData, iv)
+
+	
 		await gateway.disconnect();
 
-		return patientDataJson;
+		return JSON.parse(decryptedData);
 		
 
 	} catch (error) {

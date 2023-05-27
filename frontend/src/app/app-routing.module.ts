@@ -6,7 +6,7 @@ import { GrantedPatientListComponent } from './granted-patient-list/granted-pati
 import { PatientDiagnosisComponent } from './patient-diagnosis/patient-diagnosis.component';
 import { CreateDiagnosisComponent } from './create-diagnosis/create-diagnosis.component';
 import { GrantAccessToDoctorComponent } from './grant-access-to-doctor/grant-access-to-doctor.component';
-import { RoleGuardService } from './services/role-guard.service';
+import { AuthGuardService } from './services/auth-guard.service';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { DoctorListComponent } from './doctor-list/doctor-list.component';
 import { EditPatientComponent } from './edit-patient/edit-patient.component';
@@ -18,12 +18,12 @@ const routes: Routes = [
     {
         path: '',
         component: HomePageComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
     },
     {
         path: 'admin/create-user',
         component: CreateUserComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             expectedUserRole: 'admin',
         },
@@ -31,7 +31,7 @@ const routes: Routes = [
     {
         path: 'admin/create-user',
         component: CreateUserComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             expectedUserRole: 'admin',
         },
@@ -39,7 +39,7 @@ const routes: Routes = [
     {
         path: 'admin/doctor-list',
         component: DoctorListComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             expectedUserRole: 'admin',
         },
@@ -47,7 +47,7 @@ const routes: Routes = [
     {
         path: 'admin/patient-list',
         component: PatientListComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             expectedUserRole: 'admin',
         },
@@ -55,7 +55,7 @@ const routes: Routes = [
     {
         path: 'doctor/:id',
         component: GrantedPatientListComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             expectedUserRole: 'doctor',
         },
@@ -63,7 +63,7 @@ const routes: Routes = [
     {
         path: 'patient/:id',
         component: GrantAccessToDoctorComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             expectedUserRole: 'patient',
         },
@@ -71,7 +71,7 @@ const routes: Routes = [
     {
         path: 'patient-diagnosis/:id',
         component: PatientDiagnosisComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         data: {
             // expectedUserRole: 'patient',
             patientDetail: "patientDetail",
@@ -80,7 +80,7 @@ const routes: Routes = [
     {
         path: 'edit-patient/:id',
         component: EditPatientComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         // data: {
         //     expectedUserRole: 'admin'
         // },
@@ -88,7 +88,7 @@ const routes: Routes = [
     {
         path: 'edit-doctor/:id',
         component: EditDoctorComponent,
-        canActivate: [RoleGuardService],
+        canActivate: [AuthGuardService],
         // data: {
         //     expectedUserRole: 'admin'
         // },

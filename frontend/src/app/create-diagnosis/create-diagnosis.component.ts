@@ -131,8 +131,6 @@ export class CreateDiagnosisComponent {
                         this.patientId,
                         this.doctorId,
                         medicalData,
-                        this.doctorAccessList,
-
                     )
                     .subscribe((res) => {
                         this.refresh();
