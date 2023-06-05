@@ -58,6 +58,7 @@ class MedicalContract extends Contract {
 	
 
 	//write case if accessExpirationDate < currentDate
+
 	async grantAccess(ctx, patientId, doctorId, accessExpirationDate) {
 		let role = ctx.clientIdentity.getAttributeValue("role").toString();
 		let accessList = await ctx.stub.getState(doctorId);
@@ -74,7 +75,6 @@ class MedicalContract extends Contract {
 				accessList = JSON.parse(accessList.toString());
 			}
 
-			// if (!accessList.includes(clientId)) {
 			if (!accessList.find((item) => item.clientId === clientId)) {
 				accessList.push({ clientId, accessExpirationDate });
 
@@ -117,11 +117,7 @@ class MedicalContract extends Contract {
 	}
 
 	async writePatientMedicalData(ctx, patientId, doctorId, medicalData) {
-		// let patientData = JSON.stringify(medicalData);
-		// console.log("patientData1", medicalData);
-		// console.log("patientData2", patientData);
-
-		// const patientData = JSON.stringify(medicalData);
+		
 		let role = ctx.clientIdentity.getAttributeValue("role");
 		role = role.toString();
 		let clientId = ctx.clientIdentity.getID().split("::")[1].split("/")[4].split("=")[1];
@@ -138,8 +134,6 @@ class MedicalContract extends Contract {
 				await ctx.stub.putState(patientId, Buffer.from(medicalData));
 				return Buffer.from(medicalData);
 				
-				// await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(patientData)));
-				// return Buffer.from(JSON.stringify(patientData));
 			} else {
 				// return `doctor: ${doctorId}  doesn't have access to patient: ${patientId}`;
 				return JSON.parse(`{"error": "doctor: ${doctorId} doesn't have access to patient ${patientId} or accessExpirationDate expired"}`);

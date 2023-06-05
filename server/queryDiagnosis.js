@@ -5,7 +5,7 @@ const  crypto  = require('crypto')
 
 
 
-function decryptMessage(encryptedData, iv) {
+function decryptData(encryptedData, iv) {
 	const algorithm = 'aes-256-cbc';
 	const key = Buffer.from(process.env.SYMMETRIC_KEY, 'hex');
 	const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from(iv, 'hex'));
@@ -88,7 +88,7 @@ async function readPatientHistoryData(userId, patientId) {
 		readPatientHistoryDataJson.forEach(patientData => {
 			let encryptedData = patientData.encryptedData
 			let iv = patientData.iv
-			let decryptedData = decryptMessage(encryptedData, iv)
+			let decryptedData = decryptData(encryptedData, iv)
 			encryptedHistoryArray.push(JSON.parse(decryptedData))
 		});
 
@@ -164,7 +164,7 @@ async function readPatientMedicalData(userId, patientId) {
 		let encryptedData = patientDataJson.encryptedData
 		let iv = patientDataJson.iv
 	
-		let decryptedData = decryptMessage(encryptedData, iv)
+		let decryptedData = decryptData(encryptedData, iv)
 
 	
 		await gateway.disconnect();
