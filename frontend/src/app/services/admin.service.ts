@@ -16,39 +16,29 @@ const httpOptions = {
 };
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
-
 export class AdminService {
     // private base_url = 'http://localhost:3000/admin/';
-    private base_url = '/api/admin/';
+    private base_url = '/api/user/';
 
     constructor(private http: HttpClient, private router: Router) {
         console.log('admin service constructor');
     }
 
     registerPatient(patient: Patient): Observable<Patient> {
-        let url = 'user/register';
-        console.log("register patient");
+        let url = 'register';
+        console.log('register patient');
         console.log(patient);
-        return this.http
-            .post<Patient>(this.base_url + url, patient, httpOptions)
-            .pipe(catchError(this.handleError<Patient>('registerPatient')));
+        return this.http.post<Patient>(this.base_url + url, patient, httpOptions).pipe(catchError(this.handleError<Patient>('registerPatient')));
     }
 
     registerDoctor(doctor: Doctor): Observable<Doctor> {
-        let url = 'user/register';
-        console.log("register doctor")
+        let url = 'register';
+        console.log('register doctor');
         console.log(doctor);
-        return this.http
-            .post<Doctor>(this.base_url + url, doctor, httpOptions)
-            .pipe(catchError(this.handleError<Doctor>('registerDoctor')));
+        return this.http.post<Doctor>(this.base_url + url, doctor, httpOptions).pipe(catchError(this.handleError<Doctor>('registerDoctor')));
     }
-
-
-
-
-
 
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {

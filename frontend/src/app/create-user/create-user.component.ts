@@ -112,7 +112,7 @@ export class CreateUserComponent {
 
                     // this.refresh()
                 } else {
-                    console.log("user exists")
+                    console.log('user exists', res);
                     this.openSnackBar("user exists")
                 }
             });
@@ -140,19 +140,19 @@ export class CreateUserComponent {
         };
 
         if(this.createDoctorForm.valid){
-            formDirective.resetForm();
+            // formDirective.resetForm();
             this.adminService.registerDoctor(doctor).subscribe((res) => {
-                if(res){
-                    console.log("doctor registered")
-                    console.log(res)
-                    this.openSnackBar(res.userId + " registered successfully")
+                if (res) {
+                    console.log('doctor registered');
+                    console.log(res);
+                    this.openSnackBar(res.userId + ' registered successfully');
                     formDirective.resetForm();
-                    this.createDoctorForm.reset()
+                    this.createDoctorForm.reset();
 
                     // this.refresh()
                 } else {
-                    console.log("user exists")
-                    this.openSnackBar("user exists")
+                    console.log('user exists');
+                    this.openSnackBar('user exists');
                 }
             });
         } else {
