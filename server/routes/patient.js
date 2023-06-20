@@ -47,7 +47,7 @@ router.get("/list", authMiddleware, async (req, res) => {
 	}
 
 	patientList.forEach((patient, index, array) => {
-		// console.log(patient);
+		
 		let patientId = patient.id;
 		let firstName = patient.attrs.find((attr) => attr.name === "firstName");
 		let lastName = patient.attrs.find((attr) => attr.name === "lastName");
@@ -76,8 +76,7 @@ router.get('/:patientId/medical-data', authMiddleware, async (req, res) => {
     const patientId = req.params.patientId
     // const currentUserId = req.params.currentUserId
 	const currentUserId = req.query.currentUserId
-    console.log("get-current-medical-data")
-    console.log(patientId)
+
     const medicalData = await readPatientMedicalData(currentUserId, patientId)
     
     res.json(medicalData)
@@ -105,10 +104,7 @@ router.post('/:patientId/grant-access/:doctorId', authMiddleware , async (req, r
     const patientId = req.body.patientId
     const doctorId = req.body.doctorId
     const accessExpirationDate = req.body.accessExpirationDate
-	console.log(req.body.patientId)
-	console.log(req.body.doctorId)
-	console.log(req.body.accessExpirationDate)
-	console.log(req.body)
+	
     let doctorAccessList = await grantAccess(patientId, doctorId, accessExpirationDate)
 
     res.json(doctorAccessList)

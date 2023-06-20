@@ -30,7 +30,7 @@ async function updateUserAttributes(firstName, lastName, role, userId, hashedPas
     
     const walletPath = path.join(process.cwd(), 'wallet');
     const wallet = await Wallets.newFileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
+
 
     const identity = await wallet.get(userId);
     

@@ -75,10 +75,10 @@ export class GrantAccessToDoctorComponent {
                         new Date(patient.accessExpirationDate) >= currentDate
                 )
         ) {
-            // console.log('true');
+
             return true;
         } else {
-            // console.log('false');
+
             return false;
         }
     }
@@ -100,8 +100,7 @@ export class GrantAccessToDoctorComponent {
 
     getDoctorList() {
         this.doctorService.getDoctorList().subscribe((res) => {
-            // console.log('doctor list');
-            // console.log(res);
+
             this.doctorList = res;
 
             this.dataSource = new MatTableDataSource(this.doctorList);
@@ -175,7 +174,7 @@ export class GrantAccessToDoctorComponent {
                             `trying to grant doctor: ${doctorId} access to patient: ${patientId}`
                         );
                         console.log(res);
-                        // this.loading = false;
+
                         this.refresh();
                     });
             }

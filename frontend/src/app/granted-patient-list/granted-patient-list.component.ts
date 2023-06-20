@@ -84,11 +84,7 @@ export class GrantedPatientListComponent {
 
             console.log("patientsToRevoke", patientsToRevoke)
 
-            // patientsToRevoke.forEach(element => {
-            //     this.revokeDoctorAccess(this.userId, element.clientId)
-            //       .pipe(concatMap(() => of(null).pipe(delay(500))))
-            //       .subscribe((res: any) => console.log(res));
-            //   });
+
             let index = 0;
 
             const revokePatient = () => {
@@ -107,14 +103,7 @@ export class GrantedPatientListComponent {
 
               revokePatient();
 
-            // patientsToRevoke.forEach(element => {
 
-
-            //     console.log("revokeDoctorAccess in foreach")
-            //     this.revokeDoctorAccess(this.userId, element.clientId)
-
-
-            // });
 
             this.grantedAccessPatientList = filteredPatientList
 
@@ -132,21 +121,7 @@ export class GrantedPatientListComponent {
     revokeDoctorAccess(doctorId: string, patientId: string) {
 
         return this.patientService.revokeDoctorAccess(patientId, doctorId);
-        // this.doctorService
-        //     .revokeDoctorAccess(
-        //         patientId,
-        //         doctorId,
-        //     )
-        //     .subscribe((res) => {
-        //         console.log(
-        //             `trying to revoke doctor: ${doctorId} access to patient: ${patientId}`
-        //         );
-        //         // this.isRevoking = false;
-        //         console.log(res);
-
-
-        //         // this.refresh();
-        //     });
+  
     }
 
     getDoctorAccessList(doctorId: string) {

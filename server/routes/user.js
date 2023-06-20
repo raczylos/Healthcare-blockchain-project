@@ -74,8 +74,7 @@ router.post("/login", async (req, res) => {
 	console.log("login");
 	console.log(req.body);
 
-	// let userList = await userUtils.getUserList();
-	// console.log("login all users in wallet", userList);
+
 
 	let username = req.body.username;
 	let password = req.body.password;
@@ -162,7 +161,7 @@ router.get("/:userId/details", authMiddleware, async (req, res) => {
 		return res.sendStatus(404);
 	}
 	const role = userAttrs.find((attr) => attr.name === "role").value;
-	// console.log(userAttrs)
+
 	let userInfo = {
 		userId: userId,
 		firstName: userAttrs.find((attr) => attr.name === "firstName").value,

@@ -34,7 +34,7 @@ async function readPatientHistoryData(userId, patientId) {
 		
 		const walletPath = path.join(process.cwd(), "wallet");
 		const wallet = await Wallets.newFileSystemWallet(walletPath);
-		console.log(`Wallet path: ${walletPath}`);
+		
 
 	
 		const patientIdentity = await wallet.get(patientId);
@@ -120,7 +120,7 @@ async function readPatientMedicalData(userId, patientId) {
 
 		const walletPath = path.join(process.cwd(), "wallet");
 		const wallet = await Wallets.newFileSystemWallet(walletPath);
-		console.log(`Wallet path: ${walletPath}`);
+		
 
 		const patientIdentity = await wallet.get(patientId);
 		if (!patientIdentity) {
@@ -134,7 +134,6 @@ async function readPatientMedicalData(userId, patientId) {
 
 		const userIdentity = await wallet.get(userId);
 		if (!userIdentity) {
-			console.log("readMedicalData")
 			console.log(
 				`An identity for the user ${userId} does not exist in the wallet`
 			);

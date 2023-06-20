@@ -35,7 +35,7 @@ router.get("/list", authMiddleware, async (req, res) => {
 	let doctorListInfo = [];
 
 	doctorList.forEach((doctor, index, array) => {
-		// console.log(doctor);
+		
 		let doctorId = doctor.id;
 		let firstName = doctor.attrs.find((attr) => attr.name === "firstName");
 		let lastName = doctor.attrs.find((attr) => attr.name === "lastName");
@@ -86,8 +86,7 @@ router.post("/:doctorId/medical-data", authMiddleware, async (req, res) => {
 router.get('/:doctorId/access-list', authMiddleware, async (req, res) => {
     const doctorId = req.params.doctorId
     const doctorAccessList = await getDoctorAccessList(doctorId)
-    console.log(doctorId)
-	console.log(doctorAccessList)
+   
     if(!doctorAccessList){ // if undefined doctor doesn't have any access
         let list = []
         res.json(list)

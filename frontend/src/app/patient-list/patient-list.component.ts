@@ -25,7 +25,7 @@ export class PatientListComponent {
     ngOnInit() {
         this.patientService.getPatientList().subscribe((res) => {
 
-            console.log(res)
+            
             this.patientList = res
             this.dataSource = new MatTableDataSource(this.patientList);
             this.dataSource.paginator = this.paginator;

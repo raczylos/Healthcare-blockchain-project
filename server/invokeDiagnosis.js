@@ -72,18 +72,7 @@ async function invokeDiagnosis(patientId, medicalData, doctorId) {
 
 		const encryptedMedicalData = encryptData(JSON.stringify(medicalData));
 
-		console.log("encryptedMedicalData.encryptedData", encryptedMedicalData.encryptedData)
-		console.log("iv", encryptedMedicalData.iv)
-
-		// await contract.submitTransaction(
-		// 	"writePatientMedicalData",
-		// 	patientId,
-		// 	doctorId,
-		// 	JSON.stringify(medicalData),
-
-		// );
-		console.log("encryptedMedicalData", encryptedMedicalData)
-
+	
 		await contract.submitTransaction(
 			"writePatientMedicalData",
 			patientId,
