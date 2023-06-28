@@ -64,7 +64,7 @@ export class CreateDiagnosisComponent {
         this.doctorId = this.userService.getUserIdFromToken();
 
         this.getDoctorAccessList(this.doctorId);
-        this.activatedRoute.params.subscribe((params) => {
+        this.activatedRoute.params.subscribe((params: any) => {
             this.patientId = params['id'];
 
             console.log(this.patientId);

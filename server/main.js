@@ -10,7 +10,7 @@ const session = require("express-session");
 const crypto = require("crypto");
 
 const cookieParser = require("cookie-parser");
-// const csrfDSC = require("express-csrf-double-submit-cookie");
+
 
 const userRoute = require("./routes/user");
 const patientRoute = require("./routes/patient");
@@ -28,7 +28,7 @@ app.use(
 	})
 );
 
-// app.use(cookieParser());
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -39,7 +39,6 @@ const { csrfSynchronisedProtection } = csrfSync();
 
 
 
-// const { doubleCsrf } = require("csrf-csrf");
 
 function generateSecret(length) {
 	let secret = crypto.randomBytes(length).toString("hex");
@@ -49,23 +48,9 @@ function generateSecret(length) {
 
 app.use(csrfSynchronisedProtection);
 
-// const doubleCsrfUtilities = {
-// 	getSecret: (req) => {
-// 		if (!req.session.secret) {
-// 			req.session.secret = generateSecret(32);
-// 		}
-// 		return req.session.secret;
-// 	},
-// 	cookieName: "psifi.x-csrf-token",
-// };
 
-
-// const { generateToken, doubleCsrfProtection } = doubleCsrf(doubleCsrfUtilities);
-
-// app.use(doubleCsrfProtection);
 
 app.use(function (req, res, next) {
-	// res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Origin", "http://localhost:4200");
 	res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-CSRF-Token");
