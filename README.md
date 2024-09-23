@@ -8,7 +8,7 @@ Electronic healthcare record (EHR) project to store sensitive patient medical da
 - create patients/doctors by admin
 - edit users
 
-# Instalation
+# Installation
 - Clone repo
 - Follow prerequisites: **https://hyperledger-fabric.readthedocs.io/en/latest/prereqs.html**
 - Intall script in fabric-samples directory:  
